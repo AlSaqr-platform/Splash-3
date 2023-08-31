@@ -252,6 +252,21 @@ int main (int argc, string argv[])
      }
    }
 
+   long unsigned cntr3,cntr4,cntr5,cntr6,cntr7,cntr8;
+
+   __asm__ volatile ("csrr %0, hpmcounter3" : "=r"(cntr3));
+   __asm__ volatile ("csrr %0, hpmcounter4" : "=r"(cntr4));
+   __asm__ volatile ("csrr %0, hpmcounter5" : "=r"(cntr5));
+   __asm__ volatile ("csrr %0, hpmcounter6" : "=r"(cntr6));
+   __asm__ volatile ("csrr %0, hpmcounter7" : "=r"(cntr7));
+   printf("MISS_START        = %12lu\n",cntr3);
+   printf("HIT_START         = %12lu\n",cntr4);
+   printf("FLUSH_START       = %12lu\n",cntr5);
+   printf("FLUSH_PULSE_START = %12lu\n",cntr6);
+   printf("AMO_START         = %12lu\n",cntr7);
+   __asm__ volatile ("csrr %0, hpmcounter8" : "=r"(cntr8));
+   printf("CYCLES_START      = %12lu\n",cntr8);
+
    Global = NULL;
    initparam(defv);
    startrun();
@@ -274,6 +289,7 @@ int main (int argc, string argv[])
    SPLASH3_ROI_END();
 
    CLOCK(Global->computeend);
+   __asm__ volatile ("csrr %0, hpmcounter8" : "=r"(cntr8));
 
    printf("COMPUTEEND    = %12lu\n",Global->computeend);
    printf("COMPUTETIME   = %12lu\n",Global->computeend - Global->computestart);
@@ -290,6 +306,19 @@ int main (int argc, string argv[])
 	  ((float)(Global->tracktime-Global->partitiontime-
 		   Global->treebuildtime-Global->forcecalctime))/
 	  Global->tracktime);
+
+   __asm__ volatile ("csrr %0, hpmcounter3" : "=r"(cntr3));
+   __asm__ volatile ("csrr %0, hpmcounter4" : "=r"(cntr4));
+   __asm__ volatile ("csrr %0, hpmcounter5" : "=r"(cntr5));
+   __asm__ volatile ("csrr %0, hpmcounter6" : "=r"(cntr6));
+   __asm__ volatile ("csrr %0, hpmcounter7" : "=r"(cntr7));
+   printf("MISS_END        = %12lu\n",cntr3);
+   printf("HIT_END         = %12lu\n",cntr4);
+   printf("FLUSH_END       = %12lu\n",cntr5);
+   printf("FLUSH_PULSE_END = %12lu\n",cntr6);
+   printf("AMO_END         = %12lu\n",cntr7);
+   printf("CYCLES_END      = %12lu\n",cntr8);
+
    MAIN_END;
 }
 
@@ -303,7 +332,7 @@ void ANLinit()
 
    Global = (struct GlobalMemory *) G_MALLOC(sizeof(struct GlobalMemory));
    if (Global==NULL) error("No initialization for Global\n");
-    
+
    BARINIT(Global->Barload, NPROC);
    BARINIT(Global->Bartree, NPROC);
    BARINIT(Global->Barcom, NPROC);
