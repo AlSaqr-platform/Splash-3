@@ -43,7 +43,7 @@ runtest :
 	chmod +x $@
 
 XLEN = 64
-CVA_SDK_ROOT = $(abspath ../../culsans/cva6-sdk)
+CVA_SDK_ROOT = $(abspath ../../../cva6-sdk)
 
 all: export TOOLCHAIN_PREFIX = $(CVA_SDK_ROOT)/buildroot/output/host/bin/riscv$(XLEN)-buildroot-linux-gnu-
 all: runtest
