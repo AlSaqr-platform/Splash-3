@@ -316,11 +316,11 @@ int main (int argc, string argv[])
 
    // read out performance counters
    __asm__ volatile ("csrr %0, hpmcounter8" : "=r"(cycles_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter3" : "=r"(miss_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter4" : "=r"(hit_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter5" : "=r"(flush_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter6" : "=r"(flush_pulse_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter7" : "=r"(amo_cntr_start));
+   __asm__ volatile ("csrr %0, hpmcounter3" : "=r"(miss_cntr_end));
+   __asm__ volatile ("csrr %0, hpmcounter4" : "=r"(hit_cntr_end));
+   __asm__ volatile ("csrr %0, hpmcounter5" : "=r"(flush_cntr_end));
+   __asm__ volatile ("csrr %0, hpmcounter6" : "=r"(flush_pulse_cntr_end));
+   __asm__ volatile ("csrr %0, hpmcounter7" : "=r"(amo_cntr_end));
 
    printf("MISS_END        = %12lu\n",miss_cntr_end);
    printf("HIT_END         = %12lu\n",hit_cntr_end);
