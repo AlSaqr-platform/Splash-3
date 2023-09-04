@@ -2,7 +2,7 @@
 *.o
 *.h
 
-codes/runtest
+codes/splash3
 
 codes/apps/barnes/BARNES
 codes/apps/fmm/FMM

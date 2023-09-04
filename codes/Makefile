@@ -1,6 +1,53 @@
 .PHONY: all clean
 
-runtest :
+# create a minimal directory to be included in the fpga image
+splash3 :
+	mkdir -p                                       $@/codes/apps/barnes/inputs
+	cp apps/barnes/BARNES                          $@/codes/apps/barnes/
+	cp apps/barnes/inputs/n16384-p2                $@/codes/apps/barnes/inputs/
+
+	mkdir -p                                       $@/codes/apps/fmm/inputs
+	cp apps/fmm/FMM                                $@/codes/apps/fmm/
+	cp apps/fmm/inputs/input.2.16384               $@/codes/apps/fmm/inputs/
+
+	mkdir -p                                       $@/codes/apps/ocean/contiguous_partitions
+	cp apps/ocean/contiguous_partitions/OCEAN      $@/codes/apps/ocean/contiguous_partitions/
+
+	mkdir -p                                       $@/codes/apps/radiosity
+	cp apps/radiosity/RADIOSITY                    $@/codes/apps/radiosity/
+
+	mkdir -p                                       $@/codes/apps/raytrace/inputs
+	cp apps/raytrace/RAYTRACE                      $@/codes/apps/raytrace/
+	cp apps/raytrace/inputs/car.*                  $@/codes/apps/raytrace/inputs/
+
+	mkdir -p                                       $@/codes/apps/water-nsquared/inputs
+	cp apps/water-nsquared/WATER-NSQUARED          $@/codes/apps/water-nsquared/
+	cp apps/water-nsquared/random.in               $@/codes/apps/water-nsquared/
+	cp apps/water-nsquared/inputs/n512-p2          $@/codes/apps/water-nsquared/inputs/
+
+	mkdir -p                                       $@/codes/apps/water-spatial/inputs
+	cp apps/water-spatial/WATER-SPATIAL            $@/codes/apps/water-spatial/
+	cp apps/water-spatial/random.in                $@/codes/apps/water-spatial/
+	cp apps/water-spatial/inputs/n512-p2           $@/codes/apps/water-spatial/inputs/
+
+	mkdir -p                                       $@/codes/kernels/cholesky/inputs
+	cp kernels/cholesky/CHOLESKY                   $@/codes/kernels/cholesky/
+	cp kernels/cholesky/inputs/tk15.O              $@/codes/kernels/cholesky/inputs/
+
+	mkdir -p                                       $@/codes/kernels/fft
+	cp kernels/fft/FFT                             $@/codes/kernels/fft/
+
+	mkdir -p                                       $@/codes/kernels/lu/contiguous_blocks
+	cp kernels/lu/contiguous_blocks/LU             $@/codes/kernels/lu/contiguous_blocks/
+
+	mkdir -p                                       $@/codes/kernels/lu/non_contiguous_blocks
+	cp kernels/lu/non_contiguous_blocks/LU         $@/codes/kernels/lu/non_contiguous_blocks/
+
+	mkdir -p                                       $@/codes/kernels/radix
+	cp kernels/radix/RADIX                         $@/codes/kernels/radix/
+
+
+splash3/runtest : splash3
 	echo "cd /perf/splash3/codes/apps/barnes" > $@
 	echo "./BARNES < inputs/n16384-p2" >> $@
 
@@ -8,9 +55,6 @@ runtest :
 	echo "./FMM < inputs/input.2.16384" >> $@
 
 	echo "cd /perf/splash3/codes/apps/ocean/contiguous_partitions" >> $@
-	echo "./OCEAN -p2 -n258" >> $@
-
-	echo "cd /perf/splash3/codes/apps/ocean/non_contiguous_partitions" >> $@
 	echo "./OCEAN -p2 -n258" >> $@
 
 	echo "cd /perf/splash3/codes/apps/radiosity" >> $@
@@ -42,11 +86,11 @@ runtest :
 
 	chmod +x $@
 
-all: runtest
+all:
 	$(MAKE) --no-print-directory -C apps/barnes
 	$(MAKE) --no-print-directory -C apps/fmm
 	$(MAKE) --no-print-directory -C apps/ocean/contiguous_partitions
-	$(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions
+	# $(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions
 	$(MAKE) --no-print-directory -C apps/radiosity
 	$(MAKE) --no-print-directory -C apps/raytrace
 	# $(MAKE) --no-print-directory -C apps/volrend
@@ -57,13 +101,14 @@ all: runtest
 	$(MAKE) --no-print-directory -C kernels/lu/contiguous_blocks
 	$(MAKE) --no-print-directory -C kernels/lu/non_contiguous_blocks
 	$(MAKE) --no-print-directory -C kernels/radix
+	$(MAKE) --no-print-directory splash3/runtest
 
 clean:
-	rm -f runtest
+	rm -rf splash3
 	$(MAKE) --no-print-directory -C apps/barnes clean
 	$(MAKE) --no-print-directory -C apps/fmm clean
 	$(MAKE) --no-print-directory -C apps/ocean/contiguous_partitions clean
-	$(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions clean
+	# $(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions clean
 	$(MAKE) --no-print-directory -C apps/radiosity clean
 	$(MAKE) --no-print-directory -C apps/raytrace clean
 	# $(MAKE) --no-print-directory -C apps/volrend clean
