@@ -87,35 +87,35 @@ splash3/runtest : splash3
 	chmod +x $@
 
 all:
-	$(MAKE) --no-print-directory -C apps/barnes
-	$(MAKE) --no-print-directory -C apps/fmm
-	$(MAKE) --no-print-directory -C apps/ocean/contiguous_partitions
-	# $(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions
-	$(MAKE) --no-print-directory -C apps/radiosity
-	$(MAKE) --no-print-directory -C apps/raytrace
-	# $(MAKE) --no-print-directory -C apps/volrend
-	$(MAKE) --no-print-directory -C apps/water-nsquared
-	$(MAKE) --no-print-directory -C apps/water-spatial
-	$(MAKE) --no-print-directory -C kernels/cholesky
-	$(MAKE) --no-print-directory -C kernels/fft
-	$(MAKE) --no-print-directory -C kernels/lu/contiguous_blocks
-	$(MAKE) --no-print-directory -C kernels/lu/non_contiguous_blocks
-	$(MAKE) --no-print-directory -C kernels/radix
-	$(MAKE) --no-print-directory splash3/runtest
+	$(MAKE) -C apps/barnes
+	$(MAKE) -C apps/fmm
+	$(MAKE) -C apps/ocean/contiguous_partitions
+	# $(MAKE) -C apps/ocean/non_contiguous_partitions
+	$(MAKE) -C apps/radiosity
+	$(MAKE) -C apps/raytrace
+	# $(MAKE) -C apps/volrend
+	$(MAKE) -C apps/water-nsquared
+	$(MAKE) -C apps/water-spatial
+	$(MAKE) -C kernels/cholesky
+	$(MAKE) -C kernels/fft
+	$(MAKE) -C kernels/lu/contiguous_blocks
+	$(MAKE) -C kernels/lu/non_contiguous_blocks
+	$(MAKE) -C kernels/radix
+	$(MAKE)  splash3/runtest
 
 clean:
 	rm -rf splash3
-	$(MAKE) --no-print-directory -C apps/barnes clean
-	$(MAKE) --no-print-directory -C apps/fmm clean
-	$(MAKE) --no-print-directory -C apps/ocean/contiguous_partitions clean
-	# $(MAKE) --no-print-directory -C apps/ocean/non_contiguous_partitions clean
-	$(MAKE) --no-print-directory -C apps/radiosity clean
-	$(MAKE) --no-print-directory -C apps/raytrace clean
-	# $(MAKE) --no-print-directory -C apps/volrend clean
-	$(MAKE) --no-print-directory -C apps/water-nsquared clean
-	$(MAKE) --no-print-directory -C apps/water-spatial clean
-	$(MAKE) --no-print-directory -C kernels/cholesky clean
-	$(MAKE) --no-print-directory -C kernels/fft clean
-	$(MAKE) --no-print-directory -C kernels/lu/contiguous_blocks clean
-	$(MAKE) --no-print-directory -C kernels/lu/non_contiguous_blocks clean
-	$(MAKE) --no-print-directory -C kernels/radix clean
+	$(MAKE) -C apps/barnes clean
+	$(MAKE) -C apps/fmm clean
+	$(MAKE) -C apps/ocean/contiguous_partitions clean
+	# $(MAKE) -C apps/ocean/non_contiguous_partitions clean
+	$(MAKE) -C apps/radiosity clean
+	$(MAKE) -C apps/raytrace clean
+	# $(MAKE) -C apps/volrend clean
+	$(MAKE) -C apps/water-nsquared clean
+	$(MAKE) -C apps/water-spatial clean
+	$(MAKE) -C kernels/cholesky clean
+	$(MAKE) -C kernels/fft clean
+	$(MAKE) -C kernels/lu/contiguous_blocks clean
+	$(MAKE) -C kernels/lu/non_contiguous_blocks clean
+	$(MAKE) -C kernels/radix clean
