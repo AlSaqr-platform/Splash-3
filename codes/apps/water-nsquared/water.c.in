@@ -112,44 +112,13 @@ int main(int argc, char **argv)
         the WorkStart routine.
         */
 
-   // initialize performance counters
-   long unsigned miss_cntr_start,               miss_cntr_end;
-   long unsigned hit_cntr_start,                hit_cntr_end;
-   long unsigned flush_cntr_start,              flush_cntr_end;
-   long unsigned flush_pulse_cntr_start,        flush_pulse_cntr_end;
-   long unsigned amo_cntr_start,                amo_cntr_end;
-   long unsigned cycles_cntr_start,             cycles_cntr_end;
-   long unsigned wr_hit_unique_cntr_start,      wr_hit_unique_cntr_end;
-   long unsigned wr_hit_shared_cntr_start,      wr_hit_shared_cntr_end;
-   long unsigned wr_miss_cntr_start,            wr_miss_cntr_end;
-   long unsigned clean_invalid_hit_cntr_start,  clean_invalid_hit_cntr_end;
-   long unsigned clean_invalid_miss_cntr_start, clean_invalid_miss_cntr_end;
+    // cycle counter holders
+    long unsigned cycles_cntr_start, cycles_cntr_end;
 
-   __asm__ volatile ("csrr %0, hpmcounter3"  : "=r"(miss_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter4"  : "=r"(hit_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter5"  : "=r"(flush_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter6"  : "=r"(flush_pulse_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter7"  : "=r"(amo_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter9"  : "=r"(wr_hit_unique_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter10" : "=r"(wr_hit_shared_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter11" : "=r"(wr_miss_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter12" : "=r"(clean_invalid_hit_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter13" : "=r"(clean_invalid_miss_cntr_start));
-   __asm__ volatile ("csrr %0, hpmcounter8"  : "=r"(cycles_cntr_start));
-
-   printf("MISS_START               = %12lu\n",miss_cntr_start);
-   printf("HIT_START                = %12lu\n",hit_cntr_start);
-   printf("FLUSH_START              = %12lu\n",flush_cntr_start);
-   printf("FLUSH_PULSE_START        = %12lu\n",flush_pulse_cntr_start);
-   printf("AMO_START                = %12lu\n",amo_cntr_start);
-   printf("CYCLES_START             = %12lu\n",cycles_cntr_start);
-   printf("WRITE_HIT_UNIQUE_START   = %12lu\n",wr_hit_unique_cntr_start);
-   printf("WRITE_HIT_SHARED_START   = %12lu\n",wr_hit_shared_cntr_start);
-   printf("WRITE_MISS_START         = %12lu\n",wr_miss_cntr_start);
-   printf("CLEAN_INVALID_HIT_START  = %12lu\n",clean_invalid_hit_cntr_start);
-   printf("CLEAN_INVALID_MISS_START = %12lu\n",clean_invalid_miss_cntr_start);
-
-   printf("\n");
+    // read out cycle counter before test
+    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+    printf("CYCLES_START = %12lu\n",cycles_cntr_start);
+    printf("\n");
 
     six = stdout;   /* output file */
 
@@ -303,45 +272,11 @@ int main(int argc, char **argv)
     printf("Intermolecular time only (2nd timestep onward) = %lu\n",gl->intertime);
     printf("Other time (2nd timestep onward) = %lu\n",gl->tracktime - gl->intratime - gl->intertime);
 
-   // read out performance counters
-   __asm__ volatile ("csrr %0, hpmcounter8"  : "=r"(cycles_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter3"  : "=r"(miss_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter4"  : "=r"(hit_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter5"  : "=r"(flush_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter6"  : "=r"(flush_pulse_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter7"  : "=r"(amo_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter9"  : "=r"(wr_hit_unique_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter10" : "=r"(wr_hit_shared_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter11" : "=r"(wr_miss_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter12" : "=r"(clean_invalid_hit_cntr_end));
-   __asm__ volatile ("csrr %0, hpmcounter13" : "=r"(clean_invalid_miss_cntr_end));
-
-   printf("\n");
-   printf("MISS_END                 = %12lu\n",miss_cntr_end);
-   printf("HIT_END                  = %12lu\n",hit_cntr_end);
-   printf("FLUSH_END                = %12lu\n",flush_cntr_end);
-   printf("FLUSH_PULSE_END          = %12lu\n",flush_pulse_cntr_end);
-   printf("AMO_END                  = %12lu\n",amo_cntr_end);
-   printf("CYCLES_END               = %12lu\n",cycles_cntr_end);
-   printf("WRITE_HIT_UNIQUE_END     = %12lu\n",wr_hit_unique_cntr_end);
-   printf("WRITE_HIT_SHARED_END     = %12lu\n",wr_hit_shared_cntr_end);
-   printf("WRITE_MISS_END           = %12lu\n",wr_miss_cntr_end);
-   printf("CLEAN_INVALID_HIT_END    = %12lu\n",clean_invalid_hit_cntr_end);
-   printf("CLEAN_INVALID_MISS_END   = %12lu\n",clean_invalid_miss_cntr_end);
-   printf("\n");
-
-   printf("MISS COUNT               = %12lu\n",miss_cntr_end - miss_cntr_start);
-   printf("HIT COUNT                = %12lu\n",hit_cntr_end - hit_cntr_start);
-   printf("FLUSH COUNT              = %12lu\n",flush_cntr_end - flush_cntr_start);
-   printf("FLUSH_PULSE COUNT        = %12lu\n",flush_pulse_cntr_end - flush_pulse_cntr_start);
-   printf("AMO COUNT                = %12lu\n",amo_cntr_end - amo_cntr_start);
-   printf("CYCLES COUNT             = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   printf("WRITE_HIT_UNIQUE COUNT   = %12lu\n",wr_hit_unique_cntr_end - wr_hit_unique_cntr_start);
-   printf("WRITE_HIT_SHARED COUNT   = %12lu\n",wr_hit_shared_cntr_end - wr_hit_shared_cntr_start);
-   printf("WRITE_MISS COUNT         = %12lu\n",wr_miss_cntr_end - wr_miss_cntr_start);
-   printf("CLEAN_INVALID_HIT COUNT  = %12lu\n",clean_invalid_hit_cntr_end - clean_invalid_hit_cntr_start);
-   printf("CLEAN_INVALID_MISS COUNT = %12lu\n",clean_invalid_miss_cntr_end - clean_invalid_miss_cntr_start);
-   printf("\n");
+    // read out cycle counter and calc diff
+    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+    printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+    printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
+    printf("\n");
 
     printf("\nExited Happily with XTT = %g (note: XTT value is garbage if NPRINT > NSTEP)\n", XTT);
 
