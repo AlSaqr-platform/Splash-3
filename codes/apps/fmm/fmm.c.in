@@ -119,6 +119,14 @@ main (int argc, char *argv[])
    long c;
    extern char *optarg;
 
+   // cycle counter holders
+   long unsigned cycles_cntr_start, cycles_cntr_end;
+
+   // read out cycle counter before test
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+   printf("CYCLES_START = %12lu\n",cycles_cntr_start);
+   printf("\n");
+
    CLOCK(starttime);
 
    while ((c = getopt(argc, argv, "osh")) != -1) {
@@ -151,6 +159,13 @@ main (int argc, char *argv[])
    if (do_output) {
      PrintAllParticles();
    }
+
+   // read out cycle counter and calc diff
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
+   printf("\n");
+
    MAIN_END;
 }
 

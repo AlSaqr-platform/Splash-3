@@ -168,6 +168,14 @@ int main(int argc, char *argv[])
                        DFLT_VIEW_DIST, DFLT_VIEW_ZOOM,0 ) ;
         }
 
+    // cycle counter holders
+    long unsigned cycles_cntr_start, cycles_cntr_end;
+
+    // read out cycle counter before test
+    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+    printf("CYCLES_START = %12lu\n",cycles_cntr_start);
+    printf("\n");
+
     /* Initialize ANL macro */
     MAIN_INITENV(,60000000) ;
 
@@ -316,6 +324,7 @@ int main(int argc, char *argv[])
             /*	print_fork_time(0) ; */
 
             print_statistics( stdout, 0 ) ;
+
         }
     else
         {
@@ -326,6 +335,13 @@ int main(int argc, char *argv[])
             g_start( expose_callback,
                     N_SLIDERS, sliders, N_CHOICES, choices ) ;
         }
+
+    // read out cycle counter and calc diff
+    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+    printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+    printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
+    printf("\n");
+
     MAIN_END;
     exit(0) ;
 }
