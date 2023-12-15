@@ -50,38 +50,50 @@ splash3 :
 splash3/runtest : splash3
 	echo "cd /perf/splash3/codes/apps/barnes" > $@
 	echo "./BARNES < inputs/n16384-p2" >> $@
+	echo "./BARNES < inputs/n16384-p2" >> $@
 
 	echo "cd /perf/splash3/codes/apps/fmm" >> $@
+	echo "./FMM < inputs/input.2.16384" >> $@
 	echo "./FMM < inputs/input.2.16384" >> $@
 
 	echo "cd /perf/splash3/codes/apps/ocean/contiguous_partitions" >> $@
 	echo "./OCEAN -p2 -n258" >> $@
+	echo "./OCEAN -p2 -n258" >> $@
 
 	echo "cd /perf/splash3/codes/apps/radiosity" >> $@
+	echo "./RADIOSITY -p 2 -ae 5000 -bf 0.1 -en 0.05 -room -batch" >> $@
 	echo "./RADIOSITY -p 2 -ae 5000 -bf 0.1 -en 0.05 -room -batch" >> $@
 
 	echo "cd /perf/splash3/codes/apps/raytrace" >> $@
 	echo "./RAYTRACE -p2 -m64 inputs/car.env" >> $@
+	echo "./RAYTRACE -p2 -m64 inputs/car.env" >> $@
 
 	echo "cd /perf/splash3/codes/apps/water-nsquared" >> $@
+	echo "./WATER-NSQUARED < inputs/n512-p2" >> $@
 	echo "./WATER-NSQUARED < inputs/n512-p2" >> $@
 
 	echo "cd /perf/splash3/codes/apps/water-spatial" >> $@
 	echo "./WATER-SPATIAL < inputs/n512-p2" >> $@
+	echo "./WATER-SPATIAL < inputs/n512-p2" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/cholesky" >> $@
+	echo "./CHOLESKY -p2 < inputs/tk15.O" >> $@
 	echo "./CHOLESKY -p2 < inputs/tk15.O" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/fft" >> $@
 	echo "./FFT -p2 -m16" >> $@
+	echo "./FFT -p2 -m16" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/lu/contiguous_blocks" >> $@
+	echo "./LU -p2 -n512" >> $@
 	echo "./LU -p2 -n512" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/lu/non_contiguous_blocks" >> $@
 	echo "./LU -p2 -n512" >> $@
+	echo "./LU -p2 -n512" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/radix" >> $@
+	echo "./RADIX -p2 -n1048576" >> $@
 	echo "./RADIX -p2 -n1048576" >> $@
 
 	chmod +x $@
