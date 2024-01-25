@@ -114,11 +114,6 @@ int main(int argc, char *argv[])
   // cycle counter holders
   long unsigned cycles_cntr_start, cycles_cntr_end;
 
-  // read out cycle counter before test
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
-  printf("CYCLES_START = %12lu\n",cycles_cntr_start);
-  printf("\n");
-
   CLOCK(start);
 
   while ((ch = getopt(argc, argv, "n:p:b:cstoh")) != -1) {
@@ -221,12 +216,14 @@ int main(int argc, char *argv[])
     PrintA();
   }
 
+  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
   SPLASH3_ROI_BEGIN();
 
   CREATE(SlaveStart, P);
   WAIT_FOR_END(P);
 
   SPLASH3_ROI_END();
+  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 
   if (doprint) {
     printf("\nMatrix after decomposition:\n");
@@ -318,7 +315,6 @@ int main(int argc, char *argv[])
   printf("\n");
 
   // read out cycle counter and calc diff
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
   printf("\n");

@@ -133,11 +133,6 @@ int main(int argc, char *argv[])
    // cycle counter holders
    long unsigned cycles_cntr_start, cycles_cntr_end;
 
-   // read out cycle counter before test
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
-   printf("CYCLES_START = %12lu\n",cycles_cntr_start);
-   printf("\n");
-
    CLOCK(start)
 
    while ((c = getopt(argc, argv, "p:r:n:m:stoh")) != -1) {
@@ -317,10 +312,12 @@ int main(int argc, char *argv[])
    }  */
 
    /* Fill the random-number array. */
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
    SPLASH3_ROI_BEGIN();
 
    CREATE(slave_sort, number_of_processors);
    WAIT_FOR_END(number_of_processors);
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 
    printf("\n");
    printf("                 PROCESS STATISTICS\n");
@@ -395,7 +392,6 @@ int main(int argc, char *argv[])
    }
   
    // read out cycle counter and calc diff
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
    printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
    printf("\n");

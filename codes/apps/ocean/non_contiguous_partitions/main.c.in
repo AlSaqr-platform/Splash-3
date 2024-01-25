@@ -131,9 +131,6 @@ int main(int argc, char *argv[])
    long unsigned cycles_cntr_start, cycles_cntr_end;
 
    // read out cycle counter before test
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
-   printf("CYCLES_START = %12lu\n",cycles_cntr_start);
-   printf("\n");
 
    CLOCK(start)
 
@@ -446,9 +443,11 @@ int main(int argc, char *argv[])
      printf("                       MULTIGRID OUTPUTS\n");
    }
 
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
    SPLASH3_ROI_BEGIN();
    CREATE(slave, nprocs);
    WAIT_FOR_END(nprocs);
+   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    SPLASH3_ROI_END();
    CLOCK(computeend)
 
@@ -508,7 +507,6 @@ int main(int argc, char *argv[])
    printf("\n");
 
    // read out cycle counter and calc diff
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
    printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
    printf("\n");

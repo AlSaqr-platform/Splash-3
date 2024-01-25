@@ -459,9 +459,9 @@ int	main(int argc, CHAR *argv[])
 	SPLASH3_ROI_BEGIN();
 	CREATE(StartRayTrace, gm->nprocs);
 	WAIT_FOR_END(gm->nprocs);
+	__asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 	SPLASH3_ROI_END();
 	CLOCK(end);
-	__asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 
 
 
