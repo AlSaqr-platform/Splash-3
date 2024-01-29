@@ -124,18 +124,18 @@ int main(int argc, char *argv[])
     case 's': dostats = 1; break;
     case 't': test_result = !test_result; break;
     case 'o': doprint = !doprint; break;
-    case 'h': printf("Usage: LU <options>\n\n");
-              printf("options:\n");
-              printf("  -nN : Decompose NxN matrix.\n");
-              printf("  -pP : P = number of processors.\n");
-              printf("  -bB : Use a block size of B. BxB elements should fit in cache for \n");
-              printf("        good performance. Small block sizes (B=8, B=16) work well.\n");
-              printf("  -c  : Copy non-locally allocated blocks to local memory before use.\n");
-              printf("  -s  : Print individual processor timing statistics.\n");
-              printf("  -t  : Test output.\n");
-              printf("  -o  : Print out matrix values.\n");
-              printf("  -h  : Print out command line options.\n\n");
-              printf("Default: LU -n%1d -p%1d -b%1d\n",
+    case 'h': if (TOPRINT) printf("Usage: LU <options>\n\n");
+              if (TOPRINT) printf("options:\n");
+              if (TOPRINT) printf("  -nN : Decompose NxN matrix.\n");
+              if (TOPRINT) printf("  -pP : P = number of processors.\n");
+              if (TOPRINT) printf("  -bB : Use a block size of B. BxB elements should fit in cache for \n");
+              if (TOPRINT) printf("        good performance. Small block sizes (B=8, B=16) work well.\n");
+              if (TOPRINT) printf("  -c  : Copy non-locally allocated blocks to local memory before use.\n");
+              if (TOPRINT) printf("  -s  : Print individual processor timing statistics.\n");
+              if (TOPRINT) printf("  -t  : Test output.\n");
+              if (TOPRINT) printf("  -o  : Print out matrix values.\n");
+              if (TOPRINT) printf("  -h  : Print out command line options.\n\n");
+              if (TOPRINT) printf("Default: LU -n%1d -p%1d -b%1d\n",
                      DEFAULT_N,DEFAULT_P,DEFAULT_B);
               exit(0);
               break;
@@ -144,13 +144,13 @@ int main(int argc, char *argv[])
 
   MAIN_INITENV(,150000000)
 
-  printf("\n");
-  printf("Blocked Dense LU Factorization\n");
-  printf("     %ld by %ld Matrix\n",n,n);
-  printf("     %ld Processors\n",P);
-  printf("     %ld by %ld Element Blocks\n",block_size,block_size);
-  printf("\n");
-  printf("\n");
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("Blocked Dense LU Factorization\n");
+  if (TOPRINT) printf("     %ld by %ld Matrix\n",n,n);
+  if (TOPRINT) printf("     %ld Processors\n",P);
+  if (TOPRINT) printf("     %ld by %ld Element Blocks\n",block_size,block_size);
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("\n");
 
   num_rows = (long) sqrt((double) P);
   for (;;) {
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 
   InitA(rhs);
   if (doprint) {
-    printf("Matrix before decomposition:\n");
+    if (TOPRINT) printf("Matrix before decomposition:\n");
     PrintA();
   }
 
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 
   if (doprint) {
-    printf("\nMatrix after decomposition:\n");
+    if (TOPRINT) printf("\nMatrix after decomposition:\n");
     PrintA();
   }
 
@@ -283,44 +283,44 @@ int main(int argc, char *argv[])
     avg_mod = avg_mod/P;
     avg_bar = avg_bar/P;
   }
-  printf("                            PROCESS STATISTICS\n");
-  printf("              Total      Diagonal     Perimeter      Interior       Barrier\n");
-  printf(" Proc         Time         Time         Time           Time          Time\n");
-  printf("    0    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
+  if (TOPRINT) printf("                            PROCESS STATISTICS\n");
+  if (TOPRINT) printf("              Total      Diagonal     Perimeter      Interior       Barrier\n");
+  if (TOPRINT) printf(" Proc         Time         Time         Time           Time          Time\n");
+  if (TOPRINT) printf("    0    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
           Global->completion[0],Global->t_in_fac[0],
           Global->t_in_solve[0],Global->t_in_mod[0],
           Global->t_in_bar[0]);
   if (dostats) {
     for (i=1; i<P; i++) {
-      printf("  %3ld    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
+      if (TOPRINT) printf("  %3ld    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
               i,Global->completion[i],Global->t_in_fac[i],
               Global->t_in_solve[i],Global->t_in_mod[i],
               Global->t_in_bar[i]);
     }
-    printf("  Avg    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
+    if (TOPRINT) printf("  Avg    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
            avgt,avg_fac,avg_solve,avg_mod,avg_bar);
-    printf("  Min    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
+    if (TOPRINT) printf("  Min    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
            mint,min_fac,min_solve,min_mod,min_bar);
-    printf("  Max    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
+    if (TOPRINT) printf("  Max    %10.0f    %10.0f    %10.0f    %10.0f    %10.0f\n",
            maxt,max_fac,max_solve,max_mod,max_bar);
   }
-  printf("\n");
+  if (TOPRINT) printf("\n");
   Global->starttime = start;
-  printf("                            TIMING INFORMATION\n");
-  printf("Start time                        : %16lu\n", Global->starttime);
-  printf("Initialization finish time        : %16lu\n", Global->rs);
-  printf("Overall finish time               : %16lu\n", Global->rf);
-  printf("Total time with initialization    : %16lu\n", Global->rf-Global->starttime);
-  printf("Total time without initialization : %16lu\n", Global->rf-Global->rs);
-  printf("\n");
+  if (TOPRINT) printf("                            TIMING INFORMATION\n");
+  if (TOPRINT) printf("Start time                        : %16lu\n", Global->starttime);
+  if (TOPRINT) printf("Initialization finish time        : %16lu\n", Global->rs);
+  if (TOPRINT) printf("Overall finish time               : %16lu\n", Global->rf);
+  if (TOPRINT) printf("Total time with initialization    : %16lu\n", Global->rf-Global->starttime);
+  if (TOPRINT) printf("Total time without initialization : %16lu\n", Global->rf-Global->rs);
+  if (TOPRINT) printf("\n");
 
   // read out cycle counter and calc diff
-  printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-  printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-  printf("\n");
+  if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+  printf("LU NC CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+  if (TOPRINT) printf("\n");
 
   if (test_result) {
-    printf("                             TESTING RESULTS\n");
+    if (TOPRINT) printf("                             TESTING RESULTS\n");
     CheckResult(n, a, rhs);
   }
 
@@ -350,7 +350,7 @@ void OneSolve(long n, long block_size, long MyNum, long dostats)
 
   lc = (struct LocalCopies *) malloc(sizeof(struct LocalCopies));
   if (lc == NULL) {
-    fprintf(stderr,"Proc %ld could not malloc memory for lc\n",MyNum);
+     if(TOPRINT) fprintf(stderr,"Proc %ld could not malloc memory for lc\n",MyNum);
     exit(-1);
   }
   lc->t_in_fac = 0.0;
@@ -521,7 +521,7 @@ void lu(long n, long bs, long MyNum, struct LocalCopies *lc, long dostats)
     D = &(a[k+k*n]);
     for (i=kl, I=K+1; i<n; i+=bs, I++) {
       if (BlockOwner/*Column*/(I, K) == MyNum) {  /* parcel out blocks */
-	      /*if (K == 0) printf("C%lx\n", BlockOwnerColumn(I, K));*/
+	      /*if (K == 0) if (TOPRINT) printf("C%lx\n", BlockOwnerColumn(I, K));*/
         il = i + bs;
         if (il > n) {
           il = n;
@@ -533,7 +533,7 @@ void lu(long n, long bs, long MyNum, struct LocalCopies *lc, long dostats)
     /* modify row k by diagonal block */
     for (j=kl, J=K+1; j<n; j+=bs, J++) {
       if (BlockOwner/*Row*/(K, J) == MyNum) {  /* parcel out blocks */
-	      /*if (K == 0) printf("R%lx\n", BlockOwnerRow(K, J));*/
+	      /*if (K == 0) if (TOPRINT) printf("R%lx\n", BlockOwnerRow(K, J));*/
         jl = j+bs;
         if (jl > n) {
           jl = n;
@@ -566,7 +566,7 @@ void lu(long n, long bs, long MyNum, struct LocalCopies *lc, long dostats)
           jl = n;
         }
         if (BlockOwner(I, J) == MyNum) {  /* parcel out blocks */
-//		if (K == 0) printf("%lx\n", BlockOwner(I, J));
+//		if (K == 0) if (TOPRINT) printf("%lx\n", BlockOwner(I, J));
           B = &(a[k+j*n]);
           C = &(a[i+j*n]);
           bmod(A, B, C, il-i, jl-j, kl-k, n);
@@ -635,9 +635,9 @@ void PrintA()
 
   for (i=0; i<n; i++) {
     for (j=0; j<n; j++) {
-      printf("%8.1f ", a[i+j*n]);
+      if (TOPRINT) printf("%8.1f ", a[i+j*n]);
     }
-    printf("\n");
+    if (TOPRINT) printf("\n");
   }
 }
 
@@ -677,9 +677,9 @@ void CheckResult(long n, double *a, double *rhs)
     }
   }
   if (bogus) {
-    printf("TEST FAILED: (%.5f diff)\n", max_diff);
+    if (TOPRINT) printf("TEST FAILED: (%.5f diff)\n", max_diff);
   } else {
-    printf("TEST PASSED\n");
+    if (TOPRINT) printf("TEST PASSED\n");
   }
   free(y);
 }
@@ -687,6 +687,6 @@ void CheckResult(long n, double *a, double *rhs)
 
 void printerr(char *s)
 {
-  fprintf(stderr,"ERROR: %s\n",s);
+   if(TOPRINT) fprintf(stderr,"ERROR: %s\n",s);
 }
 

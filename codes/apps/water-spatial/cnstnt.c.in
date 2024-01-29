@@ -125,7 +125,7 @@ void CNSTNT(long N, double *C)
     switch(N1) {
     case 1:
     case 2:
-        fprintf(six,"***** ERROR: THE ORDER HAS TO BE GREATER THAN 2 ****");
+         if(TOPRINT) fprintf(six,"***** ERROR: THE ORDER HAS TO BE GREATER THAN 2 ****");
         break;
     case 3:
         PCC[0] = ONE/6.00;

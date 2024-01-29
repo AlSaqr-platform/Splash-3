@@ -233,7 +233,7 @@ void CompleteColumnB(long j)
 
   diag = *theNZ;
   if (diag <= 0.0) {
-    printf("Negative pivot, d[%ld] = %f\n", j, diag);
+    if (TOPRINT) printf("Negative pivot, d[%ld] = %f\n", j, diag);
     exit(0);
   }
   diag = sqrt(diag);

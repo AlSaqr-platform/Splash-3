@@ -82,13 +82,13 @@ void MallocStats()
 {
   long i;
 
-  printf("Malloc max: ");
+  if (TOPRINT) printf("Malloc max: ");
   for (i=0; i<mallocP; i++)
     if (mem_pool[i].touched > 0)
-      printf("%ld* ", mem_pool[i].maxm);
+      if (TOPRINT) printf("%ld* ", mem_pool[i].maxm);
     else
-      printf("%ld ", mem_pool[i].maxm);
-  printf("\n");
+      if (TOPRINT) printf("%ld ", mem_pool[i].maxm);
+  if (TOPRINT) printf("\n");
 
 }
 
@@ -220,7 +220,7 @@ char *MyMalloc(long size, long home)
   }
 
   if (SIZE(result) < size)
-    printf("*** Bad size from malloc %ld, %ld\n", size, SIZE(result));
+    if (TOPRINT) printf("*** Bad size from malloc %ld, %ld\n", size, SIZE(result));
 
   return((char *) result);
 
@@ -280,11 +280,11 @@ void MyFreeNow(void *block)
   home = HOME(block);
 
   if (size <= 0) {
-    printf("Bad size %ld\n", size);
+    if (TOPRINT) printf("Bad size %ld\n", size);
     exit(-1);
   }
   if (home < -1 || home >= mallocP) {
-    printf("Bad home %ld\n", home);
+    if (TOPRINT) printf("Bad home %ld\n", home);
     exit(-1);
   }
 

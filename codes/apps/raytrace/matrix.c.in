@@ -115,16 +115,16 @@ VOID	PrintMatrix(MATRIX M, CHAR *s)
 	{
 	INT	i, j;
 
-	printf("\n%s\n", s);
+	if (TOPRINT) printf("\n%s\n", s);
 
 	for (i = 0; i < 4; i++)
 		{
-		printf("\t");
+		if (TOPRINT) printf("\t");
 
 		for (j = 0; j < 4; j++)
-			printf("%f  ", M[i][j]);
+			if (TOPRINT) printf("%f  ", M[i][j]);
 
-		printf("\n");
+		if (TOPRINT) printf("\n");
 		}
 	}
 
@@ -450,7 +450,7 @@ VOID	Rotate(INT axis, MATRIX M, REAL angle)
 			break;
 
 		default:
-			printf("Unknown rotation axis %ld.\n", axis);
+			if (TOPRINT) printf("Unknown rotation axis %ld.\n", axis);
 			exit(5);
 			break;
 		}

@@ -275,37 +275,37 @@ CheckBox (long my_id, box *b, long partition_level)
    if (b->type == CHILDLESS) {
       if (partition_level != -1) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : CHILDLESS box in parent partition (B%f P%ld %ld)\n", b->id, my_id, b->proc);
+	 if (TOPRINT) printf("ERROR : CHILDLESS box in parent partition (B%f P%ld %ld)\n", b->id, my_id, b->proc);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
       }
       if (b->num_children != 0) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : CHILDLESS box has children (B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : CHILDLESS box has children (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
       }
       if (b->num_particles == 0) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : CHILDLESS box has no particles (B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : CHILDLESS box has no particles (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
       }
       if (b->particles[b->num_particles - 1] == NULL) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : CHILDLESS box has fewer particles than expected ");
-	 printf("(B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : CHILDLESS box has fewer particles than expected ");
+	 if (TOPRINT) printf("(B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
       }
       if (b->particles[b->num_particles] != NULL) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : CHILDLESS box has more particles than expected ");
-	 printf("(B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : CHILDLESS box has more particles than expected ");
+	 if (TOPRINT) printf("(B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
@@ -314,7 +314,7 @@ CheckBox (long my_id, box *b, long partition_level)
    else {
       if (partition_level == -1) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : PARENT box in childless partition (B%f P%ld %ld)\n",
+	 if (TOPRINT) printf("ERROR : PARENT box in childless partition (B%f P%ld %ld)\n",
 		b->id, my_id, b->proc);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
@@ -323,8 +323,8 @@ CheckBox (long my_id, box *b, long partition_level)
       else {
 	 if (partition_level != b->level) {
 	    LOCK(G_Memory->io_lock);
-	    printf("ERROR : PARENT box in wrong partition level ");
-	    printf("(%ld vs %ld) (B%f P%ld)\n", b->level, partition_level, b->id, my_id);
+	    if (TOPRINT) printf("ERROR : PARENT box in wrong partition level ");
+	    if (TOPRINT) printf("(%ld vs %ld) (B%f P%ld)\n", b->level, partition_level, b->id, my_id);
 	    fflush(stdout);
 	    UNLOCK(G_Memory->io_lock);
 	    num_errors += 1;
@@ -332,14 +332,14 @@ CheckBox (long my_id, box *b, long partition_level)
       }
       if (b->num_children == 0) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : PARENT box has no children (B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : PARENT box has no children (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
       }
       if (b->num_particles != 0) {
 	 LOCK(G_Memory->io_lock);
-	 printf("ERROR : PARENT box has particles (B%f P%ld)\n", b->id, my_id);
+	 if (TOPRINT) printf("ERROR : PARENT box has particles (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
@@ -349,9 +349,9 @@ CheckBox (long my_id, box *b, long partition_level)
       if (b != Grid) {
 	 LOCK(G_Memory->io_lock);
 	 if (b->type == CHILDLESS)
-	    printf("ERROR : Extra CHILDLESS box in partition (B%f P%ld)\n", b->id, my_id);
+	    if (TOPRINT) printf("ERROR : Extra CHILDLESS box in partition (B%f P%ld)\n", b->id, my_id);
 	 else
-	    printf("ERROR : Extra PARENT box in partition (B%f P%ld)\n", b->id, my_id);
+	    if (TOPRINT) printf("ERROR : Extra PARENT box in partition (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;
@@ -361,9 +361,9 @@ CheckBox (long my_id, box *b, long partition_level)
       if (b->parent->children[b->child_num] != b) {
 	 LOCK(G_Memory->io_lock);
 	 if (b->type == CHILDLESS)
-	    printf("ERROR : Extra CHILDLESS box in partition (B%f P%ld)\n", b->id, my_id);
+	    if (TOPRINT) printf("ERROR : Extra CHILDLESS box in partition (B%f P%ld)\n", b->id, my_id);
 	 else
-	    printf("ERROR : Extra PARENT box in partition (B%f P%ld)\n", b->id, my_id);
+	    if (TOPRINT) printf("ERROR : Extra PARENT box in partition (B%f P%ld)\n", b->id, my_id);
 	 fflush(stdout);
 	 UNLOCK(G_Memory->io_lock);
 	 num_errors += 1;

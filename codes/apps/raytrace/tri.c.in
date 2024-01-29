@@ -81,13 +81,13 @@ VOID	TriPrint(OBJECT *po)
 	ELEMENT *pe;			/* Ptr to triangle element.	     */
 
 	pe = po->pelem;
-	fprintf(stderr, "\ttriangle: %ld triangles.\n", po->numelements);
+	 if(TOPRINT) fprintf(stderr, "\ttriangle: %ld triangles.\n", po->numelements);
 
 	for (i = 0; i < po->numelements; i++)
 		{
 		pt = (TRI *)pe->data;
 
-		fprintf(stderr, "\t\tVertices: 3   Plane eq: %f %f %f %f\n", pt->norm[0], pt->norm[1], pt->norm[2], pt->d);
+		 if(TOPRINT) fprintf(stderr, "\t\tVertices: 3   Plane eq: %f %f %f %f\n", pt->norm[0], pt->norm[1], pt->norm[2], pt->d);
 
 		vlist  = pt->vptr;
 		vindex = pt->vindex;
@@ -95,7 +95,7 @@ VOID	TriPrint(OBJECT *po)
 		for (j = 0; j < 3; j++)
 			{
 			vptr = vlist + (*vindex);
-			fprintf(stderr, "\t\t%f %f %f \n", (*vptr)[0], (*vptr)[1], (*vptr)[2]);
+			 if(TOPRINT) fprintf(stderr, "\t\t%f %f %f \n", (*vptr)[0], (*vptr)[1], (*vptr)[2]);
 			vindex++;
 			}
 
@@ -736,7 +736,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 	if (instat != 1)
 		{
-		printf("Error in TriRead: totalverts.\n");
+		if (TOPRINT) printf("Error in TriRead: totalverts.\n");
 		exit(-1);
 		}
 
@@ -754,7 +754,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 	if (instat != 1)
 		{
-		printf("Error in TriRead: face normal indicator.\n");
+		if (TOPRINT) printf("Error in TriRead: face normal indicator.\n");
 		exit(-1);
 		}
 
@@ -766,7 +766,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 	instat = fscanf(pf, "%s\n", normstr);
 	if (instat != 1)
 		{
-		printf("Error in TriRead: vertex normal indicator.\n");
+		if (TOPRINT) printf("Error in TriRead: vertex normal indicator.\n");
 		exit(-1);
 		}
 
@@ -781,7 +781,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 		if (instat != 3)
 			{
-			printf("Error in TriRead: vertex %ld.\n", i);
+			if (TOPRINT) printf("Error in TriRead: vertex %ld.\n", i);
 			exit(-1);
 			}
 
@@ -791,7 +791,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 			if (instat != 3)
 				{
-				printf("Error in TriRead: vertex normal %ld.\n", i);
+				if (TOPRINT) printf("Error in TriRead: vertex normal %ld.\n", i);
 				exit(-1);
 				}
 
@@ -817,7 +817,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 			if (instat != 3)
 				{
-				printf("Error in TriRead: face normal %ld.\n", i);
+				if (TOPRINT) printf("Error in TriRead: face normal %ld.\n", i);
 				exit(-1);
 				}
 			}
@@ -830,7 +830,7 @@ VOID	TriRead(OBJECT *po, FILE *pf)
 
 		if (instat != 3)
 			{
-			printf("Error in TriRead: vertex index %ld.\n", i);
+			if (TOPRINT) printf("Error in TriRead: vertex index %ld.\n", i);
 			exit(-1);
 			}
 

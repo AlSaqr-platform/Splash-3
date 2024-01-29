@@ -154,17 +154,17 @@ INT dostats = 0;
 
 VOID	Usage()
 	{
-	fprintf(stdout, "%s - parallel ray tracer\n", ProgName);
-	fprintf(stdout, "Version %s\n\n", VERSION);
+	 if(TOPRINT) fprintf(stdout, "%s - parallel ray tracer\n", ProgName);
+	 if(TOPRINT) fprintf(stdout, "Version %s\n\n", VERSION);
 
-	fprintf(stdout, "Usage:\t%s [options] envfile\n\n", ProgName);
+	 if(TOPRINT) fprintf(stdout, "Usage:\t%s [options] envfile\n\n", ProgName);
 
-	fprintf(stdout, "\t-h\tPrint this usage message.\n");
-	fprintf(stdout, "\t-a<n>\tEnable antialiasing with n subpixels (default = 1).\n\tWhen using with SPLASH suite for evaluation, use default (no antialiasing)\n");
-	fprintf(stdout, "\t-m<n>\tRequest n megabytes of global memory (default = 32).\n");
-	fprintf(stdout, "\t-p<n>\tRun on n processors (default = 1).\n");
-    fprintf(stdout, "\t-s\tMeasure and print per-process timing information.\n");
-	fprintf(stdout, "\n");
+	 if(TOPRINT) fprintf(stdout, "\t-h\tPrint this usage message.\n");
+	 if(TOPRINT) fprintf(stdout, "\t-a<n>\tEnable antialiasing with n subpixels (default = 1).\n\tWhen using with SPLASH suite for evaluation, use default (no antialiasing)\n");
+	 if(TOPRINT) fprintf(stdout, "\t-m<n>\tRequest n megabytes of global memory (default = 32).\n");
+	 if(TOPRINT) fprintf(stdout, "\t-p<n>\tRun on n processors (default = 1).\n");
+     if(TOPRINT) fprintf(stdout, "\t-s\tMeasure and print per-process timing information.\n");
+	 if(TOPRINT) fprintf(stdout, "\n");
 	}
 
 
@@ -183,26 +183,26 @@ VOID	Usage()
 VOID	PrintStatistics()
 	{
 	/*
-	printf("\n****** Ray trace Stats ******\n");
+	if (TOPRINT) printf("\n****** Ray trace Stats ******\n");
 
-	printf("\tResolution:\t\t%ld by %ld\n",            Display.xres+1, Display.yres+1);
-	printf("\tNumber Lights:\t\t%ld\n",                nlights);
-	printf("\tAnti level:\t\t%ld\n",                   Display.maxAAsubdiv);
-	printf("\tTotal Rays:\t\t%ld\n",                   Stats.total_rays);
-	printf("\tPrimary Rays:\t\t%ld\n",                 Stats.prim_rays);
-	printf("\tShadow Rays:\t\t%ld\n",                  Stats.shad_rays);
-	printf("\tShadow Rays Hit:\t%ld\n",                Stats.shad_rays_hit);
-	printf("\tShadow Rays Not Hit:\t%ld\n",            Stats.shad_rays_not_hit);
-	printf("\tShadow Coherence Rays:\t%ld\n",          Stats.shad_coherence_rays);
-	printf("\tReflective Rays:\t%ld\n",                Stats.refl_rays);
-	printf("\tTransmissiveRays:\t%ld\n",               Stats.trans_rays);
-	printf("\tAnti-Aliasing Rays:\t%ld\n",             Stats.aa_rays);
-	printf("\tBackground Pixels:\t%ld\n",              Stats.coverage);
-	printf("\tMax Tree depth reached:\t%ld\n",         Stats.max_tree_depth);
-	printf("\tMax # prims tested for a ray:\t%ld\n",   Stats.max_objs_ray);
-	printf("\tMax Rays shot for a pixel:\t%ld\n",      Stats.max_rays_pixel);
-	printf("\tMax # prims tested for a pixel:\t%ld\n", Stats.max_objs_pixel);
-	printf("\n");
+	if (TOPRINT) printf("\tResolution:\t\t%ld by %ld\n",            Display.xres+1, Display.yres+1);
+	if (TOPRINT) printf("\tNumber Lights:\t\t%ld\n",                nlights);
+	if (TOPRINT) printf("\tAnti level:\t\t%ld\n",                   Display.maxAAsubdiv);
+	if (TOPRINT) printf("\tTotal Rays:\t\t%ld\n",                   Stats.total_rays);
+	if (TOPRINT) printf("\tPrimary Rays:\t\t%ld\n",                 Stats.prim_rays);
+	if (TOPRINT) printf("\tShadow Rays:\t\t%ld\n",                  Stats.shad_rays);
+	if (TOPRINT) printf("\tShadow Rays Hit:\t%ld\n",                Stats.shad_rays_hit);
+	if (TOPRINT) printf("\tShadow Rays Not Hit:\t%ld\n",            Stats.shad_rays_not_hit);
+	if (TOPRINT) printf("\tShadow Coherence Rays:\t%ld\n",          Stats.shad_coherence_rays);
+	if (TOPRINT) printf("\tReflective Rays:\t%ld\n",                Stats.refl_rays);
+	if (TOPRINT) printf("\tTransmissiveRays:\t%ld\n",               Stats.trans_rays);
+	if (TOPRINT) printf("\tAnti-Aliasing Rays:\t%ld\n",             Stats.aa_rays);
+	if (TOPRINT) printf("\tBackground Pixels:\t%ld\n",              Stats.coverage);
+	if (TOPRINT) printf("\tMax Tree depth reached:\t%ld\n",         Stats.max_tree_depth);
+	if (TOPRINT) printf("\tMax # prims tested for a ray:\t%ld\n",   Stats.max_objs_ray);
+	if (TOPRINT) printf("\tMax Rays shot for a pixel:\t%ld\n",      Stats.max_rays_pixel);
+	if (TOPRINT) printf("\tMax # prims tested for a pixel:\t%ld\n", Stats.max_objs_pixel);
+	if (TOPRINT) printf("\n");
 	*/
 
 	if (TraversalType == TT_HUG)
@@ -344,7 +344,7 @@ int	main(int argc, CHAR *argv[])
 				break;
 
 			default:
-				fprintf(stderr, "%s: Invalid option \'%c\'.\n", ProgName, argv[i][0]);
+				 if(TOPRINT) fprintf(stderr, "%s: Invalid option \'%c\'.\n", ProgName, argv[i][0]);
 				exit(1);
 		}
 		i++;
@@ -362,7 +362,7 @@ int	main(int argc, CHAR *argv[])
 
 	if (nprocs < 1 || nprocs > MAX_PROCS)
 		{
-		fprintf(stderr, "%s: Valid range for #processors is [1, %d].\n", ProgName, MAX_PROCS);
+		 if(TOPRINT) fprintf(stderr, "%s: Valid range for #processors is [1, %d].\n", ProgName, MAX_PROCS);
 		exit(1);
 		}
 
@@ -371,11 +371,11 @@ int	main(int argc, CHAR *argv[])
 	 *	Print command line parameters.
 	 */
 
-	printf("\n");
-	printf("Number of processors:     \t%ld\n", nprocs);
-	printf("Global shared memory size:\t%ld MB\n", MaxGlobMem);
-	printf("Samples per pixel:        \t%ld\n", NumSubRays);
-	printf("\n");
+	if (TOPRINT) printf("\n");
+	if (TOPRINT) printf("Number of processors:     \t%ld\n", nprocs);
+	if (TOPRINT) printf("Global shared memory size:\t%ld MB\n", MaxGlobMem);
+	if (TOPRINT) printf("Samples per pixel:        \t%ld\n", NumSubRays);
+	if (TOPRINT) printf("\n");
 
 
 	/*
@@ -409,7 +409,7 @@ int	main(int argc, CHAR *argv[])
 
 	if (!GlobalHeapInit(MaxGlobMem))
 		{
-		fprintf(stderr, "%s: Cannot initialize global heap.\n", ProgName);
+		 if(TOPRINT) fprintf(stderr, "%s: Cannot initialize global heap.\n", ProgName);
 		exit(1);
 		}
 
@@ -438,8 +438,8 @@ int	main(int argc, CHAR *argv[])
 	 *	Print out what we have so far.
 	 */
 
-	printf("Number of primitive objects: \t%ld\n", prim_obj_cnt);
-	printf("Number of primitive elements:\t%ld\n", prim_elem_cnt);
+	if (TOPRINT) printf("Number of primitive objects: \t%ld\n", prim_obj_cnt);
+	if (TOPRINT) printf("Number of primitive elements:\t%ld\n", prim_elem_cnt);
 
 	/*
 	 *	Preprocess database into hierarchical uniform grid.
@@ -476,25 +476,25 @@ int	main(int argc, CHAR *argv[])
 
 
 
-	printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
-	printf("        Overall start time     %20lu\n", begin);
-	printf("        Overall end time   %20lu\n", end);
-	printf("        Total time with initialization  %20lu\n", lapsed);
-	printf("        Total time without initialization  %20lu\n", end - gm->par_start_time);
-	printf("CYCLES_START = %12lu\n",cycles_cntr_start);
-	printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-	printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-	printf("\n");
+	if (TOPRINT) printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
+	if (TOPRINT) printf("        Overall start time     %20lu\n", begin);
+	if (TOPRINT) printf("        Overall end time   %20lu\n", end);
+	if (TOPRINT) printf("        Total time with initialization  %20lu\n", lapsed);
+	if (TOPRINT) printf("        Total time without initialization  %20lu\n", end - gm->par_start_time);
+	if (TOPRINT) printf("CYCLES_START = %12lu\n",cycles_cntr_start);
+	if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+	printf("RAYTRACE CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+	if (TOPRINT) printf("\n");
 
     if (dostats) {
         unsigned totalproctime, maxproctime, minproctime;
 
-        printf("\n\n\nPER-PROCESS STATISTICS:\n");
+        if (TOPRINT) printf("\n\n\nPER-PROCESS STATISTICS:\n");
 
-        printf("%20s%20s\n","Proc","Time");
-        printf("%20s%20s\n\n","","Tracing Rays");
+        if (TOPRINT) printf("%20s%20s\n","Proc","Time");
+        if (TOPRINT) printf("%20s%20s\n\n","","Tracing Rays");
         for (i = 0; i < gm->nprocs; i++)
-            printf("%20ld%20ld\n",i,gm->partime[i]);
+            if (TOPRINT) printf("%20ld%20ld\n",i,gm->partime[i]);
 
         totalproctime = gm->partime[0];
         minproctime = gm->partime[0];
@@ -507,9 +507,9 @@ int	main(int argc, CHAR *argv[])
             if (gm->partime[i] < minproctime)
                 minproctime = gm->partime[i];
         }
-        printf("\n\n%20s%20d\n","Max = ",maxproctime);
-        printf("%20s%20d\n","Min = ",minproctime);
-        printf("%20s%20d\n","Avg = ",(int) (((double) totalproctime) / ((double) (1.0 * gm->nprocs))));
+        if (TOPRINT) printf("\n\n%20s%20d\n","Max = ",maxproctime);
+        if (TOPRINT) printf("%20s%20d\n","Min = ",minproctime);
+        if (TOPRINT) printf("%20s%20d\n","Avg = ",(int) (((double) totalproctime) / ((double) (1.0 * gm->nprocs))));
     }
 
 	MAIN_END

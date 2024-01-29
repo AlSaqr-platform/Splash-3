@@ -70,13 +70,13 @@ VOID	PolyPrint(OBJECT *po)
 	ELEMENT *pe;			/* Ptr to polygon element.	     */
 
 	pe = po->pelem;
-	fprintf(stderr, "\tpolygon: %ld polygons.\n", po->numelements);
+	 if(TOPRINT) fprintf(stderr, "\tpolygon: %ld polygons.\n", po->numelements);
 
 	for (i = 0; i < po->numelements; i++)
 		{
 		pp = (POLY *)pe->data;
 
-		fprintf(stderr, "\t\tVertices: %ld  Plane eq: %f %f %f %f\n", pp->nverts, pp->norm[0], pp->norm[1], pp->norm[2], pp->d);
+		 if(TOPRINT) fprintf(stderr, "\t\tVertices: %ld  Plane eq: %f %f %f %f\n", pp->nverts, pp->norm[0], pp->norm[1], pp->norm[2], pp->d);
 
 		vlist  = pp->vptr;
 		vindex = pp->vindex;
@@ -84,7 +84,7 @@ VOID	PolyPrint(OBJECT *po)
 		for (j = 0; j < pp->nverts; j++)
 			{
 			vptr = vlist + (*vindex);
-			fprintf(stderr, "\t\t%f %f %f \n", (*vptr)[0], (*vptr)[1], (*vptr)[2]);
+			 if(TOPRINT) fprintf(stderr, "\t\t%f %f %f \n", (*vptr)[0], (*vptr)[1], (*vptr)[2]);
 			vindex++;
 			}
 
@@ -680,7 +680,7 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 	if (instat != 1)
 		{
-		printf("Error in PolyRead: totalverts.\n");
+		if (TOPRINT) printf("Error in PolyRead: totalverts.\n");
 		exit(-1);
 		}
 
@@ -695,7 +695,7 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 	if (instat != 1)
 		{
-		printf("Error in PolyRead: face normal indicator.\n");
+		if (TOPRINT) printf("Error in PolyRead: face normal indicator.\n");
 		exit(-1);
 		}
 
@@ -710,7 +710,7 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 		if (instat != 3)
 			{
-			printf("Error in PolyRead: vertex %ld.\n", i);
+			if (TOPRINT) printf("Error in PolyRead: vertex %ld.\n", i);
 			exit(-1);
 			}
 
@@ -731,13 +731,13 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 		if (instat != 1)
 			{
-			printf("Error in PolyRead: vertex count.\n");
+			if (TOPRINT) printf("Error in PolyRead: vertex count.\n");
 			exit(-1);
 			}
 
 		if (pp->nverts > MAX_VERTS)
 			{
-			printf("Polygon vertex count, %ld, exceeds maximum.\n", pp->nverts);
+			if (TOPRINT) printf("Polygon vertex count, %ld, exceeds maximum.\n", pp->nverts);
 			exit(-1);
 			}
 
@@ -747,7 +747,7 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 			if (instat != 3)
 				{
-				printf("Error in PolyRead: face normal %ld.\n", i);
+				if (TOPRINT) printf("Error in PolyRead: face normal %ld.\n", i);
 				exit(-1);
 				}
 			}
@@ -762,7 +762,7 @@ VOID	PolyRead(OBJECT *po, FILE *pf)
 
 			if (instat != 1)
 				{
-				printf("Error in PolyRead: vertex index %ld.\n", i);
+				if (TOPRINT) printf("Error in PolyRead: vertex index %ld.\n", i);
 				exit(-1);
 				}
 			}

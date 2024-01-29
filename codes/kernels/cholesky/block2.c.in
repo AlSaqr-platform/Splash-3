@@ -118,11 +118,11 @@ void CreateBlockedMatrix2(SMatrix M, long block_ub, long *T, long *firstchild, l
   LB.mapJ = (long *) MyMalloc(LB.n_partitions*sizeof(long), DISTRIBUTED);
   for (i=0; i<LB.n_partitions; i++)
     LB.mapI[i] = LB.mapJ[i] = i;
-  printf("No redistribution\n");
+  if (TOPRINT) printf("No redistribution\n");
 
-  printf("Supers: "); DumpSizes(LB, domain, node);
-  printf("Blocks: "); DumpSizes(LB, domain, LB.partition_size);
-  printf("%ld partitions\n", LB.n_partitions);
+  if (TOPRINT) printf("Supers: "); DumpSizes(LB, domain, node);
+  if (TOPRINT) printf("Blocks: "); DumpSizes(LB, domain, LB.partition_size);
+  if (TOPRINT) printf("%ld partitions\n", LB.n_partitions);
 
   structure = (long *) malloc(M.n*sizeof(long));
   nz = (long *) malloc(M.n*sizeof(long));
@@ -166,7 +166,7 @@ void CreateBlockedMatrix2(SMatrix M, long block_ub, long *T, long *firstchild, l
   for (j=0; j<LB.n_domains; j++)
     LB.n_blocks += (LB.col[LB.n+j+1]-LB.col[LB.n+j]);
 
-  printf("%ld partitions, %ld blocks\n", LB.n_partitions, LB.n_blocks);
+  if (TOPRINT) printf("%ld partitions, %ld blocks\n", LB.n_partitions, LB.n_blocks);
 
   /* now allocate storage for blocks and fill in simple info */
   blocks = (Block *) MyMalloc(LB.n_blocks*sizeof(Block), DISTRIBUTED);
@@ -179,7 +179,7 @@ void CreateBlockedMatrix2(SMatrix M, long block_ub, long *T, long *firstchild, l
         BLOCK(i)->j = j;
 	if (LB.renumbering[BLOCK(i)->i] < 0 ||
 	    LB.renumbering[BLOCK(i)->j] < 0) {
-	  printf("Block %ld has bad structure\n", which);
+	  if (TOPRINT) printf("Block %ld has bad structure\n", which);
 	  exit(-1);
 	}
 	BLOCK(i)->pair = NULL;
@@ -237,7 +237,7 @@ void ComputeBlockParents(long *T)
 	else {
 	  BLOCK(i)->parent = FindBlock(BLOCK(i)->i, parent_col);
 	  if (BLOCK(i)->parent == -1)
-	    printf("Parent not found\n");
+	    if (TOPRINT) printf("Parent not found\n");
 	}
       }
     }
@@ -313,7 +313,7 @@ void FindDomStructure(long super, long *nz, long n_nz)
   for (col=super; col<super+node[super]; col++) {
     LB.col[col+1] = LB.col[col] + n_nz - (col-super);
     if (LB.col[col+1] > LB.entries_allocated) {
-      printf("Overflow\n");
+      if (TOPRINT) printf("Overflow\n");
       exit(-1);
     }
 
@@ -348,7 +348,7 @@ void FindDummyDomainStructure(long which_domain)
   }
 
   if (LB.col[LB.n+which_domain+1] > LB.entries_allocated) {
-    printf("Overflow!!\n");
+    if (TOPRINT) printf("Overflow!!\n");
     exit(-1);
   }
 }
@@ -359,7 +359,7 @@ void CheckColLength(long col, long n_nz)
   extern long *nz;
 
   if (n_nz != nz[col])
-    printf("Col %ld: %ld vs %ld\n", col, n_nz, nz[col]);
+    if (TOPRINT) printf("Col %ld: %ld vs %ld\n", col, n_nz, nz[col]);
 }
 
 void FindBlStructure(SMatrix M, long super, long *PERM, long *INVP, long *firstchild, long *child, long *structure, long *nz)
@@ -403,7 +403,7 @@ void FindBlStructure(SMatrix M, long super, long *PERM, long *INVP, long *firstc
 
   LB.col[super+1] = LB.col[super] + n_nz;
   if (LB.col[super+1] > LB.entries_allocated) {
-    printf("Overflow\n");
+    if (TOPRINT) printf("Overflow\n");
     exit(-1);
   }
   for (i=0; i<n_nz; i++)
@@ -491,7 +491,7 @@ void FindDetailedStructure(long col, long *structure, long *nz, long n_nz)
     else {
       owner = EmbeddedOwner(i);
       if (owner < 0)
-	printf("%ld,%ld: %ld\n", BLOCKROW(i), BLOCKCOL(i), owner);
+	if (TOPRINT) printf("%ld,%ld: %ld\n", BLOCKROW(i), BLOCKCOL(i), owner);
       BLOCK(i)->structure = (long *) MyMalloc(n*sizeof(long), owner);
       n = 0;
       for (j=0; j<LB.partition_size[row]; j++)
@@ -645,9 +645,9 @@ void DumpSizes(BMatrix LB, long *domain, long *sizes)
     if (buckets[i] == 0)
       ;
     else
-      printf("%ld: %ld  ", i, buckets[i]);
+      if (TOPRINT) printf("%ld: %ld  ", i, buckets[i]);
   }
-  printf("\n");
+  if (TOPRINT) printf("\n");
 
   free(buckets);
 }
@@ -679,7 +679,7 @@ void FindMachineDimensions(long P)
   }
 
   P_dimi = div; P_dimj = try;
-  printf("Processor array is %ld by %ld\n", P_dimi, P_dimj);
+  if (TOPRINT) printf("Processor array is %ld by %ld\n", P_dimi, P_dimj);
 }
 
 

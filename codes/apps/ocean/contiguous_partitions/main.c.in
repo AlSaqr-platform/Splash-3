@@ -188,17 +188,17 @@ int main(int argc, char *argv[])
      case 't': dtau = atof(optarg); break;
      case 's': do_stats = !do_stats; break;
      case 'o': do_output = !do_output; break;
-     case 'h': printf("Usage: OCEAN <options>\n\n");
-               printf("options:\n");
-               printf("  -nN : Simulate NxN ocean.  N must be (power of 2)+2.\n");
-               printf("  -pP : P = number of processors.  P must be power of 2.\n");
-               printf("  -eE : E = error tolerance for iterative relaxation.\n");
-               printf("  -rR : R = distance between grid points in meters.\n");
-               printf("  -tT : T = timestep in seconds.\n");
-               printf("  -s  : Print timing statistics.\n");
-               printf("  -o  : Print out relaxation residual values.\n");
-               printf("  -h  : Print out command line options.\n\n");
-               printf("Default: OCEAN -n%1d -p%1d -e%1g -r%1g -t%1g\n",
+     case 'h': if (TOPRINT) printf("Usage: OCEAN <options>\n\n");
+               if (TOPRINT) printf("options:\n");
+               if (TOPRINT) printf("  -nN : Simulate NxN ocean.  N must be (power of 2)+2.\n");
+               if (TOPRINT) printf("  -pP : P = number of processors.  P must be power of 2.\n");
+               if (TOPRINT) printf("  -eE : E = error tolerance for iterative relaxation.\n");
+               if (TOPRINT) printf("  -rR : R = distance between grid points in meters.\n");
+               if (TOPRINT) printf("  -tT : T = timestep in seconds.\n");
+               if (TOPRINT) printf("  -s  : Print timing statistics.\n");
+               if (TOPRINT) printf("  -o  : Print out relaxation residual values.\n");
+               if (TOPRINT) printf("  -h  : Print out command line options.\n\n");
+               if (TOPRINT) printf("Default: OCEAN -n%1d -p%1d -e%1g -r%1g -t%1g\n",
                        DEFAULT_N,DEFAULT_P,DEFAULT_E,DEFAULT_R,DEFAULT_T);
                exit(0);
                break;
@@ -208,14 +208,14 @@ int main(int argc, char *argv[])
    MAIN_INITENV(,60000000)
 
    jm = im;
-   printf("\n");
-   printf("Ocean simulation with W-cycle multigrid solver\n");
-   printf("    Processors                         : %1ld\n",nprocs);
-   printf("    Grid size                          : %1ld x %1ld\n",im,jm);
-   printf("    Grid resolution (meters)           : %0.2f\n",res);
-   printf("    Time between relaxations (seconds) : %0.0f\n",dtau);
-   printf("    Error tolerance                    : %0.7g\n",tolerance);
-   printf("\n");
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("Ocean simulation with W-cycle multigrid solver\n");
+   if (TOPRINT) printf("    Processors                         : %1ld\n",nprocs);
+   if (TOPRINT) printf("    Grid size                          : %1ld x %1ld\n",im,jm);
+   if (TOPRINT) printf("    Grid resolution (meters)           : %0.2f\n",res);
+   if (TOPRINT) printf("    Time between relaxations (seconds) : %0.0f\n",dtau);
+   if (TOPRINT) printf("    Error tolerance                    : %0.7g\n",tolerance);
+   if (TOPRINT) printf("\n");
 
    xprocs = 0;
    yprocs = 0;
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
    jm = (jmx[numlev-1]-2)/xprocs + 2;
 
    if (do_output) {
-     printf("                       MULTIGRID OUTPUTS\n");
+     if (TOPRINT) printf("                       MULTIGRID OUTPUTS\n");
    }
 
    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
@@ -484,11 +484,11 @@ int main(int argc, char *argv[])
    SPLASH3_ROI_END();
    CLOCK(computeend)
 
-   printf("\n");
-   printf("                       PROCESS STATISTICS\n");
-   printf("                  Total          Multigrid         Multigrid\n");
-   printf(" Proc             Time             Time            Fraction\n");
-   printf("    0   %15.0f    %15.0f        %10.3f\n", gp[0].total_time,gp[0].multi_time, gp[0].multi_time/gp[0].total_time);
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("                       PROCESS STATISTICS\n");
+   if (TOPRINT) printf("                  Total          Multigrid         Multigrid\n");
+   if (TOPRINT) printf(" Proc             Time             Time            Fraction\n");
+   if (TOPRINT) printf("    0   %15.0f    %15.0f        %10.3f\n", gp[0].total_time,gp[0].multi_time, gp[0].multi_time/gp[0].total_time);
 
    if (do_stats) {
      min_total = max_total = avg_total = gp[0].total_time;
@@ -521,28 +521,28 @@ int main(int argc, char *argv[])
      avg_multi = avg_multi / nprocs;
      avg_frac = avg_frac / nprocs;
      for (i=1;i<nprocs;i++) {
-       printf("  %3ld   %15.0f    %15.0f        %10.3f\n", i,gp[i].total_time,gp[i].multi_time, gp[i].multi_time/gp[i].total_time);
+       if (TOPRINT) printf("  %3ld   %15.0f    %15.0f        %10.3f\n", i,gp[i].total_time,gp[i].multi_time, gp[i].multi_time/gp[i].total_time);
      }
-     printf("  Avg   %15.0f    %15.0f        %10.3f\n", avg_total,avg_multi,avg_frac);
-     printf("  Min   %15.0f    %15.0f        %10.3f\n", min_total,min_multi,min_frac);
-     printf("  Max   %15.0f    %15.0f        %10.3f\n", max_total,max_multi,max_frac);
+     if (TOPRINT) printf("  Avg   %15.0f    %15.0f        %10.3f\n", avg_total,avg_multi,avg_frac);
+     if (TOPRINT) printf("  Min   %15.0f    %15.0f        %10.3f\n", min_total,min_multi,min_frac);
+     if (TOPRINT) printf("  Max   %15.0f    %15.0f        %10.3f\n", max_total,max_multi,max_frac);
    }
-   printf("\n");
+   if (TOPRINT) printf("\n");
 
    global->starttime = start;
-   printf("                       TIMING INFORMATION\n");
-   printf("Start time                        : %16lu\n", global->starttime);
-   printf("Initialization finish time        : %16lu\n", global->trackstart);
-   printf("Overall finish time               : %16lu\n", computeend);
-   printf("Total time with initialization    : %16lu\n", computeend-global->starttime);
-   printf("Total time without initialization : %16lu\n", computeend-global->trackstart);
-   printf("    (excludes first timestep)\n");
-   printf("\n");
+   if (TOPRINT) printf("                       TIMING INFORMATION\n");
+   if (TOPRINT) printf("Start time                        : %16lu\n", global->starttime);
+   if (TOPRINT) printf("Initialization finish time        : %16lu\n", global->trackstart);
+   if (TOPRINT) printf("Overall finish time               : %16lu\n", computeend);
+   if (TOPRINT) printf("Total time with initialization    : %16lu\n", computeend-global->starttime);
+   if (TOPRINT) printf("Total time without initialization : %16lu\n", computeend-global->trackstart);
+   if (TOPRINT) printf("    (excludes first timestep)\n");
+   if (TOPRINT) printf("\n");
 
    // read out cycle counter and calc diff
-   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   printf("\n");
+   if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+   printf("OCEAN C CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+   if (TOPRINT) printf("\n");
 
    MAIN_END
 }
@@ -571,6 +571,6 @@ long log_2(long number)
 
 void printerr(char *s)
 {
-  fprintf(stderr,"ERROR: %s\n",s);
+   if(TOPRINT) fprintf(stderr,"ERROR: %s\n",s);
 }
 

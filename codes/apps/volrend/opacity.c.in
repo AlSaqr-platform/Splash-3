@@ -57,7 +57,7 @@ void Compute_Opacity()
   opc_length = opc_len[X] * opc_len[Y] * opc_len[Z];
   Allocate_Opacity(&opc_address, opc_length);
 
-  printf("    Computing opacity map...\n");
+  if (TOPRINT) printf("    Computing opacity map...\n");
 
   Global->Index = NODE0;
 
@@ -75,7 +75,7 @@ void Allocate_Opacity(address, length)
 {
   long i;
 
-  printf("    Allocating opacity map of %ld bytes...\n",
+  if (TOPRINT) printf("    Allocating opacity map of %ld bytes...\n",
 	 length*sizeof(OPACITY));
 
   *address = (OPACITY *)NU_MALLOC(length*sizeof(OPACITY),0);
@@ -194,7 +194,7 @@ void Load_Opacity(filename)
 
   Allocate_Opacity(&opc_address,opc_length);
 
-  printf("    Loading opacity map from .opc file...\n");
+  if (TOPRINT) printf("    Loading opacity map from .opc file...\n");
   Read_Bytes(fd,(unsigned char *)opc_address,(long)(opc_length*sizeof(OPACITY)));
   Close_File(fd);
 }
@@ -219,7 +219,7 @@ char filename[];
   Write_Shorts(fd,(unsigned char *)opc_len,(long)sizeof(opc_len));
   Write_Longs(fd,(unsigned char *)&opc_length,(long)sizeof(opc_length));
 
-  printf("    Storing opacity map into .opc file...\n");
+  if (TOPRINT) printf("    Storing opacity map into .opc file...\n");
   Write_Bytes(fd,(unsigned char *)opc_address,(long)(opc_length*sizeof(OPACITY)));
   Close_File(fd);
 }
@@ -228,7 +228,7 @@ char filename[];
 void Deallocate_Opacity(address)
 OPACITY **address;
 {
-  printf("    Deallocating opacity map...\n");
+  if (TOPRINT) printf("    Deallocating opacity map...\n");
 
 /*  G_FREE(*address);  */
 

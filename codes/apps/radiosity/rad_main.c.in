@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     global = (Global *) G_MALLOC(sizeof(Global)) ;
     if( global == 0 )
         {
-            printf( "Can't allocate memory\n" ) ;
+            if (TOPRINT) printf( "Can't allocate memory\n" ) ;
             exit(1) ;
         }
     init_global(0) ;
@@ -258,17 +258,17 @@ int main(int argc, char *argv[])
             CLOCK( time_rad_end );
 
             /* Print out running time */
-            printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
+            if (TOPRINT) printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
 
             print_running_time(0);
 
             if (dostats) {
-                printf("\n\n\nPER-PROCESS STATISTICS:\n");
+                if (TOPRINT) printf("\n\n\nPER-PROCESS STATISTICS:\n");
 
-                printf("%8s%20s%20s%12s%12s\n","Proc","Total","Refine","Wait","Smooth");
-                printf("%8s%20s%20s%12s%12s\n\n","","Time","Time","Time","Time");
+                if (TOPRINT) printf("%8s%20s%20s%12s%12s\n","Proc","Total","Refine","Wait","Smooth");
+                if (TOPRINT) printf("%8s%20s%20s%12s%12s\n\n","","Time","Time","Time","Time");
                 for (i = 0; i < n_processors; i++)
-                    printf("%8ld%20lu%20lu%12lu%12lu\n",i,timing[i]->rad_time, timing[i]->refine_time, timing[i]->wait_time, timing[i]->vertex_time);
+                    if (TOPRINT) printf("%8ld%20lu%20lu%12lu%12lu\n",i,timing[i]->rad_time, timing[i]->refine_time, timing[i]->wait_time, timing[i]->vertex_time);
 
                 total_rad_time = timing[0]->rad_time;
                 max_rad_time = timing[0]->rad_time;
@@ -312,10 +312,10 @@ int main(int argc, char *argv[])
                         min_vertex_time = timing[i]->vertex_time;
                 }
 
-                printf("\n\n%8s%20lu%20lu%12lu%12lu\n","Max", max_rad_time, max_refine_time, max_wait_time, max_vertex_time);
-                printf("\n%8s%20lu%20lu%12lu%12lu\n","Min", min_rad_time, min_refine_time, min_wait_time, min_vertex_time);
-                printf("\n%8s%20lu%20lu%12lu%12lu\n","Avg", (long) (((double) total_rad_time) / ((double) (1.0 * n_processors))), (long) (((double) total_refine_time) / ((double) (1.0 * n_processors))), (long) (((double) total_wait_time) / ((double) (1.0 * n_processors))), (long) (((double) total_vertex_time) / ((double) (1.0 * n_processors))));
-                printf("\n\n");
+                if (TOPRINT) printf("\n\n%8s%20lu%20lu%12lu%12lu\n","Max", max_rad_time, max_refine_time, max_wait_time, max_vertex_time);
+                if (TOPRINT) printf("\n%8s%20lu%20lu%12lu%12lu\n","Min", min_rad_time, min_refine_time, min_wait_time, min_vertex_time);
+                if (TOPRINT) printf("\n%8s%20lu%20lu%12lu%12lu\n","Avg", (long) (((double) total_rad_time) / ((double) (1.0 * n_processors))), (long) (((double) total_refine_time) / ((double) (1.0 * n_processors))), (long) (((double) total_wait_time) / ((double) (1.0 * n_processors))), (long) (((double) total_vertex_time) / ((double) (1.0 * n_processors))));
+                if (TOPRINT) printf("\n\n");
 
             }
 
@@ -335,9 +335,9 @@ int main(int argc, char *argv[])
         }
 
     // read out cycle counter and calc diff
-    printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-    printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-    printf("\n");
+    if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+    printf("RADIOSITY CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+    if (TOPRINT) printf("\n");
 
     MAIN_END;
     exit(0) ;
@@ -387,7 +387,7 @@ void start_radiosity(long val)
         {
             if( state == -1 )
                 {
-                    printf( "Please reset first\007\n" ) ;
+                    if (TOPRINT) printf( "Please reset first\007\n" ) ;
                     return ;
                 }
 
@@ -411,18 +411,18 @@ void start_radiosity(long val)
 
             /* Print out running time */
             /* Print out running time */
-            printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
+            if (TOPRINT) printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
 
             print_running_time(0);
 
             if (dostats) {
-                printf("\n\n\nPER-PROCESS STATISTICS:\n");
+                if (TOPRINT) printf("\n\n\nPER-PROCESS STATISTICS:\n");
 
-                printf("%8s%20s%20s%12s%12s\n","Proc","Total","Refine","Wait","Smooth");
-                printf("%8s%20s%20s%12s%12s\n\n","","Time","Time","Time","Time")
+                if (TOPRINT) printf("%8s%20s%20s%12s%12s\n","Proc","Total","Refine","Wait","Smooth");
+                if (TOPRINT) printf("%8s%20s%20s%12s%12s\n\n","","Time","Time","Time","Time")
                     ;
                 for (i = 0; i < n_processors; i++)
-                    printf("%8ld%20lu%20lu%12lu%12lu\n",i,timing[i]->rad_time, timing[i]->refine_time, timing[i]->wait_time, timing[i]->vertex_time);
+                    if (TOPRINT) printf("%8ld%20lu%20lu%12lu%12lu\n",i,timing[i]->rad_time, timing[i]->refine_time, timing[i]->wait_time, timing[i]->vertex_time);
 
                 total_rad_time = timing[0]->rad_time;
                 max_rad_time = timing[0]->rad_time;
@@ -467,10 +467,10 @@ void start_radiosity(long val)
                 }
 
 
-                printf("\n\n%8s%20lu%20lu%12lu%12lu\n","Max", max_rad_time, max_refine_time, max_wait_time, max_vertex_time);
-                printf("\n%8s%20lu%20lu%12lu%12lu\n","Min", min_rad_time, min_refine_time, min_wait_time, min_vertex_time);
-                printf("\n%8s%20lu%20lu%12lu%12lu\n","Avg", (long) (((double) total_rad_time) / ((double) (1.0 * n_processors))), (long) (((double) total_refine_time) / ((double) (1.0 * n_processors))), (long) (((double) total_wait_time) / ((double) (1.0 * n_processors))), (long) (((double) total_vertex_time) / ((double) (1.0 * n_processors))));
-                printf("\n\n");
+                if (TOPRINT) printf("\n\n%8s%20lu%20lu%12lu%12lu\n","Max", max_rad_time, max_refine_time, max_wait_time, max_vertex_time);
+                if (TOPRINT) printf("\n%8s%20lu%20lu%12lu%12lu\n","Min", min_rad_time, min_refine_time, min_wait_time, min_vertex_time);
+                if (TOPRINT) printf("\n%8s%20lu%20lu%12lu%12lu\n","Avg", (long) (((double) total_rad_time) / ((double) (1.0 * n_processors))), (long) (((double) total_refine_time) / ((double) (1.0 * n_processors))), (long) (((double) total_wait_time) / ((double) (1.0 * n_processors))), (long) (((double) total_vertex_time) / ((double) (1.0 * n_processors))));
+                if (TOPRINT) printf("\n\n");
 
             }
 
@@ -489,7 +489,7 @@ void start_radiosity(long val)
         {
             if( state == -1 )
                 {
-                    printf( "Please reset first\007\n" ) ;
+                    if (TOPRINT) printf( "Please reset first\007\n" ) ;
                     return ;
                 }
 
@@ -1175,25 +1175,25 @@ static void parse_args(int argc, char *argv[])
     /* Then check the arguments */
     if( (n_processors < 1) || (MAX_PROCESSORS < n_processors) )
         {
-            fprintf( stderr, "Bad number of processors: %ld\n",
+             if(TOPRINT) fprintf( stderr, "Bad number of processors: %ld\n",
                     n_processors ) ;
             exit(1) ;
         }
     if( (n_taskqueues < 1) || (MAX_TASKQUEUES < n_taskqueues) )
         {
-            fprintf( stderr, "Bad number of task queues: %ld (max: %d)\n",
+             if(TOPRINT) fprintf( stderr, "Bad number of task queues: %ld (max: %d)\n",
 		     n_taskqueues, MAX_TASKQUEUES ) ;
             exit(1) ;
         }
     /* Check epsilon values */
     if( Area_epsilon < 0.0 )
         {
-            fprintf( stderr, "Area epsilon must be positive\n" ) ;
+             if(TOPRINT) fprintf( stderr, "Area epsilon must be positive\n" ) ;
             exit(1) ;
         }
     if( BFepsilon < 0.0 )
         {
-            fprintf( stderr, "BFepsilon must be within [0,1]\n" ) ;
+             if(TOPRINT) fprintf( stderr, "BFepsilon must be within [0,1]\n" ) ;
             exit(1) ;
         }
 }
@@ -1208,19 +1208,19 @@ static void parse_args(int argc, char *argv[])
 
 void print_usage()
 {
-    fprintf( stderr, "Usage:  RADIOSITY  [options..]\n\n" ) ;
-    fprintf( stderr, "\tNote: Must have a space between option label and numeric value, if any\n\n");
-    fprintf( stderr, "   -p    (d)  # of processes\n" ) ;
-    fprintf( stderr, "   -tq   (d)  # of tasks per queue: default (200) in code for SPLASH\n" ) ;
-    fprintf( stderr, "   -ae   (f)  Area epsilon: default (2000.0) in code for SPLASH\n" ) ;
-    fprintf( stderr, "   -pr   (d)  # of inter for parallel refinement: default (5) in code for SPLASH\n") ;
-    fprintf( stderr, "   -pv   (d)  # of visibility comp in a task: default (4) in code for SPLASH\n") ;
-    fprintf( stderr, "   -bf   (f)  BFepsilon (BF refinement): default (0.015) in code for SPLASH\n" ) ;
-    fprintf( stderr, "   -en   (f)  Energy epsilon (convergence): default (0.005) in code for SPLASH\n" ) ;
-    fprintf( stderr, "   -room      Use room model (default=test)\n" ) ;
-    fprintf( stderr, "   -largeroom Use large room model\n" ) ;
-    fprintf( stderr, "   -batch     Batch mode (use for SPLASH)\n" ) ;
-    fprintf( stderr, "   -verbose   Verbose mode (don't use for SPLASH)\n" ) ;
-    fprintf( stderr, "   -s   Measure per-process timing (don't use for SPLASH)\n" ) ;
+     if(TOPRINT) fprintf( stderr, "Usage:  RADIOSITY  [options..]\n\n" ) ;
+     if(TOPRINT) fprintf( stderr, "\tNote: Must have a space between option label and numeric value, if any\n\n");
+     if(TOPRINT) fprintf( stderr, "   -p    (d)  # of processes\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -tq   (d)  # of tasks per queue: default (200) in code for SPLASH\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -ae   (f)  Area epsilon: default (2000.0) in code for SPLASH\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -pr   (d)  # of inter for parallel refinement: default (5) in code for SPLASH\n") ;
+     if(TOPRINT) fprintf( stderr, "   -pv   (d)  # of visibility comp in a task: default (4) in code for SPLASH\n") ;
+     if(TOPRINT) fprintf( stderr, "   -bf   (f)  BFepsilon (BF refinement): default (0.015) in code for SPLASH\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -en   (f)  Energy epsilon (convergence): default (0.005) in code for SPLASH\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -room      Use room model (default=test)\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -largeroom Use large room model\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -batch     Batch mode (use for SPLASH)\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -verbose   Verbose mode (don't use for SPLASH)\n" ) ;
+     if(TOPRINT) fprintf( stderr, "   -s   Measure per-process timing (don't use for SPLASH)\n" ) ;
 }
 

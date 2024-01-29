@@ -247,7 +247,7 @@ VOID	PrintWorkPool(INT pid)
 
 	while (j)
 		{
-		printf("Workpool entry:    pid=%3ld    xs=%3ld    ys=%3ld    xe=%3ld    ye=%3ld\n", pid, j->xpix, j->ypix, j->xdim, j->ydim);
+		if (TOPRINT) printf("Workpool entry:    pid=%3ld    xs=%3ld    ys=%3ld    xe=%3ld    ye=%3ld\n", pid, j->xpix, j->ypix, j->xdim, j->ydim);
 		j = j->next;
 		}
 	}

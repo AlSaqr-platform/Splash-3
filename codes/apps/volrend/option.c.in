@@ -167,39 +167,39 @@ void Init_Parallelization()
   block_xlen = BLOCK_LEN;
   block_ylen = BLOCK_LEN;
 #ifdef RENDER_ONLY
-  printf("Rendering only:  Starting from .norm, .opc and .pyr files\n");
+  if (TOPRINT) printf("Rendering only:  Starting from .norm, .opc and .pyr files\n");
 #else
 #ifdef PREPROCESS
-  printf("Preprocessing only: From .den file to .norm, .opc, and .pyr files; no rendering\n");
+  if (TOPRINT) printf("Preprocessing only: From .den file to .norm, .opc, and .pyr files; no rendering\n");
 #else
-  printf("Both computing normals, opacities and octree as well as rendering: starting from .den file\n");
+  if (TOPRINT) printf("Both computing normals, opacities and octree as well as rendering: starting from .den file\n");
 #endif
 #ifdef SERIAL_PREPROC
-  printf("NOTE: Preprocessing (computing normals, opacities and octree) is done serially by only one processor\n");
+  if (TOPRINT) printf("NOTE: Preprocessing (computing normals, opacities and octree) is done serially by only one processor\n");
 #endif
 #endif
 
-  printf("Gouraud shading from lookup tables used\n");
-  printf("\t%ld processes\n",num_nodes);
-  printf("\t%ldx%ld image block size\n",block_xlen,block_ylen);
+  if (TOPRINT) printf("Gouraud shading from lookup tables used\n");
+  if (TOPRINT) printf("\t%ld processes\n",num_nodes);
+  if (TOPRINT) printf("\t%ldx%ld image block size\n",block_xlen,block_ylen);
 
   if (adaptive) {
-    printf("\tdoing adaptive rendering\n");
+    if (TOPRINT) printf("\tdoing adaptive rendering\n");
   }
   else
-    printf("\tdoing nonadaptive rendering\n");
+    if (TOPRINT) printf("\tdoing nonadaptive rendering\n");
 
-  printf("\tusing precomputed normals and opacities in separate array\n");
+  if (TOPRINT) printf("\tusing precomputed normals and opacities in separate array\n");
 
-  printf("\tusing opacity octree\n");
+  if (TOPRINT) printf("\tusing opacity octree\n");
 
-  printf("\tstarting angle at (%.1f, %.1f, %.1f) with rotation step of %d\n",
+  if (TOPRINT) printf("\tstarting angle at (%.1f, %.1f, %.1f) with rotation step of %d\n",
 angle[X],angle[Y],angle[Z],STEP_SIZE);
 #ifdef DIM
-  printf("rotating %d steps in each of the three Cartesian directions\n",ROTATE_STEPS);
+  if (TOPRINT) printf("rotating %d steps in each of the three Cartesian directions\n",ROTATE_STEPS);
 #else
-  printf("rotating %d steps in the Y direction\n",ROTATE_STEPS);
+  if (TOPRINT) printf("rotating %d steps in the Y direction\n",ROTATE_STEPS);
 #endif
 
-  printf("\n");
+  if (TOPRINT) printf("\n");
 }

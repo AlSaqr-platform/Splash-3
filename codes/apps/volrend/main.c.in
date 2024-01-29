@@ -71,7 +71,7 @@ void mclock(long stoptime, long starttime, long *exectime)
 int main(int argc, char *argv[])
 {
   if ((argc < 4) || (strncmp(argv[1],"-h",strlen("-h")) == 0) || (strncmp(argv[1],"-h",strlen("-H")) == 0)){
-    printf("usage:  VOLREND num_processes input_file ROTATE_STEPS\n");
+    if (TOPRINT) printf("usage:  VOLREND num_processes input_file ROTATE_STEPS\n");
     exit(-1);
   }
 
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     if (strncmp(argv[4],"-a",strlen("-a")) == 0)
       adaptive = YES;
     else {
-      printf("usage:  VOLREND num_processes input_file ROTATE_STEPS [-a] \n");
+      if (TOPRINT) printf("usage:  VOLREND num_processes input_file ROTATE_STEPS [-a] \n");
       exit(-1);
     }
   }
@@ -109,12 +109,12 @@ void Frame()
 
   Init_Options();
 
-  printf("*****Entering init_decomposition with num_nodes = %ld\n",num_nodes);
+  if (TOPRINT) printf("*****Entering init_decomposition with num_nodes = %ld\n",num_nodes);
   fflush(stdout);
 
   Init_Decomposition();
 
-  printf("*****Exited init_decomposition with num_nodes = %ld\n",num_nodes);
+  if (TOPRINT) printf("*****Exited init_decomposition with num_nodes = %ld\n",num_nodes);
   fflush(stdout);
 
 
@@ -132,7 +132,7 @@ void Frame()
   Load_Map(filename);
   CLOCK(stoptime);
   mclock(stoptime,starttime,&exectime);
-  printf("wall clock execution time to load map:  %lu ms\n", exectime);
+  if (TOPRINT) printf("wall clock execution time to load map:  %lu ms\n", exectime);
 #endif
 
   CLOCK(starttime);
@@ -146,7 +146,7 @@ void Frame()
 #endif
   CLOCK(stoptime);
   mclock(stoptime,starttime,&exectime);
-  printf("wall clock execution time to compute normal:  %lu ms\n", exectime);
+  if (TOPRINT) printf("wall clock execution time to compute normal:  %lu ms\n", exectime);
 
   CLOCK(starttime);
 #ifndef RENDER_ONLY
@@ -159,7 +159,7 @@ void Frame()
 #endif
   CLOCK(stoptime);
   mclock(stoptime,starttime,&exectime);
-  printf("wall clock execution time to compute opacity:  %lu ms\n", exectime);
+  if (TOPRINT) printf("wall clock execution time to compute opacity:  %lu ms\n", exectime);
 
   Compute_Pre_View();
   shd_length = LOOKUP_SIZE;
@@ -196,14 +196,14 @@ void Frame()
 #endif
   CLOCK(stoptime);
   mclock(stoptime,starttime,&exectime);
-  printf("wall clock execution time to compute octree:  %lu ms\n", exectime);
+  if (TOPRINT) printf("wall clock execution time to compute octree:  %lu ms\n", exectime);
 
 #ifdef PREPROCESS
   return;
 #endif
 
   if (adaptive) {
-    printf("1.\n");
+    if (TOPRINT) printf("1.\n");
     for (i=0; i<NI; i++) {
       mask_image_len[i] = image_len[i];
     }
@@ -213,7 +213,7 @@ void Frame()
       mask_image_block = (PIXEL *)mask_image_address;
     else
       Lallocate_Image(&mask_image_block, block_xlen*block_ylen);
-    printf("2.\n");
+    if (TOPRINT) printf("2.\n");
   }
 
 #ifndef RENDER_ONLY
@@ -222,8 +222,8 @@ void Frame()
 
   Global->Index = NODE0;
 
-  printf("\nRendering...\n");
-  printf("node\tframe\ttime\titime\trays\thrays\tsamples trilirped\n");
+  if (TOPRINT) printf("\nRendering...\n");
+  if (TOPRINT) printf("node\tframe\ttime\titime\trays\thrays\tsamples trilirped\n");
 
   SPLASH3_ROI_BEGIN();
   CREATE(Render_Loop, num_nodes);
@@ -341,7 +341,7 @@ WriteGrayscaleTIFF(filename, image_len[X],image_len[Y],image_len[X], image_addre
 #if 0
 void Error(char string[], char *arg1, char *arg2, char *arg3, char *arg4, char *arg5, char *arg6, char *arg7, char *arg8)
 {
-  fprintf(stderr,string,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+   if(TOPRINT) fprintf(stderr,string,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
   exit(1);
 }
 #else
@@ -360,7 +360,7 @@ void Error(char string[], ...)
 	arg1 = va_arg(ap, char *);
 	arg1 = va_arg(ap, char *);
 	va_end(ap);
-	fprintf(stderr,string,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+	 if(TOPRINT) fprintf(stderr,string,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
 	exit(1);
 }
 #endif
@@ -369,7 +369,7 @@ void Allocate_Image(PIXEL **address, long length)
 {
   long i;
 
-  printf("    Allocating image of %ld bytes...\n", length*sizeof(PIXEL));
+  if (TOPRINT) printf("    Allocating image of %ld bytes...\n", length*sizeof(PIXEL));
 
   *address = (PIXEL *)NU_MALLOC(length*sizeof(PIXEL),0);
 
@@ -385,7 +385,7 @@ void Allocate_MImage(MPIXEL **address, long length)
 {
   long i;
 
-  printf("    Allocating image of %ld bytes...\n", length*sizeof(MPIXEL));
+  if (TOPRINT) printf("    Allocating image of %ld bytes...\n", length*sizeof(MPIXEL));
 
   *address = (MPIXEL *)NU_MALLOC(length*sizeof(MPIXEL),0);
 
@@ -403,7 +403,7 @@ void Allocate_MImage(MPIXEL **address, long length)
 
 void Lallocate_Image(PIXEL **address, long length)
 {
-  printf("    Allocating image of %ld bytes...\n", length*sizeof(PIXEL));
+  if (TOPRINT) printf("    Allocating image of %ld bytes...\n", length*sizeof(PIXEL));
   *address = (PIXEL *)calloc(length,sizeof(PIXEL));
   if (*address == NULL)
     Error("    No space available for image.\n");
@@ -441,7 +441,7 @@ void Allocate_Shading_Table(PIXEL **address1, long length)
 {
   long i;
 
-  printf("    Allocating shade lookup table of %ld bytes...\n",
+  if (TOPRINT) printf("    Allocating shade lookup table of %ld bytes...\n",
 	 length*sizeof(PIXEL));
 
 /*  POSSIBLE ENHANCEMENT:  If you want to replicate the shade table,

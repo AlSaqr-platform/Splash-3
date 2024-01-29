@@ -246,7 +246,7 @@ int main (int argc, string argv[])
 	exit(-1);
 	break;
       default:
-	fprintf(stderr, "Only valid option is \"-h\".\n");
+	 if(TOPRINT) fprintf(stderr, "Only valid option is \"-h\".\n");
 	exit(-1);
 	break;
      }
@@ -269,7 +269,7 @@ int main (int argc, string argv[])
 
    CLOCK(Global->computestart);
 
-   printf("COMPUTESTART  = %12lu\n",Global->computestart);
+   if(TOPRINT) printf("COMPUTESTART  = %12lu\n",Global->computestart);
 
    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
 
@@ -282,16 +282,16 @@ int main (int argc, string argv[])
    
    CLOCK(Global->computeend);
 
-   printf("COMPUTEEND    = %12lu\n",Global->computeend);
-   printf("COMPUTETIME   = %12lu\n",Global->computeend - Global->computestart);
-   printf("TRACKTIME     = %12lu\n",Global->tracktime);
-   printf("PARTITIONTIME = %12lu\t%5.2f\n",Global->partitiontime,
+   if(TOPRINT) printf("COMPUTEEND    = %12lu\n",Global->computeend);
+   if(TOPRINT) printf("COMPUTETIME   = %12lu\n",Global->computeend - Global->computestart);
+   if(TOPRINT) printf("TRACKTIME     = %12lu\n",Global->tracktime);
+   if(TOPRINT) printf("PARTITIONTIME = %12lu\t%5.2f\n",Global->partitiontime,
 	  ((float)Global->partitiontime)/Global->tracktime);
-   printf("TREEBUILDTIME = %12lu\t%5.2f\n",Global->treebuildtime,
+   if(TOPRINT) printf("TREEBUILDTIME = %12lu\t%5.2f\n",Global->treebuildtime,
 	  ((float)Global->treebuildtime)/Global->tracktime);
-   printf("FORCECALCTIME = %12lu\t%5.2f\n",Global->forcecalctime,
+   if(TOPRINT) printf("FORCECALCTIME = %12lu\t%5.2f\n",Global->forcecalctime,
 	  ((float)Global->forcecalctime)/Global->tracktime);
-   printf("RESTTIME      = %12lu\t%5.2f\n",
+   if(TOPRINT) printf("RESTTIME      = %12lu\t%5.2f\n",
 	  Global->tracktime - Global->partitiontime -
 	  Global->treebuildtime - Global->forcecalctime,
 	  ((float)(Global->tracktime-Global->partitiontime-
@@ -299,9 +299,9 @@ int main (int argc, string argv[])
 	  Global->tracktime);
 
    // read out cycle counter and calc diff
-   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   printf("\n");
+   if(TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+   printf("BARNES CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+   if(TOPRINT) printf("\n");
 
    MAIN_END;
 }
@@ -362,7 +362,7 @@ long Log_base_2(long number)
       }
    }
 
-   fprintf(stderr,"Log_base_2: couldn't find log2 of %ld\n", number);
+    if(TOPRINT) fprintf(stderr,"Log_base_2: couldn't find log2 of %ld\n", number);
    exit(-1);
 }
 
@@ -460,7 +460,7 @@ void SlaveStart()
    while (Local[ProcessId].tnow < tstop + 0.1 * dtime) {
       stepsystem(ProcessId);
 //      printtree(Global->G_root);
-//      printf("Going to next step!!!\n");
+//      if(TOPRINT) printf("Going to next step!!!\n");
    }
 }
 
@@ -893,55 +893,55 @@ void setbound()
 
 void Help()
 {
-   printf("There are a total of twelve parameters, and all of them have default values.\n");
-   printf("\n");
-   printf("1) infile (char*) : The name of an input file that contains particle data.  \n");
-   printf("    The format of the file is:\n");
-   printf("\ta) An int representing the number of particles in the distribution\n");
-   printf("\tb) An int representing the dimensionality of the problem (3-D)\n");
-   printf("\tc) A double representing the current time of the simulation\n");
-   printf("\td) Doubles representing the masses of all the particles\n");
-   printf("\te) A vector (length equal to the dimensionality) of doubles\n");
-   printf("\t   representing the positions of all the particles\n");
-   printf("\tf) A vector (length equal to the dimensionality) of doubles\n");
-   printf("\t   representing the velocities of all the particles\n");
-   printf("\n");
-   printf("    Each of these numbers can be separated by any amount of whitespace.\n");
-   printf("\n");
-   printf("2) nbody (int) : If no input file is specified (the first line is blank), this\n");
-   printf("    number specifies the number of particles to generate under a plummer model.\n");
-   printf("    Default is 16384.\n");
-   printf("\n");
-   printf("3) seed (int) : The seed used by the random number generator.\n");
-   printf("    Default is 123.\n");
-   printf("\n");
-   printf("4) outfile (char*) : The name of the file that snapshots will be printed to. \n");
-   printf("    This feature has been disabled in the SPLASH release.\n");
-   printf("    Default is NULL.\n");
-   printf("\n");
-   printf("5) dtime (double) : The integration time-step.\n");
-   printf("    Default is 0.025.\n");
-   printf("\n");
-   printf("6) eps (double) : The usual potential softening\n");
-   printf("    Default is 0.05.\n");
-   printf("\n");
-   printf("7) tol (double) : The cell subdivision tolerance.\n");
-   printf("    Default is 1.0.\n");
-   printf("\n");
-   printf("8) fcells (double) : The total number of cells created is equal to \n");
-   printf("    fcells * number of leaves.\n");
-   printf("    Default is 2.0.\n");
-   printf("\n");
-   printf("9) fleaves (double) : The total number of leaves created is equal to  \n");
-   printf("    fleaves * nbody.\n");
-   printf("    Default is 0.5.\n");
-   printf("\n");
-   printf("10) tstop (double) : The time to stop integration.\n");
-   printf("    Default is 0.075.\n");
-   printf("\n");
-   printf("11) dtout (double) : The data-output interval.\n");
-   printf("    Default is 0.25.\n");
-   printf("\n");
-   printf("12) NPROC (int) : The number of processors.\n");
-   printf("    Default is 1.\n");
+   if(TOPRINT) printf("There are a total of twelve parameters, and all of them have default values.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("1) infile (char*) : The name of an input file that contains particle data.  \n");
+   if(TOPRINT) printf("    The format of the file is:\n");
+   if(TOPRINT) printf("\ta) An int representing the number of particles in the distribution\n");
+   if(TOPRINT) printf("\tb) An int representing the dimensionality of the problem (3-D)\n");
+   if(TOPRINT) printf("\tc) A double representing the current time of the simulation\n");
+   if(TOPRINT) printf("\td) Doubles representing the masses of all the particles\n");
+   if(TOPRINT) printf("\te) A vector (length equal to the dimensionality) of doubles\n");
+   if(TOPRINT) printf("\t   representing the positions of all the particles\n");
+   if(TOPRINT) printf("\tf) A vector (length equal to the dimensionality) of doubles\n");
+   if(TOPRINT) printf("\t   representing the velocities of all the particles\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("    Each of these numbers can be separated by any amount of whitespace.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("2) nbody (int) : If no input file is specified (the first line is blank), this\n");
+   if(TOPRINT) printf("    number specifies the number of particles to generate under a plummer model.\n");
+   if(TOPRINT) printf("    Default is 16384.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("3) seed (int) : The seed used by the random number generator.\n");
+   if(TOPRINT) printf("    Default is 123.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("4) outfile (char*) : The name of the file that snapshots will be printed to. \n");
+   if(TOPRINT) printf("    This feature has been disabled in the SPLASH release.\n");
+   if(TOPRINT) printf("    Default is NULL.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("5) dtime (double) : The integration time-step.\n");
+   if(TOPRINT) printf("    Default is 0.025.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("6) eps (double) : The usual potential softening\n");
+   if(TOPRINT) printf("    Default is 0.05.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("7) tol (double) : The cell subdivision tolerance.\n");
+   if(TOPRINT) printf("    Default is 1.0.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("8) fcells (double) : The total number of cells created is equal to \n");
+   if(TOPRINT) printf("    fcells * number of leaves.\n");
+   if(TOPRINT) printf("    Default is 2.0.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("9) fleaves (double) : The total number of leaves created is equal to  \n");
+   if(TOPRINT) printf("    fleaves * nbody.\n");
+   if(TOPRINT) printf("    Default is 0.5.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("10) tstop (double) : The time to stop integration.\n");
+   if(TOPRINT) printf("    Default is 0.075.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("11) dtout (double) : The data-output interval.\n");
+   if(TOPRINT) printf("    Default is 0.25.\n");
+   if(TOPRINT) printf("\n");
+   if(TOPRINT) printf("12) NPROC (int) : The number of processors.\n");
+   if(TOPRINT) printf("    Default is 1.\n");
 }

@@ -43,7 +43,7 @@ void maketree(long ProcessId)
       }
       else {
 	 LOCK(Global->io_lock);
-	 fprintf(stderr, "Process %ld found body %ld to have zero mass\n",
+	  if(TOPRINT) fprintf(stderr, "Process %ld found body %ld to have zero mass\n",
 		 ProcessId, (long) p);
 	 UNLOCK(Global->io_lock);
       }
@@ -100,28 +100,28 @@ void printtree(nodeptr n)
     case CELL:
       c = (cellptr) n;
       nseq = c->seqnum;
-      printf("Cell : Cost = %ld, ", Cost(c));
+      if(TOPRINT) printf("Cell : Cost = %ld, ", Cost(c));
       PRTV("Pos", Pos(n));
-      printf("\n");
+      if(TOPRINT) printf("\n");
       for (k = 0; k < NSUB; k++) {
-	 printf("Child #%ld: ", k);
+	 if(TOPRINT) printf("Child #%ld: ", k);
 	 if (Subp(c)[k] == NULL) {
-	    printf("NONE");
+	    if(TOPRINT) printf("NONE");
 	 }
 	 else {
 	    if (Type(Subp(c)[k]) == CELL) {
 	       nseq = ((cellptr) Subp(c)[k])->seqnum;
-	       printf("C: Cost = %ld, ", Cost(Subp(c)[k]));
+	       if(TOPRINT) printf("C: Cost = %ld, ", Cost(Subp(c)[k]));
 	    }
 	    else {
 	       nseq = ((leafptr) Subp(c)[k])->seqnum;
-	       printf("L: # Bodies = %2ld, Cost = %ld, ",
+	       if(TOPRINT) printf("L: # Bodies = %2ld, Cost = %ld, ",
 		      ((leafptr) Subp(c)[k])->num_bodies, Cost(Subp(c)[k]));
 	    }
 	    tmp = Subp(c)[k];
 	    PRTV("Pos", Pos(tmp));
 	 }
-	 printf("\n");
+	 if(TOPRINT) printf("\n");
       }
       for (k=0;k<NSUB;k++) {
 	 if (Subp(c)[k] != NULL) {
@@ -132,19 +132,19 @@ void printtree(nodeptr n)
     case LEAF:
       l = (leafptr) n;
       nseq = l->seqnum;
-      printf("Leaf : # Bodies = %2ld, Cost = %ld, ", l->num_bodies, Cost(l));
+      if(TOPRINT) printf("Leaf : # Bodies = %2ld, Cost = %ld, ", l->num_bodies, Cost(l));
       PRTV("Pos", Pos(n));
-      printf("\n");
+      if(TOPRINT) printf("\n");
       for (k = 0; k < l->num_bodies; k++) {
 	 p = Bodyp(l)[k];
-	 printf("Body #%2ld: Num = %2ld, Level = %ld, ",
+	 if(TOPRINT) printf("Body #%2ld: Num = %2ld, Level = %ld, ",
 		p - bodytab, k, Level(p));
 	 PRTV("Pos",Pos(p));
-	 printf("\n");
+	 if(TOPRINT) printf("\n");
       }
       break;
     default:
-      fprintf(stderr, "Bad type\n");
+       if(TOPRINT) fprintf(stderr, "Bad type\n");
       exit(-1);
       break;
    }
@@ -196,7 +196,7 @@ nodeptr loadtree(bodyptr p, cellptr root, long ProcessId)
 	       }
 	    }
 	    if (!valid_root) {
-	       printf("P%ld body %ld\n", ProcessId, p - bodytab);
+	       if(TOPRINT) printf("P%ld body %ld\n", ProcessId, p - bodytab);
 	       root = Global->G_root;
 	    }
 	 }

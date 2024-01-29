@@ -80,7 +80,7 @@ void Compute_Octree()
   pyr_levels = 1;
   while ((1<<(pyr_levels-1)) < max_len)
     pyr_levels++;
-  printf("    Computing binary pyramid of %d levels...\n",
+  if (TOPRINT) printf("    Computing binary pyramid of %d levels...\n",
 	 pyr_levels);
 
   for (i=0; i<NM; i++) {
@@ -90,7 +90,7 @@ void Compute_Octree()
   pyr_length[0] = (pyr_len[0][X]*pyr_len[0][Y]*pyr_len[0][Z]+7)/8;
   Allocate_Pyramid_Level(&pyr_address[0], pyr_length[0]);
 
-  printf("    Computing octree base...\n");
+  if (TOPRINT) printf("    Computing octree base...\n");
 
   Global->Index = NODE0;
 
@@ -104,7 +104,7 @@ on all processors, don't do this create.
   Compute_Base();
 #endif
 
-  printf("    Performing OR of eight neighbors in binary mask...\n");
+  if (TOPRINT) printf("    Performing OR of eight neighbors in binary mask...\n");
 
   Global->Index = 0;
 
@@ -275,7 +275,7 @@ void Allocate_Pyramid_Level(address, length)
 {
   long i;
 
-  printf("      Allocating pyramid level of %ld bytes...\n",
+  if (TOPRINT) printf("      Allocating pyramid level of %ld bytes...\n",
 	 length*sizeof(BYTE));
 
 /*  POSSIBLE ENHANCEMENT:  If you want to replicate the octree
@@ -304,7 +304,7 @@ void Compute_Pyramid_Level(level)
   long inx_plus_one,iny_plus_one,inz_plus_one;
   BOOLEAN bit;
 
-  printf("      Computing pyramid level %ld from level %ld...\n",
+  if (TOPRINT) printf("      Computing pyramid level %ld from level %ld...\n",
 	 level,level-1);
   for (outz=0; outz<pyr_len[level][Z]; outz++) {
     inz = outz<<1;
@@ -352,10 +352,10 @@ void Load_Octree(filename)
   Read_Shorts(fd,(unsigned char *)pyr_voxlen,(long)(pyr_levels*NM*sizeof(long)));
   Read_Longs(fd,(unsigned char *)pyr_length,(long)(pyr_levels*sizeof(pyr_length[0])));
 
-  printf("    Loading binary pyramid of %d levels...\n",pyr_levels);
+  if (TOPRINT) printf("    Loading binary pyramid of %d levels...\n",pyr_levels);
   for (level=0; level<pyr_levels; level++) {
     Allocate_Pyramid_Level(&pyr_address[level],pyr_length[level]);
-    printf("      Loading pyramid level %ld from .pyr file...\n",level);
+    if (TOPRINT) printf("      Loading pyramid level %ld from .pyr file...\n",level);
     Read_Bytes(fd,(unsigned char *)pyr_address[level],(long)(pyr_length[level]*sizeof(BYTE)));
   }
   Close_File(fd);
@@ -381,9 +381,9 @@ char filename[];
   Write_Shorts(fd,(unsigned char *)pyr_voxlen,(long)(pyr_levels*NM*sizeof(long)));
   Write_Longs(fd,(unsigned char *)pyr_length,(long)(pyr_levels*sizeof(pyr_length[0])));
 
-  printf("    Storing binary pyramid of %d levels...\n",pyr_levels);
+  if (TOPRINT) printf("    Storing binary pyramid of %d levels...\n",pyr_levels);
   for (level=0; level<pyr_levels; level++) {
-    printf("      Storing pyramid level %ld into .pyr file...\n",level);
+    if (TOPRINT) printf("      Storing pyramid level %ld into .pyr file...\n",level);
 
     Write_Bytes(fd,(unsigned char *)pyr_address[level],(long)(pyr_length[level]*sizeof(BYTE)));
   }

@@ -107,7 +107,7 @@ VOID	*LocalMalloc(UINT n, CHAR *msg)
 	p = (VOID *) /*malloc*/G_MALLOC(n);
 	if (!p)
 		{
-		printf("%s: %s cannot allocate local memory.\n", ProgName, msg);
+		if (TOPRINT) printf("%s: %s cannot allocate local memory.\n", ProgName, msg);
 		exit(-1);
 		}
 
@@ -163,20 +163,20 @@ VOID	GlobalHeapWalk()
 	LOCK(gm->memlock)
 	curr = begmem;
 
-	printf("freelist ->\t0x%08lX\n\n", (U32)gm->freelist);
+	if (TOPRINT) printf("freelist ->\t0x%08lX\n\n", (U32)gm->freelist);
 
-	printf("node addr \tnode->next\tnode->size\tnode->free\tnode->cksm\n");
-	printf("==========\t==========\t==========\t==========\t==========\n");
+	if (TOPRINT) printf("node addr \tnode->next\tnode->size\tnode->free\tnode->cksm\n");
+	if (TOPRINT) printf("==========\t==========\t==========\t==========\t==========\n");
 
 	while (curr < endmem)
 		{
-		printf("0x%08lX\t0x%08lX\t%10ld\t%s\t\t0x%08lX\n",
+		if (TOPRINT) printf("0x%08lX\t0x%08lX\t%10ld\t%s\t\t0x%08lX\n",
 			(U32)curr, (U32)curr->next, curr->size,
 			(curr->free ? "FREE" : "    "), curr->cksm);
 
 		if (curr->cksm != CKSM)
 			{
-			fprintf(stderr, "GlobalHeapWalk: Invalid checksum in node.\n");
+			 if(TOPRINT) fprintf(stderr, "GlobalHeapWalk: Invalid checksum in node.\n");
 			exit(1);
 			}
 
@@ -288,13 +288,13 @@ VOID	*GlobalMalloc(UINT size, CHAR *msg)
 		{
 		if (curr->cksm != CKSM)
 			{
-			fprintf(stderr, "GlobalMalloc: Invalid checksum in node.\n");
+			 if(TOPRINT) fprintf(stderr, "GlobalMalloc: Invalid checksum in node.\n");
 			exit(1);
 			}
 
 		if (curr->free != TRUE)
 			{
-			fprintf(stderr, "GlobalMalloc: Node in free list not marked as free.\n");
+			 if(TOPRINT) fprintf(stderr, "GlobalMalloc: Node in free list not marked as free.\n");
 			exit(1);
 			}
 
@@ -305,7 +305,7 @@ VOID	*GlobalMalloc(UINT size, CHAR *msg)
 
 	if (!curr)
 		{
-		fprintf(stderr, "%s: %s cannot allocate global memory.\n", ProgName, msg);
+		 if(TOPRINT) fprintf(stderr, "%s: %s cannot allocate global memory.\n", ProgName, msg);
 		exit(-1);
 		}
 
@@ -469,13 +469,13 @@ VOID	*GlobalRealloc(VOID *p, UINT size)
 
 	if (pn->cksm != CKSM)
 		{
-		fprintf(stderr, "GlobalRealloc: Attempted to realloc node with invalid checksum.\n");
+		 if(TOPRINT) fprintf(stderr, "GlobalRealloc: Attempted to realloc node with invalid checksum.\n");
 		exit(1);
 		}
 
 	if (pn->free)
 		{
-		fprintf(stderr, "GlobalRealloc: Attempted to realloc an unallocated node.\n");
+		 if(TOPRINT) fprintf(stderr, "GlobalRealloc: Attempted to realloc an unallocated node.\n");
 		exit(1);
 		}
 
@@ -532,7 +532,7 @@ VOID	*GlobalRealloc(VOID *p, UINT size)
 
 		if (curr != next)
 			{
-			fprintf(stderr, "GlobalRealloc: Could not find next node in free list.\n");
+			 if(TOPRINT) fprintf(stderr, "GlobalRealloc: Could not find next node in free list.\n");
 			exit(1);
 			}
 
@@ -636,13 +636,13 @@ VOID	GlobalFree(VOID *p)
 
 	if (pn->cksm != CKSM)
 		{
-		fprintf(stderr, "GlobalFree: Attempted to free node with invalid checksum.\n");
+		 if(TOPRINT) fprintf(stderr, "GlobalFree: Attempted to free node with invalid checksum.\n");
 		exit(1);
 		}
 
 	if (pn->free)
 		{
-		fprintf(stderr, "GlobalFree: Attempted to free unallocated node.\n");
+		 if(TOPRINT) fprintf(stderr, "GlobalFree: Attempted to free unallocated node.\n");
 		exit(1);
 		}
 
@@ -663,7 +663,7 @@ VOID	GlobalFree(VOID *p)
 			{
 			if (curr->cksm != CKSM)
 				{
-				fprintf(stderr, "GlobalFree: Invalid checksum in previous node.\n");
+				 if(TOPRINT) fprintf(stderr, "GlobalFree: Invalid checksum in previous node.\n");
 				exit(1);
 				}
 
@@ -685,8 +685,8 @@ VOID	GlobalFree(VOID *p)
 
 		if (curr >= endmem)
 			{
-			fprintf(stdout, "freelist=0x%p, curr=0x%p, size=0x%lu, pn=0x%p, endmem=0x%p\n", gm->freelist, curr, curr->size, pn, endmem);
-			fprintf(stderr, "GlobalFree: Search for previous block fell off end of memory.\n");
+			 if(TOPRINT) fprintf(stdout, "freelist=0x%p, curr=0x%p, size=0x%lu, pn=0x%p, endmem=0x%p\n", gm->freelist, curr, curr->size, pn, endmem);
+			 if(TOPRINT) fprintf(stderr, "GlobalFree: Search for previous block fell off end of memory.\n");
 			exit(1);
 			}
 		}
@@ -704,7 +704,7 @@ VOID	GlobalFree(VOID *p)
 		{
 		if (curr->cksm != CKSM)
 			{
-			fprintf(stderr, "GlobalFree: Invalid checksum in next node.\n");
+			 if(TOPRINT) fprintf(stderr, "GlobalFree: Invalid checksum in next node.\n");
 			exit(1);
 			}
 
@@ -964,7 +964,7 @@ VOID	*ObjectMalloc(INT ObjectType, INT count)
 			break;
 
 		default:
-			printf("ObjectMalloc: Unknown object type: %ld\n", ObjectType);
+			if (TOPRINT) printf("ObjectMalloc: Unknown object type: %ld\n", ObjectType);
 			exit(-1);
 		}
 
@@ -1031,7 +1031,7 @@ VOID	ObjectFree(INT ObjectType, INT count, VOID *p)
 			break;
 
 		default:
-			printf("ObjectFree: Unknown object type: %ld\n", ObjectType);
+			if (TOPRINT) printf("ObjectFree: Unknown object type: %ld\n", ObjectType);
 			exit(-1);
 		}
 	}
@@ -1045,7 +1045,7 @@ RAYINFO *ma_rayinfo(RAY *r)
 
 	if (r->ri_indx + 1 > MAX_RAYINFO + 1)
 		{
-		fprintf(stderr, "error ma_rayinfo \n");
+		 if(TOPRINT) fprintf(stderr, "error ma_rayinfo \n");
 		exit(-1);
 		}
 
@@ -1089,16 +1089,16 @@ VOID	ma_print()
 	maxmem_total  = maxmem_grid + maxmem_hashtable + maxmem_emptycells;
 	maxmem_total += maxmem_voxel + maxmem_bintree;
 
-	fprintf(stdout, "\n****** Hierarchial uniform grid memory allocation summary ******* \n\n");
-	fprintf(stdout, "     < struct >:            < current >   < maximum >    < sizeof > \n");
-	fprintf(stdout, "     <  bytes >:             <  bytes >   <   bytes >    <  bytes > \n\n");
-	fprintf(stdout, "     grid:                %11ld   %11ld   %11ld \n", mem_grid,        maxmem_grid,        sizeof(GRID)   );
-	fprintf(stdout, "     hashtable entries:   %11ld   %11ld   %11ld \n", mem_hashtable,   maxmem_hashtable,   sizeof(VOXEL**));
-	fprintf(stdout, "     emptycell entries:   %11ld   %11ld   %11ld \n", mem_emptycells,  maxmem_emptycells,  sizeof(UINT)   );
-	fprintf(stdout, "     voxel:               %11ld   %11ld   %11ld \n", mem_voxel,       maxmem_voxel,       sizeof(VOXEL)  );
-	fprintf(stdout, "     bintree_node:        %11ld   %11ld   %11ld \n", mem_bintree,     maxmem_bintree,     sizeof(BTNODE) );
+	 if(TOPRINT) fprintf(stdout, "\n****** Hierarchial uniform grid memory allocation summary ******* \n\n");
+	 if(TOPRINT) fprintf(stdout, "     < struct >:            < current >   < maximum >    < sizeof > \n");
+	 if(TOPRINT) fprintf(stdout, "     <  bytes >:             <  bytes >   <   bytes >    <  bytes > \n\n");
+	 if(TOPRINT) fprintf(stdout, "     grid:                %11ld   %11ld   %11ld \n", mem_grid,        maxmem_grid,        sizeof(GRID)   );
+	 if(TOPRINT) fprintf(stdout, "     hashtable entries:   %11ld   %11ld   %11ld \n", mem_hashtable,   maxmem_hashtable,   sizeof(VOXEL**));
+	 if(TOPRINT) fprintf(stdout, "     emptycell entries:   %11ld   %11ld   %11ld \n", mem_emptycells,  maxmem_emptycells,  sizeof(UINT)   );
+	 if(TOPRINT) fprintf(stdout, "     voxel:               %11ld   %11ld   %11ld \n", mem_voxel,       maxmem_voxel,       sizeof(VOXEL)  );
+	 if(TOPRINT) fprintf(stdout, "     bintree_node:        %11ld   %11ld   %11ld \n", mem_bintree,     maxmem_bintree,     sizeof(BTNODE) );
 
-	fprintf(stdout, "\n");
-	fprintf(stdout, "     Totals:              %11ld   %11ld      \n\n", mem_total,       maxmem_total);
+	 if(TOPRINT) fprintf(stdout, "\n");
+	 if(TOPRINT) fprintf(stdout, "     Totals:              %11ld   %11ld      \n\n", mem_total,       maxmem_total);
 	}
 

@@ -286,19 +286,19 @@ typedef real vector[NDIM], matrix[NDIM][NDIM];
 
 #define PRTV(name, vec)           /* PRinT Vector */                      \
 {                                                                         \
-   fprintf(stdout,"%s = [%9.4f,%9.4f,%9.4f] ",name,vec[0],vec[1],vec[2]); \
+    if(TOPRINT) fprintf(stdout,"%s = [%9.4f,%9.4f,%9.4f] ",name,vec[0],vec[1],vec[2]); \
 }
 #define PRIV(name, vec)           /* PRint Integer Vector */               \
 {                                                                         \
-   fprintf(stdout,"%s = [%d,%d,%d] ",name,vec[0],vec[1],vec[2]); \
+    if(TOPRINT) fprintf(stdout,"%s = [%d,%d,%d] ",name,vec[0],vec[1],vec[2]); \
 }
 #define PROV(name, vec)           /* PRint Integer Vector */               \
 {                                                                         \
-   fprintf(stdout,"%s = [%o,%o,%o] ",name,vec[0],vec[1],vec[2]); \
+    if(TOPRINT) fprintf(stdout,"%s = [%o,%o,%o] ",name,vec[0],vec[1],vec[2]); \
 }
 #define PRHV(name, vec)           /* PRint Integer Vector */               \
 {                                                                         \
-   fprintf(stdout,"%s = [%x,%x,%x] ",name,vec[0],vec[1],vec[2]); \
+    if(TOPRINT) fprintf(stdout,"%s = [%x,%x,%x] ",name,vec[0],vec[1],vec[2]); \
 }
 
 #endif

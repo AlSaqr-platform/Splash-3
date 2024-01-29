@@ -143,7 +143,7 @@ VOID	PushRayTreeStack(RAY *rmsg, INT pid)
 
 	if (raystruct[pid].StackTop == raystruct[pid].StackSize)
 		{
-		fprintf(stderr,"%s: Ray tree stack overflow.\n", ProgName);
+		 if(TOPRINT) fprintf(stderr,"%s: Ray tree stack overflow.\n", ProgName);
 		exit(-1);
 		}
 

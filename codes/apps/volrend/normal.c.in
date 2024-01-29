@@ -58,7 +58,7 @@ void Compute_Normal()
 
   Allocate_Normal(&norm_address, norm_length);
 
-  printf("    Computing normal...\n");
+  if (TOPRINT) printf("    Computing normal...\n");
 
   Global->Index = NODE0;
 
@@ -76,7 +76,7 @@ void Allocate_Normal(address, length)
 {
   long i;
 
-  printf("    Allocating normal map of %ld bytes...\n",
+  if (TOPRINT) printf("    Allocating normal map of %ld bytes...\n",
 	 length*sizeof(NORMAL));
 
   *address = (NORMAL *)NU_MALLOC(length*sizeof(NORMAL),0);
@@ -199,7 +199,7 @@ void Load_Normal(filename)
 
   Allocate_Normal(&norm_address,norm_length);
 
-  printf("    Loading normal map from .norm file...\n");
+  if (TOPRINT) printf("    Loading normal map from .norm file...\n");
   Read_Shorts(fd,(unsigned char *)norm_address,(long)(norm_length*sizeof(NORMAL)));
   fflush(stdout);
   Close_File(fd);
@@ -225,7 +225,7 @@ char filename[];
   Write_Shorts(fd,(unsigned char *)norm_len,(long)sizeof(norm_len));
   Write_Longs(fd,(unsigned char *)&norm_length,(long)sizeof(norm_length));
 
-  printf("    Storing normal map into .norm file...\n");
+  if (TOPRINT) printf("    Storing normal map into .norm file...\n");
   Write_Shorts(fd,(unsigned char *)norm_address,(long)(norm_length*sizeof(NORMAL)));
   Close_File(fd);
 }
@@ -234,7 +234,7 @@ char filename[];
 void Deallocate_Normal(address)
 NORMAL **address;
 {
-  printf("    Deallocating normal map...\n");
+  if (TOPRINT) printf("    Deallocating normal map...\n");
 
 /*  G_FREE(*address);  */
 

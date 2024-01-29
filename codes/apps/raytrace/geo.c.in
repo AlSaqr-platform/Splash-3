@@ -154,13 +154,13 @@ VOID	PrintGeo(OBJECT *po)
 	{
 	while (po)
 		{
-		fprintf(stdout, "Object  %s\n", po->name);
-		fprintf(stdout, "\tcolor  %f %f %f %f %f %f\n",
+		 if(TOPRINT) fprintf(stdout, "Object  %s\n", po->name);
+		 if(TOPRINT) fprintf(stdout, "\tcolor  %f %f %f %f %f %f\n",
 			po->surf->fcolor[0], po->surf->fcolor[1],
 			po->surf->fcolor[2], po->surf->bcolor[0],
 			po->surf->bcolor[1], po->surf->bcolor[2]);
 
-		fprintf(stdout, "\tcoeffs %f %f %f %f %f\n",
+		 if(TOPRINT) fprintf(stdout, "\tcoeffs %f %f %f %f %f\n",
 			po->surf->kdiff, po->surf->kspec, po->surf->ktran,
 			po->surf->refrindex, po->surf->kspecn);
 
@@ -298,7 +298,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 	pf = fopen(GeoFileName, "r");
 	if (!pf)
 		{
-		printf("Unable to open model file %s.\n", GeoFileName);
+		if (TOPRINT) printf("Unable to open model file %s.\n", GeoFileName);
 		exit(1);
 		}
 
@@ -330,7 +330,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 		while (comchar != '#')
 			if ((comchar = getc(pf)) == EOF)
 				{
-				fprintf(stderr, "Incorrect comment in geometry file.\n");
+				 if(TOPRINT) fprintf(stderr, "Incorrect comment in geometry file.\n");
 				exit(-1);
 				}
 		}
@@ -342,7 +342,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 		{
 		if (stat != 2 || strcmp(objstr, "object") != 0)
 			{
-			printf("Invalid object definition %s.\n", objstr);
+			if (TOPRINT) printf("Invalid object definition %s.\n", objstr);
 			exit(-1);
 			}
 
@@ -374,7 +374,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 
 		if (stat != 6)
 			{
-			printf("Object color incorrect.\n");
+			if (TOPRINT) printf("Object color incorrect.\n");
 			exit(-1);
 			}
 
@@ -384,7 +384,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 
 		if (stat != 5)
 			{
-			printf("Object surface coefficients incorrect.\n");
+			if (TOPRINT) printf("Object surface coefficients incorrect.\n");
 			exit(-1);
 			}
 
@@ -395,7 +395,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 
 		if (stat != 4)
 			{
-			printf("Texture and/or flag information not all present.\n");
+			if (TOPRINT) printf("Texture and/or flag information not all present.\n");
 			exit(-1);
 			}
 
@@ -406,7 +406,7 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 
 		if (stat != 2)
 			{
-			printf("Object primitive opcode.\n");
+			if (TOPRINT) printf("Object primitive opcode.\n");
 			exit(-1);
 			}
 
@@ -426,11 +426,11 @@ VOID	ReadGeoFile(CHAR *GeoFileName)
 
 			case 'c':
 			case 'q':
-				printf("Code for cylinders and quadrics not implemented yet.\n");
+				if (TOPRINT) printf("Code for cylinders and quadrics not implemented yet.\n");
 				exit(-1);
 
 			default:
-				printf("Invalid primitive type \'%c\'.\n", primop);
+				if (TOPRINT) printf("Invalid primitive type \'%c\'.\n", primop);
 				exit(-1);
 			}
 

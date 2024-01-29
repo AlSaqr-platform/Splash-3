@@ -74,16 +74,16 @@ PrintExpTables ()
    long i;
    long j;
 
-   printf("Table for the functions f(i) = 1 / i and g(i) = i / (i + 1)\n");
-   printf("i\t\tf(i)\t\tg(i)\t\t\n");
+   if (TOPRINT) printf("Table for the functions f(i) = 1 / i and g(i) = i / (i + 1)\n");
+   if (TOPRINT) printf("i\t\tf(i)\t\tg(i)\t\t\n");
    for (i = 1; i < MAX_EXPANSION_TERMS; i++)
-      printf("%ld\t\t%e\t%f\t\n", i, Inv[i], OverInc[i]);
-   printf("\n\nTable for the function h(i,j) = i choose j\n");
-   printf("i\tj\th(i,j)\n");
+      if (TOPRINT) printf("%ld\t\t%e\t%f\t\n", i, Inv[i], OverInc[i]);
+   if (TOPRINT) printf("\n\nTable for the function h(i,j) = i choose j\n");
+   if (TOPRINT) printf("i\tj\th(i,j)\n");
    for (i = 0; i < (2 * MAX_EXPANSION_TERMS); i++) {
       for (j = 0; j <= i; j++)
-	 printf("%ld\t%ld\t%g\n", i, j, C[i][j]);
-      printf("\n");
+	 if (TOPRINT) printf("%ld\t%ld\t%g\n", i, j, C[i][j]);
+      if (TOPRINT) printf("\n");
    }
 }
 

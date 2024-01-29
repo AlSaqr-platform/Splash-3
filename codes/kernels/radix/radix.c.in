@@ -176,17 +176,17 @@ int main(int argc, char *argv[])
                 break;
       case 'o': doprint = !doprint;
                 break;
-      case 'h': printf("Usage: RADIX <options>\n\n");
-                printf("   -pP : P = number of processors.\n");
-                printf("   -rR : R = radix for sorting.  Must be power of 2.\n");
-                printf("   -nN : N = number of keys to sort.\n");
-                printf("   -mM : M = maximum key value.  Integer keys k will be generated such\n");
-                printf("         that 0 <= k <= M.\n");
-                printf("   -s  : Print individual processor timing statistics.\n");
-                printf("   -t  : Check to make sure all keys are sorted correctly.\n");
-                printf("   -o  : Print out sorted keys.\n");
-                printf("   -h  : Print out command line options.\n\n");
-                printf("Default: RADIX -p%1d -n%1d -r%1d -m%1d\n",
+      case 'h': if (TOPRINT) printf("Usage: RADIX <options>\n\n");
+                if (TOPRINT) printf("   -pP : P = number of processors.\n");
+                if (TOPRINT) printf("   -rR : R = radix for sorting.  Must be power of 2.\n");
+                if (TOPRINT) printf("   -nN : N = number of keys to sort.\n");
+                if (TOPRINT) printf("   -mM : M = maximum key value.  Integer keys k will be generated such\n");
+                if (TOPRINT) printf("         that 0 <= k <= M.\n");
+                if (TOPRINT) printf("   -s  : Print individual processor timing statistics.\n");
+                if (TOPRINT) printf("   -t  : Check to make sure all keys are sorted correctly.\n");
+                if (TOPRINT) printf("   -o  : Print out sorted keys.\n");
+                if (TOPRINT) printf("   -h  : Print out command line options.\n\n");
+                if (TOPRINT) printf("Default: RADIX -p%1d -n%1d -r%1d -m%1d\n",
                         DEFAULT_P,DEFAULT_N,DEFAULT_R,DEFAULT_M);
 		exit(0);
      }
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
    log2_keys = log_2(num_keys);
    global = (struct global_memory *) G_MALLOC(sizeof(struct global_memory));
    if (global == NULL) {
-	   fprintf(stderr,"ERROR: Cannot malloc enough memory for global\n");
+	    if(TOPRINT) fprintf(stderr,"ERROR: Cannot malloc enough memory for global\n");
 	   exit(-1);
    }
    key[0] = (long *) G_MALLOC(num_keys*sizeof(long));
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
    rank_me = (long **) G_MALLOC(size);
    if ((key[0] == NULL) || (key[1] == NULL) || (key_partition == NULL) || (rank_partition == NULL) || 
        (global->ranktime == NULL) || (global->sorttime == NULL) || (global->totaltime == NULL) || (rank_me == NULL)) {
-     fprintf(stderr,"ERROR: Cannot malloc enough memory\n");
+      if(TOPRINT) fprintf(stderr,"ERROR: Cannot malloc enough memory\n");
      exit(-1); 
    }
 
@@ -239,13 +239,13 @@ int main(int argc, char *argv[])
 
    global->Index = 0;
    max_num_digits = get_max_digits(max_key);
-   printf("\n");
-   printf("Integer Radix Sort\n");
-   printf("     %ld Keys\n",num_keys);
-   printf("     %ld Processors\n",number_of_processors);
-   printf("     Radix = %ld\n",radix);
-   printf("     Max key = %ld\n",max_key);
-   printf("\n");
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("Integer Radix Sort\n");
+   if (TOPRINT) printf("     %ld Keys\n",num_keys);
+   if (TOPRINT) printf("     %ld Processors\n",number_of_processors);
+   if (TOPRINT) printf("     Radix = %ld\n",radix);
+   if (TOPRINT) printf("     Max key = %ld\n",max_key);
+   if (TOPRINT) printf("\n");
 
    quotient = num_keys / number_of_processors;
    remainder = num_keys % number_of_processors;
@@ -319,11 +319,11 @@ int main(int argc, char *argv[])
    WAIT_FOR_END(number_of_processors);
    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
 
-   printf("\n");
-   printf("                 PROCESS STATISTICS\n");
-   printf("               Total            Rank            Sort\n");
-   printf(" Proc          Time             Time            Time\n");
-   printf("    0     %10.0f      %10.0f      %10.0f\n",
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("                 PROCESS STATISTICS\n");
+   if (TOPRINT) printf("               Total            Rank            Sort\n");
+   if (TOPRINT) printf(" Proc          Time             Time            Time\n");
+   if (TOPRINT) printf("    0     %10.0f      %10.0f      %10.0f\n",
            global->totaltime[0],global->ranktime[0],
            global->sorttime[0]);
    if (dostats) {
@@ -357,32 +357,32 @@ int main(int argc, char *argv[])
      avgrank = avgrank / number_of_processors;
      avgsort = avgsort / number_of_processors;
      for (i=1; i<number_of_processors; i++) {
-       printf("  %3ld     %10.0f      %10.0f      %10.0f\n",
+       if (TOPRINT) printf("  %3ld     %10.0f      %10.0f      %10.0f\n",
                i,global->totaltime[i],global->ranktime[i],
                global->sorttime[i]);
      }
-     printf("  Avg     %10.0f      %10.0f      %10.0f\n",avgt,avgrank,avgsort);
-     printf("  Min     %10.0f      %10.0f      %10.0f\n",mint,minrank,minsort);
-     printf("  Max     %10.0f      %10.0f      %10.0f\n",maxt,maxrank,maxsort);
-     printf("\n");
+     if (TOPRINT) printf("  Avg     %10.0f      %10.0f      %10.0f\n",avgt,avgrank,avgsort);
+     if (TOPRINT) printf("  Min     %10.0f      %10.0f      %10.0f\n",mint,minrank,minsort);
+     if (TOPRINT) printf("  Max     %10.0f      %10.0f      %10.0f\n",maxt,maxrank,maxsort);
+     if (TOPRINT) printf("\n");
    }
 
    SPLASH3_ROI_END();
 
-   printf("\n");
+   if (TOPRINT) printf("\n");
    global->starttime = start;
-   printf("                 TIMING INFORMATION\n");
-   printf("Start time                        : %16lu\n",
+   if (TOPRINT) printf("                 TIMING INFORMATION\n");
+   if (TOPRINT) printf("Start time                        : %16lu\n",
            global->starttime);
-   printf("Initialization finish time        : %16lu\n",
+   if (TOPRINT) printf("Initialization finish time        : %16lu\n",
            global->rs);
-   printf("Overall finish time               : %16lu\n",
+   if (TOPRINT) printf("Overall finish time               : %16lu\n",
            global->rf);
-   printf("Total time with initialization    : %16lu\n",
+   if (TOPRINT) printf("Total time with initialization    : %16lu\n",
            global->rf-global->starttime);
-   printf("Total time without initialization : %16lu\n",
+   if (TOPRINT) printf("Total time without initialization : %16lu\n",
            global->rf-global->rs);
-   printf("\n");
+   if (TOPRINT) printf("\n");
 
    if (doprint) {
      printout();
@@ -392,9 +392,9 @@ int main(int argc, char *argv[])
    }
   
    // read out cycle counter and calc diff
-   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   printf("\n");
+   if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+   printf("RADIX CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+   if (TOPRINT) printf("\n");
 
    MAIN_END;
 }
@@ -725,7 +725,7 @@ long get_log2_radix(long rad)
        cumulative = cumulative * 2;
      }
    }
-   fprintf(stderr,"ERROR: Radix %ld not a power of 2\n", rad);
+    if(TOPRINT) fprintf(stderr,"ERROR: Radix %ld not a power of 2\n", rad);
    exit(-1);
 }
 
@@ -741,7 +741,7 @@ long get_log2_keys(long num_keys)
        cumulative = cumulative * 2;
      }
    }
-   fprintf(stderr,"ERROR: Number of keys %ld not a power of 2\n", num_keys);
+    if(TOPRINT) fprintf(stderr,"ERROR: Number of keys %ld not a power of 2\n", num_keys);
    exit(-1);
 }
 
@@ -769,7 +769,7 @@ long log_2(long number)
 
 void printerr(char *s)
 {
-  fprintf(stderr,"ERROR: %s\n",s);
+   if(TOPRINT) fprintf(stderr,"ERROR: %s\n",s);
 }
 
 void init(long key_start, long key_stop, long from)
@@ -803,23 +803,23 @@ void test_sort(long final)
    long mistake = 0;
    long *key_final;
 
-   printf("\n");
-   printf("                  TESTING RESULTS\n");
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("                  TESTING RESULTS\n");
    key_final = key[final];
    for (i = 0; i < num_keys-1; i++) {
      if (key_final[i] > key_final[i + 1]) {
-       fprintf(stderr,"error with key %ld, value %ld %ld \n",
+        if(TOPRINT) fprintf(stderr,"error with key %ld, value %ld %ld \n",
         i,key_final[i],key_final[i + 1]);
        mistake++;
      }
    }
 
    if (mistake) {
-      printf("FAILED: %ld keys out of place.\n", mistake);
+      if (TOPRINT) printf("FAILED: %ld keys out of place.\n", mistake);
    } else {
-      printf("PASSED: All keys in place.\n");
+      if (TOPRINT) printf("PASSED: All keys in place.\n");
    }
-   printf("\n");
+   if (TOPRINT) printf("\n");
 }
 
 void printout()
@@ -828,15 +828,15 @@ void printout()
    long *key_final;
 
    key_final = (long *) key[global->final];
-   printf("\n");
-   printf("                 SORTED KEY VALUES\n");
-   printf("%8ld ",key_final[0]);
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("                 SORTED KEY VALUES\n");
+   if (TOPRINT) printf("%8ld ",key_final[0]);
    for (i = 0; i < num_keys-1; i++) {
-     printf("%8ld ",key_final[i+1]);
+     if (TOPRINT) printf("%8ld ",key_final[i+1]);
      if ((i+2)%5 == 0) {
-       printf("\n");
+       if (TOPRINT) printf("\n");
      }
    }
-   printf("\n");
+   if (TOPRINT) printf("\n");
 }
 

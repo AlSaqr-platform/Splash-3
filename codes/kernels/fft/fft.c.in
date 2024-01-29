@@ -175,19 +175,19 @@ int main(int argc, char *argv[])
 	        break;
       case 'o': doprint = !doprint; 
 	        break;
-      case 'h': printf("Usage: FFT <options>\n\n");
-                printf("options:\n");
-                printf("  -mM : M = even integer; 2**M total complex data points transformed.\n");
-                printf("  -pP : P = number of processors; Must be a power of 2.\n");
-                printf("  -nN : N = number of cache lines.\n");
-                printf("  -lL : L = Log base 2 of cache line length in bytes.\n");
-                printf("  -s  : Print individual processor timing statistics.\n");
-                printf("  -t  : Perform FFT and inverse FFT.  Test output by comparing the\n");
-                printf("        integral of the original data to the integral of the data that\n");
-                printf("        results from performing the FFT and inverse FFT.\n");
-                printf("  -o  : Print out complex data points.\n");
-                printf("  -h  : Print out command line options.\n\n");
-                printf("Default: FFT -m%1d -p%1d -n%1d -l%1d\n",
+      case 'h': if (TOPRINT) printf("Usage: FFT <options>\n\n");
+                if (TOPRINT) printf("options:\n");
+                if (TOPRINT) printf("  -mM : M = even integer; 2**M total complex data points transformed.\n");
+                if (TOPRINT) printf("  -pP : P = number of processors; Must be a power of 2.\n");
+                if (TOPRINT) printf("  -nN : N = number of cache lines.\n");
+                if (TOPRINT) printf("  -lL : L = Log base 2 of cache line length in bytes.\n");
+                if (TOPRINT) printf("  -s  : Print individual processor timing statistics.\n");
+                if (TOPRINT) printf("  -t  : Perform FFT and inverse FFT.  Test output by comparing the\n");
+                if (TOPRINT) printf("        integral of the original data to the integral of the data that\n");
+                if (TOPRINT) printf("        results from performing the FFT and inverse FFT.\n");
+                if (TOPRINT) printf("  -o  : Print out complex data points.\n");
+                if (TOPRINT) printf("  -h  : Print out command line options.\n\n");
+                if (TOPRINT) printf("Default: FFT -m%1d -p%1d -n%1d -l%1d\n",
                        DEFAULT_M,DEFAULT_P,NUM_CACHE_LINES,LOG2_LINE_SIZE);
 		exit(0);
 	        break;
@@ -206,9 +206,9 @@ int main(int argc, char *argv[])
 
   line_size = 1 << log2_line_size;
   if (line_size < 2*sizeof(double)) {
-    printf("WARNING: Each element is a complex double (%ld bytes)\n",2*sizeof(double));
-    printf("  => Less than one element per cache line\n");
-    printf("     Computing transpose blocking factor\n");
+    if (TOPRINT) printf("WARNING: Each element is a complex double (%ld bytes)\n",2*sizeof(double));
+    if (TOPRINT) printf("  => Less than one element per cache line\n");
+    if (TOPRINT) printf("     Computing transpose blocking factor\n");
     factor = (2*sizeof(double)) / line_size;
     num_cache_lines = orig_num_lines / factor;
   }  
@@ -291,19 +291,19 @@ int main(int argc, char *argv[])
 
    */
 
-  printf("\n");
-  printf("FFT with Blocking Transpose\n");
-  printf("   %ld Complex Doubles\n",N);
-  printf("   %ld Processors\n",P);
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("FFT with Blocking Transpose\n");
+  if (TOPRINT) printf("   %ld Complex Doubles\n",N);
+  if (TOPRINT) printf("   %ld Processors\n",P);
   if (num_cache_lines != orig_num_lines) {
-    printf("   %ld Cache lines\n",orig_num_lines);
-    printf("   %ld Cache lines for blocking transpose\n",num_cache_lines);
+    if (TOPRINT) printf("   %ld Cache lines\n",orig_num_lines);
+    if (TOPRINT) printf("   %ld Cache lines for blocking transpose\n",num_cache_lines);
   } else {
-    printf("   %ld Cache lines\n",num_cache_lines);
+    if (TOPRINT) printf("   %ld Cache lines\n",num_cache_lines);
   }
-  printf("   %d Byte line size\n",(1 << log2_line_size));
-  printf("   %d Bytes per page\n",PAGE_SIZE);
-  printf("\n");
+  if (TOPRINT) printf("   %d Byte line size\n",(1 << log2_line_size));
+  if (TOPRINT) printf("   %d Bytes per page\n",PAGE_SIZE);
+  if (TOPRINT) printf("\n");
 
   BARINIT(Global->start, P);
   LOCKINIT(Global->idlock);
@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
     ck1 = CheckSum(x);
   }
   if (doprint) {
-    printf("Original data values:\n");
+    if (TOPRINT) printf("Original data values:\n");
     PrintArray(N, x);
   }
 
@@ -335,19 +335,19 @@ int main(int argc, char *argv[])
 
   if (doprint) {
     if (test_result) {
-      printf("Data values after inverse FFT:\n");
+      if (TOPRINT) printf("Data values after inverse FFT:\n");
     } else {
-      printf("Data values after FFT:\n");
+      if (TOPRINT) printf("Data values after FFT:\n");
     }
     PrintArray(N, x);
   }
 
   transtime = Global->transtimes[0];
-  printf("\n");
-  printf("                 PROCESS STATISTICS\n");
-  printf("            Computation      Transpose     Transpose\n");
-  printf(" Proc          Time            Time        Fraction\n");
-  printf("    0        %10ld     %10ld      %8.5f\n",
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("                 PROCESS STATISTICS\n");
+  if (TOPRINT) printf("            Computation      Transpose     Transpose\n");
+  if (TOPRINT) printf(" Proc          Time            Time        Fraction\n");
+  if (TOPRINT) printf("    0        %10ld     %10ld      %8.5f\n",
          Global->totaltimes[0],Global->transtimes[0],
          ((double)Global->transtimes[0])/Global->totaltimes[0]);
   if (dostats) {
@@ -378,55 +378,55 @@ int main(int argc, char *argv[])
       if (((double)Global->transtimes[i])/Global->totaltimes[i] < minfrac) {
         minfrac = ((double)Global->transtimes[i])/Global->totaltimes[i];
       }
-      printf("  %3ld        %10ld     %10ld      %8.5f\n",
+      if (TOPRINT) printf("  %3ld        %10ld     %10ld      %8.5f\n",
              i,Global->totaltimes[i],Global->transtimes[i],
              ((double)Global->transtimes[i])/Global->totaltimes[i]);
       avgtranstime += Global->transtimes[i];
       avgcomptime += Global->totaltimes[i];
       avgfractime += ((double)Global->transtimes[i])/Global->totaltimes[i];
     }
-    printf("  Avg        %10.0f     %10.0f      %8.5f\n",
+    if (TOPRINT) printf("  Avg        %10.0f     %10.0f      %8.5f\n",
            ((double) avgcomptime)/P,((double) avgtranstime)/P,avgfractime/P);
-    printf("  Max        %10ld     %10ld      %8.5f\n",
+    if (TOPRINT) printf("  Max        %10ld     %10ld      %8.5f\n",
 	   maxtotal,transtime,maxfrac);
-    printf("  Min        %10ld     %10ld      %8.5f\n",
+    if (TOPRINT) printf("  Min        %10ld     %10ld      %8.5f\n",
 	   mintotal,transtime2,minfrac);
   }
   Global->starttime = start;
-  printf("\n");
-  printf("                 TIMING INFORMATION\n");
-  printf("Start time                        : %16lu\n",
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("                 TIMING INFORMATION\n");
+  if (TOPRINT) printf("Start time                        : %16lu\n",
 	  Global->starttime);
-  printf("Initialization finish time        : %16lu\n",
+  if (TOPRINT) printf("Initialization finish time        : %16lu\n",
 	  Global->initdonetime);
-  printf("Overall finish time               : %16lu\n",
+  if (TOPRINT) printf("Overall finish time               : %16lu\n",
 	  Global->finishtime);
-  printf("Total time with initialization    : %16lu\n",
+  if (TOPRINT) printf("Total time with initialization    : %16lu\n",
 	  Global->finishtime-Global->starttime);
-  printf("Total time without initialization : %16lu\n",
+  if (TOPRINT) printf("Total time without initialization : %16lu\n",
 	  Global->finishtime-Global->initdonetime);
-  printf("Overall transpose time            : %16ld\n",
+  if (TOPRINT) printf("Overall transpose time            : %16ld\n",
          transtime);
-  printf("Overall transpose fraction        : %16.5f\n",
+  if (TOPRINT) printf("Overall transpose fraction        : %16.5f\n",
          ((double) transtime)/(Global->finishtime-Global->initdonetime));
-  printf("\n");
+  if (TOPRINT) printf("\n");
 
   if (test_result) {
     ck3 = CheckSum(x);
-    printf("              INVERSE FFT TEST RESULTS\n");
-    printf("Checksum difference is %.3f (%.3f, %.3f)\n",
+    if (TOPRINT) printf("              INVERSE FFT TEST RESULTS\n");
+    if (TOPRINT) printf("Checksum difference is %.3f (%.3f, %.3f)\n",
 	   ck1-ck3, ck1, ck3);
     if (fabs(ck1-ck3) < 0.001) {
-      printf("TEST PASSED\n");
+      if (TOPRINT) printf("TEST PASSED\n");
     } else {
-      printf("TEST FAILED\n");
+      if (TOPRINT) printf("TEST FAILED\n");
     }
   }
 
   // read out cycle counter and calc diff
-  printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-  printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-  printf("\n");
+  if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+  printf("FFT CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+  if (TOPRINT) printf("\n");
 
   MAIN_END;
 }
@@ -455,7 +455,7 @@ void SlaveStart()
 
   upriv = (double *) malloc(2*(rootN-1)*sizeof(double));  
   if (upriv == NULL) {
-    fprintf(stderr,"Proc %ld could not malloc memory for upriv\n",MyNum);
+     if(TOPRINT) fprintf(stderr,"Proc %ld could not malloc memory for upriv\n",MyNum);
     exit(-1);
   }
   for (i=0;i<2*(rootN-1);i++) {
@@ -614,7 +614,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
   m1 = M/2;
   n1 = 1<<m1;
 
-  printf("iter_num = %lu\n", MyLast - MyFirst);
+  if (TOPRINT) printf("iter_num = %lu\n", MyLast - MyFirst);
   BARRIER(Global->start, P);
 
   if ((MyNum == 0) || (dostats)) {
@@ -627,7 +627,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
   if ((MyNum == 0) || (dostats)) {
     CLOCK(clocktime2);
     *l_transtime += (clocktime2-clocktime1);
-    printf("Step 1: %8lu\n", clocktime2-clocktime1);
+    if (TOPRINT) printf("Step 1: %8lu\n", clocktime2-clocktime1);
   }
 
   /* do n1 1D FFTs on columns */
@@ -640,7 +640,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
 
   if ((MyNum == 0) || (dostats)) {
     CLOCK(clocktime1);
-    printf("Step 2: %8lu\n", clocktime1-clocktime2);
+    if (TOPRINT) printf("Step 2: %8lu\n", clocktime1-clocktime2);
   }
   /* transpose */
   Transpose(n1, scratch, x, MyNum, MyFirst, MyLast, pad_length);
@@ -648,7 +648,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
   if ((MyNum == 0) || (dostats)) {
     CLOCK(clocktime2);
     *l_transtime += (clocktime2-clocktime1);
-    printf("Step 3: %8lu\n", clocktime2-clocktime1);
+    if (TOPRINT) printf("Step 3: %8lu\n", clocktime2-clocktime1);
   }
 
   /* do n1 1D FFTs on columns again */
@@ -662,7 +662,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
 
   if ((MyNum == 0) || (dostats)) {
     CLOCK(clocktime1);
-    printf("Step 4: %8lu\n", clocktime1-clocktime2);
+    if (TOPRINT) printf("Step 4: %8lu\n", clocktime1-clocktime2);
   }
 
   /* transpose back */
@@ -671,7 +671,7 @@ void FFT1D(long direction, long M, long N, double *x, double *scratch, double *u
   if ((MyNum == 0) || (dostats)) {
     CLOCK(clocktime2);
     *l_transtime += (clocktime2-clocktime1);
-    printf("Step 5: %8lu\n", clocktime2-clocktime1);
+    if (TOPRINT) printf("Step 5: %8lu\n", clocktime2-clocktime1);
   }
 
   BARRIER(Global->start, P);
@@ -763,7 +763,7 @@ void Transpose(long n1, double *src, double *dest, long MyNum, long MyFirst, lon
       v_off+=blksize;
     }
   }
-  printf("Transpose: iter_num = %lu\n", iter_num);
+  if (TOPRINT) printf("Transpose: iter_num = %lu\n", iter_num);
 
   for (l=0;l<MyNum;l++) {
     v_off = l*row_count;
@@ -873,7 +873,7 @@ void FFT1DOnce(long direction, long M, long N, double *u, double *x)
     }
   }
   if(is_output == 1){
-      printf("FFt1DOnce: iter_num = %lu\n", iter_num);
+      if (TOPRINT) printf("FFt1DOnce: iter_num = %lu\n", iter_num);
       is_output = 0;
   }
 }
@@ -886,23 +886,23 @@ void PrintArray(long N, double *x)
   for (i=0; i<rootN; i++) {
     k = i*(rootN+pad_length);
     for (j=0; j<rootN; j++) {
-      printf(" %4.2f %4.2f", x[2*(k+j)], x[2*(k+j)+1]);
+      if (TOPRINT) printf(" %4.2f %4.2f", x[2*(k+j)], x[2*(k+j)+1]);
       if (i*rootN+j != N-1) {
-        printf(",");
+        if (TOPRINT) printf(",");
       }
       if ((i*rootN+j+1) % 8 == 0) {
-        printf("\n");
+        if (TOPRINT) printf("\n");
       }
     }
   }
-  printf("\n");
-  printf("\n");
+  if (TOPRINT) printf("\n");
+  if (TOPRINT) printf("\n");
 }
 
 
 void printerr(char *s)
 {
-  fprintf(stderr,"ERROR: %s\n",s);
+   if(TOPRINT) fprintf(stderr,"ERROR: %s\n",s);
 }
 
 

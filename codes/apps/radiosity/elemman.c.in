@@ -528,11 +528,11 @@ long radiosity_converged(long process_id)
             rad.r /= global->total_patch_area ;
             rad.g /= global->total_patch_area ;
             rad.b /= global->total_patch_area ;
-            printf( "Total energy:     " ) ;
+            if (TOPRINT) printf( "Total energy:     " ) ;
             print_rgb( &global->total_energy ) ;
-            printf( "Average radiosity:" ) ;
+            if (TOPRINT) printf( "Average radiosity:" ) ;
             print_rgb( &rad ) ;
-            printf( "Difference %.2f%%\n", difference * 100.0 ) ;
+            if (TOPRINT) printf( "Difference %.2f%%\n", difference * 100.0 ) ;
         }
 
     if( difference <=  Energy_epsilon )
@@ -1000,7 +1000,7 @@ Element *get_element(long process_id)
     /* Test pointer */
     if( global->free_element == 0 )
         {
-            printf( "Fatal: Ran out of element buffer\n" ) ;
+            if (TOPRINT) printf( "Fatal: Ran out of element buffer\n" ) ;
             UNLOCK(global->free_element_lock);
             exit( 1 ) ;
         }
@@ -1095,13 +1095,13 @@ void init_elemlist(long process_id)
 
 void print_element(Element *elem, long process_id)
 {
-    printf( "Element (%ld)\n", (long)elem ) ;
+    if (TOPRINT) printf( "Element (%ld)\n", (long)elem ) ;
 
     print_point( &elem->ev1->p ) ;
     print_point( &elem->ev2->p ) ;
     print_point( &elem->ev3->p ) ;
 
-    printf( "Radiosity:" ) ;     print_rgb( &elem->rad ) ;
+    if (TOPRINT) printf( "Radiosity:" ) ;     print_rgb( &elem->rad ) ;
 }
 
 
@@ -1371,7 +1371,7 @@ Interaction *get_interaction(long process_id)
     /* Test pointer */
     if( global->free_interaction == 0 )
         {
-            printf( "Fatal: Ran out of interaction buffer\n" ) ;
+            if (TOPRINT) printf( "Fatal: Ran out of interaction buffer\n" ) ;
             UNLOCK(global->free_interaction_lock);
             exit( 1 ) ;
         }
@@ -1445,11 +1445,11 @@ void init_interactionlist(long process_id)
 void print_interaction(Interaction *inter, long process_id)
 {
 
-    printf( "Interaction(0x%ld)\n", (long)inter ) ;
-    printf( "    Dest: Elem (0x%ld) of patch %ld\n",
+    if (TOPRINT) printf( "Interaction(0x%ld)\n", (long)inter ) ;
+    if (TOPRINT) printf( "    Dest: Elem (0x%ld) of patch %ld\n",
            (long)inter->destination, inter->destination->patch->seq_no ) ;
-    printf( "    Fout: %f    Vis: %f\n",
+    if (TOPRINT) printf( "    Fout: %f    Vis: %f\n",
            inter->formfactor_out,
            inter->visibility ) ;
-    printf( "    Next: 0x%p\n", inter->next ) ;
+    if (TOPRINT) printf( "    Next: 0x%p\n", inter->next ) ;
 }

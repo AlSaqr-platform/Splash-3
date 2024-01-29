@@ -35,7 +35,7 @@ void inputdata ()
    bodyptr p;
    long i;
 
-   fprintf(stderr,"reading input file : %s\n",infile);
+    if(TOPRINT) fprintf(stderr,"reading input file : %s\n",infile);
    fflush(stderr);
    instr = fopen(infile, "r");
    if (instr == NULL)
@@ -77,10 +77,10 @@ void inputdata ()
 
 void initoutput()
 {
-   printf("\n\t\t%s\n\n", headline);
-   printf("%10s%10s%10s%10s%10s%10s%10s%10s\n",
+   if(TOPRINT) printf("\n\t\t%s\n\n", headline);
+   if(TOPRINT) printf("%10s%10s%10s%10s%10s%10s%10s%10s\n",
 	  "nbody", "dtime", "eps", "tol", "dtout", "tstop","fcells","NPROC");
-   printf("%10ld%10.5f%10.4f%10.2f%10.3f%10.3f%10.2f%10ld\n\n",
+   if(TOPRINT) printf("%10ld%10.5f%10.4f%10.2f%10.3f%10.3f%10.2f%10ld\n\n",
 	  nbody, dtime, eps, tol, dtout, tstop, fcells, NPROC);
 }
 
@@ -219,17 +219,17 @@ void in_vector(stream str, vector vec)
 
 void out_int(stream str, long ival)
 {
-   fprintf(str, "  %ld\n", ival);
+    if(TOPRINT) fprintf(str, "  %ld\n", ival);
 }
 
 void out_real(stream str, real rval)
 {
-   fprintf(str, " %21.14E\n", rval);
+    if(TOPRINT) fprintf(str, " %21.14E\n", rval);
 }
 
 void out_vector(stream str, vector vec)
 {
-   fprintf(str, " %21.14E %21.14E", vec[0], vec[1]);
-   fprintf(str, " %21.14E\n",vec[2]);
+    if(TOPRINT) fprintf(str, " %21.14E %21.14E", vec[0], vec[1]);
+    if(TOPRINT) fprintf(str, " %21.14E\n",vec[2]);
 }
 

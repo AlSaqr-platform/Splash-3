@@ -111,7 +111,7 @@ VOXEL	*lookup_hashtable(INT indx, GRID *g)
 		v = v->next;
 		if (v == NULL)
 			{
-			fprintf(stderr, "hashtable error \n");
+			 if(TOPRINT) fprintf(stderr, "hashtable error \n");
 			exit(-1);
 			}
 		}
@@ -485,7 +485,7 @@ VOID	push_down_grid(RAY *r, VOXEL *v)
 
 			if ((t_in > t_out) || (t_out < 0.0))
 				{
-				fprintf(stderr, "push_down_grid: Ray origin not in voxel \n");
+				 if(TOPRINT) fprintf(stderr, "push_down_grid: Ray origin not in voxel \n");
 				exit(-1);
 				}
 

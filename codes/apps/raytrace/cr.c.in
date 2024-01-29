@@ -56,7 +56,7 @@ VOID	prn_gridlist()
 	{
 	GRID	*g;
 
-	fprintf(stderr, "    Print Gridlist \n");
+	 if(TOPRINT) fprintf(stderr, "    Print Gridlist \n");
 	g = gridlist;
 
 	while (g != NULL)
@@ -65,7 +65,7 @@ VOID	prn_gridlist()
 		g = g->next;
 		}
 
-	fprintf(stderr, "    End Gridlist \n");
+	 if(TOPRINT) fprintf(stderr, "    End Gridlist \n");
 	}
 
 
@@ -86,26 +86,26 @@ VOID	prn_ds_stats()
 	INT	leafs;
 	INT	voxels;
 
-	printf("\n");
-	printf("****** Hierarchical uniform grid data structure statistics ******\n\n");
+	if (TOPRINT) printf("\n");
+	if (TOPRINT) printf("****** Hierarchical uniform grid data structure statistics ******\n\n");
 
-	printf("    Data structure evaluated as a preprocess.\n");
+	if (TOPRINT) printf("    Data structure evaluated as a preprocess.\n");
 
-	printf("    gridsize                             %3ld \n", hu_gridsize);
-	printf("    hashtable buckets                    %3ld \n", hu_numbuckets);
-	printf("    maximum subdivision level            %3ld \n", hu_max_subdiv_level);
-	printf("    maximum primitives / cell            %3ld \n", hu_max_prims_cell);
-	printf("    grids                                %3ld \n", grids);
+	if (TOPRINT) printf("    gridsize                             %3ld \n", hu_gridsize);
+	if (TOPRINT) printf("    hashtable buckets                    %3ld \n", hu_numbuckets);
+	if (TOPRINT) printf("    maximum subdivision level            %3ld \n", hu_max_subdiv_level);
+	if (TOPRINT) printf("    maximum primitives / cell            %3ld \n", hu_max_prims_cell);
+	if (TOPRINT) printf("    grids                                %3ld \n", grids);
 
 	voxels = empty_voxels + nonempty_voxels;
 	leafs  = empty_voxels + nonempty_leafs;
 
-	printf("    empty voxels                    %8ld    %3ld %% \n",          empty_voxels,    100*empty_voxels/voxels);
-	printf("    nonempty voxels                 %8ld    %3ld %% \n",          nonempty_voxels, 100*nonempty_voxels/voxels);
-	printf("    empty leafs                     %8ld    %3ld %% \n",          empty_voxels,    100*empty_voxels/leafs);
-	printf("    nonempty leafs                  %8ld    %3ld %% \n",          nonempty_leafs,  100*nonempty_leafs/leafs);
-	printf("    primitives / leaf                 %6.1lf \n",               (double)prims_in_leafs/leafs);
-	printf("\n");
+	if (TOPRINT) printf("    empty voxels                    %8ld    %3ld %% \n",          empty_voxels,    100*empty_voxels/voxels);
+	if (TOPRINT) printf("    nonempty voxels                 %8ld    %3ld %% \n",          nonempty_voxels, 100*nonempty_voxels/voxels);
+	if (TOPRINT) printf("    empty leafs                     %8ld    %3ld %% \n",          empty_voxels,    100*empty_voxels/leafs);
+	if (TOPRINT) printf("    nonempty leafs                  %8ld    %3ld %% \n",          nonempty_leafs,  100*nonempty_leafs/leafs);
+	if (TOPRINT) printf("    primitives / leaf                 %6.1lf \n",               (double)prims_in_leafs/leafs);
+	if (TOPRINT) printf("\n");
 	}
 
 
@@ -679,7 +679,7 @@ ELEMENT **bintree_lookup(BTNODE	*root, INT i, INT j, INT k, GRID *g, INT *n)
 			{
 			/* Not a leaf & not subdivided but should be subdivided. */
 
-			fprintf(stderr, "bintree_lookup: gridsizes (%ld, %ld, %ld), axis %ld & nprims %ld\n",
+			 if(TOPRINT) fprintf(stderr, "bintree_lookup: gridsizes (%ld, %ld, %ld), axis %ld & nprims %ld\n",
 				btn->n[0], btn->n[1], btn->n[2], btn->axis, btn->nprims);
 
 			exit(-1);

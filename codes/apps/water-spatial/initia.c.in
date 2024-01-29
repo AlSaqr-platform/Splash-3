@@ -52,7 +52,7 @@ void INITIA()
 
     random_numbers = fopen("random.in","r");
     if (random_numbers == NULL) {
-        fprintf(stderr,"Error in opening file random.in\n");
+         if(TOPRINT) fprintf(stderr,"Error in opening file random.in\n");
         fflush(stderr);
         exit(-1);
     }
@@ -72,15 +72,15 @@ void INITIA()
         double WCOS = ROH * cos(ANGLE * 0.5);
         double WSIN = ROH * sin(ANGLE * 0.5);
 
-        printf("\nNS = %.16f\n",NS);
-        printf("BOXL = %10f\n",BOXL);
-        printf("CUTOFF = %10f\n",CUTOFF);
-        printf("BOX_LENGTH = %10f\n",BOX_LENGTH);
-        printf("BOX_PER_SIDE = %ld\n",BOX_PER_SIDE);
-        printf("XS = %10f\n",XS);
-        printf("ZERO = %g\n",ZERO);
-        printf("WCOS = %f\n",WCOS);
-        printf("WSIN = %f\n",WSIN);
+        if (TOPRINT) printf("\nNS = %.16f\n",NS);
+        if (TOPRINT) printf("BOXL = %10f\n",BOXL);
+        if (TOPRINT) printf("CUTOFF = %10f\n",CUTOFF);
+        if (TOPRINT) printf("BOX_LENGTH = %10f\n",BOX_LENGTH);
+        if (TOPRINT) printf("BOX_PER_SIDE = %ld\n",BOX_PER_SIDE);
+        if (TOPRINT) printf("XS = %10f\n",XS);
+        if (TOPRINT) printf("ZERO = %g\n",ZERO);
+        if (TOPRINT) printf("WCOS = %f\n",WCOS);
+        if (TOPRINT) printf("WSIN = %f\n",WSIN);
         fflush(stdout);
 
 #ifdef RANDOM
@@ -97,7 +97,7 @@ void INITIA()
 
         Part_per_box = NMOL / (BOX_PER_SIDE * BOX_PER_SIDE * BOX_PER_SIDE);
         Unassigned = NMOL - (Part_per_box * BOX_PER_SIDE * BOX_PER_SIDE * BOX_PER_SIDE);
-        printf("Part_per_box = %ld, BOX_PER_SIDE = %ld, Unassigned = %ld\n",Part_per_box, BOX_PER_SIDE, Unassigned);
+        if (TOPRINT) printf("Part_per_box = %ld, BOX_PER_SIDE = %ld, Unassigned = %ld\n",Part_per_box, BOX_PER_SIDE, Unassigned);
         for (i = 0; i < BOX_PER_SIDE; i++)
             for (j = 0; j < BOX_PER_SIDE; j++)
                 for (k = 0; k < BOX_PER_SIDE; k++)
@@ -222,7 +222,7 @@ void INITIA()
            since random does not necessarily make sense from the viewpoint
            of preserving bond distances */
 
-        fprintf(six, "***** NEW RUN STARTING FROM REGULAR LATTICE *****\n");
+         if(TOPRINT) fprintf(six, "***** NEW RUN STARTING FROM REGULAR LATTICE *****\n");
         fflush(six);
         XT[2] = ZERO;
         mol = 0;
@@ -301,7 +301,7 @@ void INITIA()
         } /* for i */
 
         if (NMOL != mol) {
-            printf("Lattice init error: total mol %ld != NMOL %ld\n", mol, NMOL);
+            if (TOPRINT) printf("Lattice init error: total mol %ld != NMOL %ld\n", mol, NMOL);
             exit(-1);
         }
 #endif

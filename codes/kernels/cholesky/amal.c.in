@@ -115,11 +115,11 @@ void Amalgamate2(long join, SMatrix M, long *T, long *nz, long *node, long *doma
 
   supers_after = CountSupers(M.n, node);
 
-  printf("%ld/%ld supers before/after\n", supers_before, supers_after);
-  printf("%.0f/%.0f (%.2f) ops before/after amalgamation\n",
+  if (TOPRINT) printf("%ld/%ld supers before/after\n", supers_before, supers_after);
+  if (TOPRINT) printf("%.0f/%.0f (%.2f) ops before/after amalgamation\n",
 	 g_ops_before, work_tree[M.n], work_tree[M.n]/(double) g_ops_before);
   if (ops_added != work_tree[M.n]-g_ops_before)
-    printf("Model says %ld ops added, really %.0f\n", ops_added,
+    if (TOPRINT) printf("Model says %ld ops added, really %.0f\n", ops_added,
 	   work_tree[M.n]-g_ops_before);
 }
 
@@ -316,7 +316,7 @@ void InvertPerm(long n, long *PERM, long *INVP)
 
   for (i=0; i<=n; i++)
     if (INVP[i] == -1)
-      printf("Not a valid permutation\n");
+      if (TOPRINT) printf("Not a valid permutation\n");
 }
 
 

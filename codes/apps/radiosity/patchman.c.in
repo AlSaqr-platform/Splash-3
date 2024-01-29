@@ -528,7 +528,7 @@ Patch *get_patch(long process_id)
     /* Test pointer */
     if( global->free_patch == 0 )
         {
-            printf( "Fatal: Ran out of patch buffer\n" ) ;
+            if (TOPRINT) printf( "Fatal: Ran out of patch buffer\n" ) ;
             UNLOCK(global->free_patch_lock);
             exit( 1 ) ;
         }
@@ -608,12 +608,12 @@ void init_patchlist(long process_id)
 
 void print_patch(Patch *patch, long process_id)
 {
-    printf( "Patch (%ld)\n", (long)patch ) ;
+    if (TOPRINT) printf( "Patch (%ld)\n", (long)patch ) ;
     print_point( &patch->p1 ) ;
     print_point( &patch->p2 ) ;
     print_point( &patch->p3 ) ;
     print_plane_equ( &patch->plane_equ, process_id ) ;
-    printf( "\tArea %f\n", patch->area ) ;
+    if (TOPRINT) printf( "\tArea %f\n", patch->area ) ;
 }
 
 
@@ -628,9 +628,9 @@ void print_patch(Patch *patch, long process_id)
 
 void print_bsp_tree(long process_id)
 {
-    printf( "**** BSP TREE ***\n" ) ;
+    if (TOPRINT) printf( "**** BSP TREE ***\n" ) ;
     foreach_patch_in_bsp( _pr_patch, 0, process_id ) ;
-    printf( "\n\n" ) ;
+    if (TOPRINT) printf( "\n\n" ) ;
 }
 
 void _pr_patch(Patch *patch, long dummy, long process_id)
@@ -742,7 +742,7 @@ long patch_intersection(PlaneEqu *plane, Vertex *p1, Vertex *p2, Vertex *p3, lon
 
 void print_plane_equ(PlaneEqu *peq, long process_id)
 {
-    printf( "\tPLN: %.3f x + %.3f y + %.3f z + %.3f\n",
+    if (TOPRINT) printf( "\tPLN: %.3f x + %.3f y + %.3f z + %.3f\n",
            peq->n.x, peq->n.y, peq->n.z, peq->c ) ;
 }
 

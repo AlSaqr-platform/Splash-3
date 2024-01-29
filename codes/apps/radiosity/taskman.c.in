@@ -91,7 +91,7 @@ retry_entry:
                     radiosity_averaging( t->task.rad.e, t->task.rad.mode, process_id ) ;
                     break ;
                 default:
-                    fprintf( stderr, "Panic:process_tasks:Illegal task type\n" );
+                     if(TOPRINT) fprintf( stderr, "Panic:process_tasks:Illegal task type\n" );
                 }
 
             /* Free the task */
@@ -613,12 +613,12 @@ Task *get_task(long process_id)
                     /* Check retry count */
                     if( ++retry_count > MAX_TASKGET_RETRY )
                         {
-                            fprintf( stderr, "Panic(P%ld):No free task\n",
+                             if(TOPRINT) fprintf( stderr, "Panic(P%ld):No free task\n",
                                     process_id ) ;
-                            fprintf( stderr, "  Local %ld\n", task_struct[process_id].n_local_free_task ) ;
-                            fprintf( stderr, "  Q0 free %ld\n",
+                             if(TOPRINT) fprintf( stderr, "  Local %ld\n", task_struct[process_id].n_local_free_task ) ;
+                             if(TOPRINT) fprintf( stderr, "  Q0 free %ld\n",
                                     global->task_queue[0].n_free ) ;
-                            fprintf( stderr, "  Q0 task %ld\n",
+                             if(TOPRINT) fprintf( stderr, "  Q0 task %ld\n",
                                     global->task_queue[0].n_tasks ) ;
                             exit(1) ;
                         }
@@ -798,34 +798,34 @@ void print_task(Task *task)
 {
     if( task == 0 )
         {
-            printf( "Task (NULL)\n" ) ;
+            if (TOPRINT) printf( "Task (NULL)\n" ) ;
             return ;
         }
 
     switch( task->task_type )
         {
         case TASK_MODELING:
-            printf( "Task (Model)\n" ) ;
+            if (TOPRINT) printf( "Task (Model)\n" ) ;
             break ;
         case TASK_BSP:
-            printf( "Task (BSP)\n" ) ;
+            if (TOPRINT) printf( "Task (BSP)\n" ) ;
             break ;
         case TASK_FF_REFINEMENT:
-            printf( "Task (FF Refinement)\n" ) ;
+            if (TOPRINT) printf( "Task (FF Refinement)\n" ) ;
             break ;
         case TASK_RAY:
-            printf( "Task (Ray)  (patch ID %ld)\n",
+            if (TOPRINT) printf( "Task (Ray)  (patch ID %ld)\n",
                    task->task.ray.e->patch->seq_no ) ;
             break ;
         case TASK_VISIBILITY:
-            printf( "Task (Visibility)  (patch ID %ld)\n",
+            if (TOPRINT) printf( "Task (Visibility)  (patch ID %ld)\n",
                    task->task.vis.e->patch->seq_no ) ;
             break ;
         case TASK_RAD_AVERAGE:
-            printf( "Task (RadAvg)\n" ) ;
+            if (TOPRINT) printf( "Task (RadAvg)\n" ) ;
             break ;
         default:
-            fprintf( stderr, "Task(Illegal task type %ld)\n", task->task_type );
+             if(TOPRINT) fprintf( stderr, "Task(Illegal task type %ld)\n", task->task_type );
         }
 }
 
@@ -834,10 +834,10 @@ void print_taskq(Task_Queue *tq)
 {
     Task *t ;
 
-    printf( "TaskQ: %ld tasks in the queue\n", taskq_length(tq) ) ;
+    if (TOPRINT) printf( "TaskQ: %ld tasks in the queue\n", taskq_length(tq) ) ;
     for( t = taskq_top(tq) ; t ; t = t->next )
         {
-            printf( "  " ) ;
+            if (TOPRINT) printf( "  " ) ;
             print_task( t ) ;
         }
 }

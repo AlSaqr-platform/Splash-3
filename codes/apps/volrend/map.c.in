@@ -86,7 +86,7 @@ void Load_Map(filename)
 
   Allocate_Map(&map_address,map_length);
 
-  printf("    Loading map from .den file...\n");
+  if (TOPRINT) printf("    Loading map from .den file...\n");
   Read_Bytes(fd,(unsigned char *)map_address,(long)(map_length*sizeof(DENSITY)));
   Close_File(fd);
 }
@@ -98,7 +98,7 @@ void Allocate_Map(address, length)
 {
   long i;
 
-  printf("    Allocating density map of %ld bytes...\n",
+  if (TOPRINT) printf("    Allocating density map of %ld bytes...\n",
 	 length*sizeof(DENSITY));
 
   *address = (DENSITY *)NU_MALLOC(length*sizeof(DENSITY),0);
@@ -114,7 +114,7 @@ void Allocate_Map(address, length)
 void Deallocate_Map(address)
 DENSITY **address;
 {
-  printf("    Deallocating density map...\n");
+  if (TOPRINT) printf("    Deallocating density map...\n");
 
 /*  G_FREE(*address);  */
 

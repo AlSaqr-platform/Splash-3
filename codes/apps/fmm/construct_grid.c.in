@@ -160,21 +160,21 @@ PrintGrid (long my_id)
 {
    if (Grid != NULL) {
       if (my_id == 0) {
-	 printf("Info for Adaptive Grid :\n");
-	 printf("Boxes :\n\n");
+	 if (TOPRINT) printf("Info for Adaptive Grid :\n");
+	 if (TOPRINT) printf("Boxes :\n\n");
       }
       fflush(stdout);
       BARRIER(G_Memory->synch, Number_Of_Processors);
       PartitionIterate(my_id, PrintBox, TOP);
       BARRIER(G_Memory->synch, Number_Of_Processors);
       if (my_id == 0) {
-	 printf("\n");
+	 if (TOPRINT) printf("\n");
       }
       fflush(stdout);
       BARRIER(G_Memory->synch, Number_Of_Processors);
    }
    else
-      printf("Adaptive grid has not been initialized yet.\n");
+      if (TOPRINT) printf("Adaptive grid has not been initialized yet.\n");
 }
 
 

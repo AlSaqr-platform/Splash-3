@@ -149,7 +149,7 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
             XTT=POTA+POTR+POTRF+TEN;
 
             if ((i % NPRINT) == 0 && ProcID == 0) {
-                fprintf(six,"     %5ld %14.5lf %12.5lf %12.5lf  \
+                 if(TOPRINT) fprintf(six,"     %5ld %14.5lf %12.5lf %12.5lf  \
                 %12.5lf\n %16.3lf %16.5lf %16.5lf\n",
                         i,TEN,POTA,POTR,POTRF,XTT,AVGT,XVIR);
             }

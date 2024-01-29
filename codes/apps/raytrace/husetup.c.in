@@ -86,7 +86,7 @@ VOID	BuildHierarchy_Uniform()
 
 	ng = create_grid(v, g, num_pe);
 
-	fprintf(stderr, "Uniform Hierarchy built.\n");
+	 if(TOPRINT) fprintf(stderr, "Uniform Hierarchy built.\n");
 	}
 
 

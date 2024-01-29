@@ -237,7 +237,7 @@ void four_center_points(Vertex *p1, Vertex *p2, Vertex *p3, Vertex *pc, Vertex *
 
 void print_point(Vertex *point)
 {
-    printf( "\tP(%.2f, %.2f, %.2f)\n", point->x, point->y, point->z ) ;
+    if (TOPRINT) printf( "\tP(%.2f, %.2f, %.2f)\n", point->x, point->y, point->z ) ;
 }
 
 
@@ -260,7 +260,7 @@ void print_point(Vertex *point)
 
 void print_rgb(Rgb *rgb)
 {
-    printf( "\tRGB(%.2f, %.2f, %.2f)\n", rgb->r, rgb->g, rgb->b ) ;
+    if (TOPRINT) printf( "\tRGB(%.2f, %.2f, %.2f)\n", rgb->r, rgb->g, rgb->b ) ;
 }
 
 
@@ -312,7 +312,7 @@ ElemVertex *get_elemvertex(long process_id)
             if ( MAX_ELEMVERTICES - global->free_elemvertex
                 < N_ELEMVERTEX_ALLOCATE )
                 {
-                    fprintf( stderr, "Fatal:Ran out of ElemVertex buffer\n" ) ;
+                     if(TOPRINT) fprintf( stderr, "Fatal:Ran out of ElemVertex buffer\n" ) ;
                     UNLOCK(global->free_elemvertex_lock);
                     exit(1) ;
                 }
@@ -508,7 +508,7 @@ Edge *get_edge(long process_id)
             LOCK(global->free_edge_lock);
             if ( MAX_EDGES - global->free_edge < N_EDGE_ALLOCATE )
                 {
-                    fprintf( stderr, "Fatal:Ran out of Edge buffer\n" ) ;
+                     if(TOPRINT) fprintf( stderr, "Fatal:Ran out of Edge buffer\n" ) ;
                     UNLOCK(global->free_edge_lock);
                     exit(1) ;
                 }

@@ -87,14 +87,14 @@ void print_statistics(FILE *fd, long process_id)
 
     foreach_patch_in_bsp( get_patch_stat,  0, 0 ) ;
 
-    fprintf( fd, "Rasiosity Statistics\n\n" ) ;
+     if(TOPRINT) fprintf( fd, "Rasiosity Statistics\n\n" ) ;
 
-    fprintf( fd, "    Histogram of interactions/elem\n" ) ;
-    fprintf( fd, "\t Interactions  Occurrence\n" ) ;
-    fprintf( fd, "\t -------------------------------\n" ) ;
+     if(TOPRINT) fprintf( fd, "    Histogram of interactions/elem\n" ) ;
+     if(TOPRINT) fprintf( fd, "\t Interactions  Occurrence\n" ) ;
+     if(TOPRINT) fprintf( fd, "\t -------------------------------\n" ) ;
     if( many_interaction.count > 0 )
         {
-            fprintf( fd, "\t (Over %d)      %ld (%f)\n",
+             if(TOPRINT) fprintf( fd, "\t (Over %d)      %ld (%f)\n",
                     MAX_INTERACTION_PER_ELEMENT,
                     many_interaction.count,
                     many_interaction.area / many_interaction.count ) ;
@@ -107,69 +107,69 @@ void print_statistics(FILE *fd, long process_id)
                 continue ;
 
             if( elem_interaction[i].count == 0 )
-                fprintf( fd, "\t    %ld          %ld (---)\n",
+                 if(TOPRINT) fprintf( fd, "\t    %ld          %ld (---)\n",
                         i, elem_interaction[i].count ) ;
 
             else
-                fprintf( fd, "\t    %ld          %ld (%f)\n",
+                 if(TOPRINT) fprintf( fd, "\t    %ld          %ld (%f)\n",
                         i, elem_interaction[i].count,
                         elem_interaction[i].area / elem_interaction[i].count);
         }
 
-    fprintf( fd, "    Configurations\n" ) ;
+     if(TOPRINT) fprintf( fd, "    Configurations\n" ) ;
 #if PATCH_ASSIGNMENT == PATCH_ASSIGNMENT_COSTBASED
-    fprintf( fd, "\tPatch assignment: Costbased\n" ) ;
-    fprintf( fd, "\tUsing non-greedy cost-based algorithm\n") ;
+     if(TOPRINT) fprintf( fd, "\tPatch assignment: Costbased\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tUsing non-greedy cost-based algorithm\n") ;
 #endif
 #if PATCH_ASSIGNMENT == PATCH_ASSIGNMENT_STATIC
-    fprintf( fd, "\tPatch assignment: Static equal number\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tPatch assignment: Static equal number\n" ) ;
 #endif
 
-    fprintf( fd, "\tAlways inserting at top of list for visibility testing (not sorted)\n" ) ;
-    fprintf( fd, "\tRecursive pruning enabled for BSP tree traversal\n" ) ;
-    fprintf( fd, "\tPatch cache:      Enabled\n" ) ;
-    fprintf( fd, "\tAlways check all other queues when task stealing (not neighbor scheme)\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tAlways inserting at top of list for visibility testing (not sorted)\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tRecursive pruning enabled for BSP tree traversal\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tPatch cache:      Enabled\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tAlways check all other queues when task stealing (not neighbor scheme)\n" ) ;
 
 
-    fprintf( fd, "    Parameters\n" ) ;
-    fprintf( fd, "\tNumber of processors:    %ld\n", n_processors ) ;
-    fprintf( fd, "\tNumber of task queues:   %ld\n", n_taskqueues ) ;
-    fprintf( fd, "\tNumber of tasks / queue: %ld\n", n_tasks_per_queue ) ;
-    fprintf( fd, "\tArea epsilon:            %f\n", Area_epsilon ) ;
-    fprintf( fd, "\t#inter parallel refine:  %ld\n",
+     if(TOPRINT) fprintf( fd, "    Parameters\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tNumber of processors:    %ld\n", n_processors ) ;
+     if(TOPRINT) fprintf( fd, "\tNumber of task queues:   %ld\n", n_taskqueues ) ;
+     if(TOPRINT) fprintf( fd, "\tNumber of tasks / queue: %ld\n", n_tasks_per_queue ) ;
+     if(TOPRINT) fprintf( fd, "\tArea epsilon:            %f\n", Area_epsilon ) ;
+     if(TOPRINT) fprintf( fd, "\t#inter parallel refine:  %ld\n",
             N_inter_parallel_bf_refine);
-    fprintf( fd, "\t#visibility comp / task: %ld\n", N_visibility_per_task ) ;
-    fprintf( fd, "\tBF epsilon:              %f\n", BFepsilon ) ;
-    fprintf( fd, "\tEnergy convergence:      %f\n", Energy_epsilon ) ;
+     if(TOPRINT) fprintf( fd, "\t#visibility comp / task: %ld\n", N_visibility_per_task ) ;
+     if(TOPRINT) fprintf( fd, "\tBF epsilon:              %f\n", BFepsilon ) ;
+     if(TOPRINT) fprintf( fd, "\tEnergy convergence:      %f\n", Energy_epsilon ) ;
 
-    fprintf( fd, "    Iterations to converge:   %ld times\n",
+     if(TOPRINT) fprintf( fd, "    Iterations to converge:   %ld times\n",
             global->iteration_count ) ;
 
-    fprintf( fd, "    Resource Usage\n" ) ;
-    fprintf( fd, "\tNumber of patches:            %ld\n", total_patches ) ;
-    fprintf( fd, "\tTotal number of elements:     %ld\n", total_elements ) ;
-    fprintf( fd, "\tTotal number of interactions: %ld\n", total_interactions);
-    fprintf( fd, "\t          completely visible: %ld\n",
+     if(TOPRINT) fprintf( fd, "    Resource Usage\n" ) ;
+     if(TOPRINT) fprintf( fd, "\tNumber of patches:            %ld\n", total_patches ) ;
+     if(TOPRINT) fprintf( fd, "\tTotal number of elements:     %ld\n", total_elements ) ;
+     if(TOPRINT) fprintf( fd, "\tTotal number of interactions: %ld\n", total_interactions);
+     if(TOPRINT) fprintf( fd, "\t          completely visible: %ld\n",
             total_comp_visible_interactions ) ;
-    fprintf( fd, "\t        completely invisible: %ld\n",
+     if(TOPRINT) fprintf( fd, "\t        completely invisible: %ld\n",
             total_invisible_interactions ) ;
-    fprintf( fd, "\t           partially visible: %ld\n",
+     if(TOPRINT) fprintf( fd, "\t           partially visible: %ld\n",
             total_interactions - total_comp_visible_interactions
             - total_invisible_interactions ) ;
-    fprintf( fd, "\tInteraction coherence (root interaction not counted)\n");
-    fprintf( fd, "\t       Common for 4 siblings: %ld\n", total_match3 ) ;
-    fprintf( fd, "\t       Common for 3 siblings: %ld\n", total_match2 ) ;
-    fprintf( fd, "\t       Common for 2 siblings: %ld\n", total_match1 ) ;
-    fprintf( fd, "\t       Common for no sibling: %ld\n", total_match0 ) ;
-    fprintf( fd, "\tAvg. elements per patch:      %.1f\n",
+     if(TOPRINT) fprintf( fd, "\tInteraction coherence (root interaction not counted)\n");
+     if(TOPRINT) fprintf( fd, "\t       Common for 4 siblings: %ld\n", total_match3 ) ;
+     if(TOPRINT) fprintf( fd, "\t       Common for 3 siblings: %ld\n", total_match2 ) ;
+     if(TOPRINT) fprintf( fd, "\t       Common for 2 siblings: %ld\n", total_match1 ) ;
+     if(TOPRINT) fprintf( fd, "\t       Common for no sibling: %ld\n", total_match0 ) ;
+     if(TOPRINT) fprintf( fd, "\tAvg. elements per patch:      %.1f\n",
             (float)total_elements / (float)total_patches ) ;
-    fprintf( fd, "\tAvg. interactions per patch:  %.1f\n",
+     if(TOPRINT) fprintf( fd, "\tAvg. interactions per patch:  %.1f\n",
             (float)total_interactions / (float)total_patches ) ;
-    fprintf( fd, "\tAvg. interactions per element:%.1f\n",
+     if(TOPRINT) fprintf( fd, "\tAvg. interactions per element:%.1f\n",
             (float)total_interactions / (float)total_elements ) ;
-    fprintf( fd, "\tNumber of elements in equivalent uniform mesh: %ld\n",
+     if(TOPRINT) fprintf( fd, "\tNumber of elements in equivalent uniform mesh: %ld\n",
             total_equiv_elements ) ;
-    fprintf( fd, "\tElem(hierarchical)/Elem(uniform): %.2f%%\n",
+     if(TOPRINT) fprintf( fd, "\tElem(hierarchical)/Elem(uniform): %.2f%%\n",
             (float)total_elements / (float)total_equiv_elements * 100.0 ) ;
 }
 
@@ -191,61 +191,61 @@ void print_per_process_info(FILE *fd, long process)
 
     ps = &global->stat_info[process] ;
 
-    fprintf( fd, "\t\tModeling tasks:            %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tModeling tasks:            %ld\n",
     ps->total_modeling_tasks ) ;
-    fprintf( fd, "\t\tDefine patch tasks:        %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tDefine patch tasks:        %ld\n",
     ps->total_def_patch_tasks ) ;
-    fprintf( fd, "\t\tFF refinement tasks:       %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tFF refinement tasks:       %ld\n",
     ps->total_ff_ref_tasks ) ;
-    fprintf( fd, "\t\tRay processing tasks:      %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tRay processing tasks:      %ld\n",
     ps->total_ray_tasks ) ;
-    fprintf( fd, "\t\tRadiosity Avg/Norm tasks:  %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tRadiosity Avg/Norm tasks:  %ld\n",
     ps->total_radavg_tasks ) ;
-    fprintf( fd, "\t\tInteraction computations:  %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tInteraction computations:  %ld\n",
     ps->total_interaction_comp ) ;
-    fprintf( fd, "\t\tVisibility computations:   %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tVisibility computations:   %ld\n",
     ps->total_visibility_comp ) ;
-    fprintf( fd, "\t\t   (%ld of %ld were partially visible)\n",
+     if(TOPRINT) fprintf( fd, "\t\t   (%ld of %ld were partially visible)\n",
     ps->partially_visible,
     ps->total_visibility_comp ) ;
-    fprintf( fd, "\t\tRay intersection tests:    %ld\n",
+     if(TOPRINT) fprintf( fd, "\t\tRay intersection tests:    %ld\n",
     ps->total_ray_intersect_test ) ;
-    fprintf( fd, "\t\tPatch cache hit ratio:     %.2f%%\n",
+     if(TOPRINT) fprintf( fd, "\t\tPatch cache hit ratio:     %.2f%%\n",
     ps->total_patch_cache_hit * 100 /
     (ps->total_patch_cache_check + 0.01) ) ;
     for( cache_line = 0 ; cache_line < PATCH_CACHE_SIZE ; cache_line++ )
-    fprintf( fd, "\t\t    (level %ld):             %.2f%%\n",
+     if(TOPRINT) fprintf( fd, "\t\t    (level %ld):             %.2f%%\n",
     cache_line,
     ps->patch_cache_hit[cache_line] * 100 /
     (ps->total_patch_cache_check + 0.01));
 
     /* Per iteration info */
-    fprintf( fd, "\t\tPer iteration info.\n" ) ;
+     if(TOPRINT) fprintf( fd, "\t\tPer iteration info.\n" ) ;
     for( iteration = 0 ; iteration < global->iteration_count ; iteration++ )
     {
-        fprintf( fd, "\t\t     [%ld]  Interaction comp:   %ld\n",
+         if(TOPRINT) fprintf( fd, "\t\t     [%ld]  Interaction comp:   %ld\n",
         iteration, ps->per_iteration[iteration].visibility_comp ) ;
-        fprintf( fd, "\t\t          Ray Intersection:   %ld\n",
+         if(TOPRINT) fprintf( fd, "\t\t          Ray Intersection:   %ld\n",
         ps->per_iteration[iteration].ray_intersect_test ) ;
-        fprintf( fd, "\t\t          Tasks from my Q:    %ld\n",
+         if(TOPRINT) fprintf( fd, "\t\t          Tasks from my Q:    %ld\n",
         ps->per_iteration[iteration].tasks_from_myq ) ;
-        fprintf( fd, "\t\t          Tasks from other Q: %ld\n",
+         if(TOPRINT) fprintf( fd, "\t\t          Tasks from other Q: %ld\n",
         ps->per_iteration[iteration].tasks_from_otherq ) ;
-        fprintf( fd, "\t\t     Process_task wait count: %ld\n",
+         if(TOPRINT) fprintf( fd, "\t\t     Process_task wait count: %ld\n",
         ps->per_iteration[iteration].process_tasks_wait ) ;
         e = ps->per_iteration[iteration].last_pr_task ;
         if( e == 0 )
         continue ;
         if( e->parent == 0 )
         {
-            fprintf( fd, "\t\t          Last task: Patch level\n" ) ;
-            fprintf( fd, "\t\t           (%ld root inter)\n",
+             if(TOPRINT) fprintf( fd, "\t\t          Last task: Patch level\n" ) ;
+             if(TOPRINT) fprintf( fd, "\t\t           (%ld root inter)\n",
             e->n_interactions ) ;
         }
         else
         {
-            fprintf( fd, "\t\t          Last task: Elem level\n" ) ;
-            fprintf( fd, "\t\t           (%ld inter, %.3f Elem/Patch)\n",
+             if(TOPRINT) fprintf( fd, "\t\t          Last task: Elem level\n" ) ;
+             if(TOPRINT) fprintf( fd, "\t\t           (%ld inter, %.3f Elem/Patch)\n",
             e->n_interactions, e->area / e->patch->area ) ;
         }
     }
@@ -292,7 +292,7 @@ void get_patch_stat(Patch *patch, long dummy, long process_id)
     if( n_interactions_in_patch
     != global->patch_cost[patch->seq_no].n_total_inter )
     {
-        printf( "Error: patch(%d) Inter counted: %d (n_total_inter %d)\n",
+        if (TOPRINT) printf( "Error: patch(%d) Inter counted: %d (n_total_inter %d)\n",
         patch->seq_no,
         n_interactions_in_patch,
         global->patch_cost[patch->seq_no].n_total_inter ) ;
@@ -328,12 +328,12 @@ void get_elem_stat(Element *elem, long dummy, long process_id)
         p_visible++ ;
     }
     if( i_visible + c_visible + p_visible != elem->n_interactions )
-    printf( "Fatal: Interactions count miss match\n" ) ;
+    if (TOPRINT) printf( "Fatal: Interactions count miss match\n" ) ;
     if( elem->n_vis_undef_inter != 0 )
-    printf( "Fatal: Visibility undef list count non zero(%ld)\n",
+    if (TOPRINT) printf( "Fatal: Visibility undef list count non zero(%ld)\n",
     elem->n_vis_undef_inter ) ;
     if( elem->vis_undef_inter != 0 )
-    printf( "Fatal: Visibility undef list not empty\n" ) ;
+    if (TOPRINT) printf( "Fatal: Visibility undef list not empty\n" ) ;
 
     n_comp_visible_interactions += c_visible ;
     n_invisible_interactions    += i_visible ;
@@ -424,10 +424,10 @@ void print_running_time(long process_id)
     if( time_diff1 < 0 )
     time_diff1 += CLOCK_MAX_VAL ;
 
-    printf( "\tOverall start time\t%20lu\n", time_rad_start);
-    printf( "\tOverall end time\t%20lu\n", time_rad_end);
-    printf( "\tTotal time with initialization\t%20lu\n", time_diff);
-    printf( "\tTotal time without initialization\t%20lu\n", time_diff1);
+    if (TOPRINT) printf( "\tOverall start time\t%20lu\n", time_rad_start);
+    if (TOPRINT) printf( "\tOverall end time\t%20lu\n", time_rad_end);
+    if (TOPRINT) printf( "\tTotal time with initialization\t%20lu\n", time_diff);
+    if (TOPRINT) printf( "\tTotal time without initialization\t%20lu\n", time_diff1);
 }
 
 
@@ -444,15 +444,15 @@ void print_fork_time(long process_id)
     if( n_processors <= 1 )
     return ;
 
-    printf( "\tProcess fork overhead\n" ) ;
+    if (TOPRINT) printf( "\tProcess fork overhead\n" ) ;
     for( pid = 0 ; pid < n_processors-1 ; pid++ )
     {
-        printf( "\t Process %ld  %.2f mS\n",
+        if (TOPRINT) printf( "\t Process %ld  %.2f mS\n",
         pid,
         (timing[pid]->rad_start - time_rad_start) / 1000.0 ) ;
     }
 
-    printf( "\t (total)    %.2f mS\n",
+    if (TOPRINT) printf( "\t (total)    %.2f mS\n",
     (time_process_start[n_processors-2] - time_rad_start) / 1000.0 ) ;
 }
 

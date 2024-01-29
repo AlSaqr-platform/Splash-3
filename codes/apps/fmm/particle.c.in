@@ -83,12 +83,12 @@ CreateDistribution (cluster_type cluster, model_type model)
       end_limit = Total_Particles;
       switch (model) {
        case UNIFORM:
-	 printf("Creating a one cluster, uniform distribution for %ld ", Total_Particles);
-	 printf("particles\n");
+	 if (TOPRINT) printf("Creating a one cluster, uniform distribution for %ld ", Total_Particles);
+	 if (TOPRINT) printf("particles\n");
 	 break;
        case PLUMMER:
-	 printf("Creating a one cluster, non uniform distribution for %ld ", Total_Particles);
-	 printf("particles\n");
+	 if (TOPRINT) printf("Creating a one cluster, non uniform distribution for %ld ", Total_Particles);
+	 if (TOPRINT) printf("particles\n");
 	 break;
       }
       break;
@@ -96,12 +96,12 @@ CreateDistribution (cluster_type cluster, model_type model)
       end_limit = (Total_Particles / 2) + (Total_Particles & 0x1);
       switch (model) {
        case UNIFORM:
-	 printf("Creating a two cluster, uniform distribution for %ld ", Total_Particles);
-	 printf("particles\n");
+	 if (TOPRINT) printf("Creating a two cluster, uniform distribution for %ld ", Total_Particles);
+	 if (TOPRINT) printf("particles\n");
 	 break;
        case PLUMMER:
-	 printf("Creating a two cluster, non uniform distribution for %ld ", Total_Particles);
-	 printf("particles\n");
+	 if (TOPRINT) printf("Creating a two cluster, non uniform distribution for %ld ", Total_Particles);
+	 if (TOPRINT) printf("particles\n");
 	 break;
       }
       break;
@@ -228,12 +228,12 @@ void
 PrintParticle (particle *p)
 {
    if (p != NULL) {
-      printf("P %6ld :", p->id);
-      printf("  Pos    = ");
+      if (TOPRINT) printf("P %6ld :", p->id);
+      if (TOPRINT) printf("  Pos    = ");
       PrintVector(&(p->pos));
    }
    else
-      printf("Particle has not been initialized yet.\n");
+      if (TOPRINT) printf("Particle has not been initialized yet.\n");
 }
 
 
@@ -243,10 +243,10 @@ PrintAllParticles ()
    long i;
 
    fflush(stdout);
-   printf("                                   PARTICLE POSITIONS\n\n");
+   if (TOPRINT) printf("                                   PARTICLE POSITIONS\n\n");
    for (i = 0; i < Total_Particles; i++) {
       PrintParticle(Particle_List[i]);
-      printf("\n");
+      if (TOPRINT) printf("\n");
    }
 }
 
@@ -258,17 +258,17 @@ PrintParticleArrayIds (particle **p_array, long num_particles)
    long i = 0;
 
    if (num_particles == 0)
-      printf("NONE\n");
+      if (TOPRINT) printf("NONE\n");
    else {
       for (i = 0; i < num_particles; i++) {
 	 if (tab_count == 0) {
 	    tab_count = PARTICLES_PER_LINE;
-	    printf("\n");
+	    if (TOPRINT) printf("\n");
 	 }
-	 printf("\tP%ld", p_array[i]->id);
+	 if (TOPRINT) printf("\tP%ld", p_array[i]->id);
 	 tab_count -= 1;
       }
-      printf("\n");
+      if (TOPRINT) printf("\n");
    }
 }
 

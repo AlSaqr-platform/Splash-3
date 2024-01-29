@@ -143,7 +143,7 @@ void Ray_Trace(long my_node)
   }
 
     LOCK(Global->CountLock);
-    printf("%3ld\t%3ld\t%6ld\t%6ld\t%6ld\t%6ld\t%8ld\n",my_node,frame,exectime,
+    if (TOPRINT) printf("%3ld\t%3ld\t%6ld\t%6ld\t%6ld\t%6ld\t%8ld\n",my_node,frame,exectime,
 	   exectime1,num_rays_traced,num_traced_rays_hit_volume,
 	   num_samples_trilirped);
 

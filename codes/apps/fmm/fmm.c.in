@@ -152,16 +152,16 @@ main (int argc, char *argv[])
    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    SPLASH3_ROI_END();
 
-   printf("Finished FMM\n");
+   if (TOPRINT) printf("Finished FMM\n");
    PrintTimes();
    if (do_output) {
      PrintAllParticles();
    }
 
    // read out cycle counter and calc diff
-   printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("CYCLES COUNT = %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   printf("\n");
+   if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
+   printf("FMM CYCLES , %12lu\n",cycles_cntr_end - cycles_cntr_start);
+   if (TOPRINT) printf("\n");
 
    MAIN_END;
 }
@@ -321,7 +321,7 @@ GetArguments ()
 
    input = (char *) malloc(MAX_LINE_SIZE * sizeof(char));
    if (input == NULL) {
-      fprintf(stderr, "ERROR\n");
+       if(TOPRINT) fprintf(stderr, "ERROR\n");
       exit(-1);
    }
    fgets(input, MAX_LINE_SIZE, stdin);
@@ -331,9 +331,9 @@ GetArguments ()
       if ((*input == '\0') || (strcmp(input, "two cluster\n") == 0))
 	 Cluster = TWO_CLUSTER;
       else {
-	 fprintf(stderr, "ERROR: The only cluster types available are ");
-	 fprintf(stderr, "\"one cluster\" or \"two cluster\".\n");
-	 fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+	  if(TOPRINT) fprintf(stderr, "ERROR: The only cluster types available are ");
+	  if(TOPRINT) fprintf(stderr, "\"one cluster\" or \"two cluster\".\n");
+	  if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
 	 exit(-1);
       }
    }
@@ -345,72 +345,72 @@ GetArguments ()
       if ((*input == '\0') || (strcmp(input, "plummer\n") == 0))
 	 Model = PLUMMER;
       else {
-	 fprintf(stderr, "ERROR: The only distributions available are ");
-	 fprintf(stderr, "\"uniform\" or \"plummer\".\n");
-	 fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+	  if(TOPRINT) fprintf(stderr, "ERROR: The only distributions available are ");
+	  if(TOPRINT) fprintf(stderr, "\"uniform\" or \"plummer\".\n");
+	  if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
 	 exit(-1);
       }
    }
 
    Total_Particles = atoi(fgets(input, MAX_LINE_SIZE, stdin));
    if (Total_Particles <= 0) {
-      fprintf(stderr, "ERROR: The number of particles should be an int ");
-      fprintf(stderr, "greater than 0.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The number of particles should be an int ");
+       if(TOPRINT) fprintf(stderr, "greater than 0.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
    Precision = atof(fgets(input, MAX_LINE_SIZE, stdin));
    if (Precision == 0.0) {
-      fprintf(stderr, "ERROR: The precision has no default value.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The precision has no default value.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
    /* Determine number of multipole expansion terms needed for specified
     * precision and flag an error if it is too precise */
    Expansion_Terms = (long) ceil(-(log(Precision) / log(BASE)));
    if (Expansion_Terms > MAX_EXPANSION_TERMS) {
-      fprintf(stderr, "ERROR: %g (%ld terms) is too great a precision.\n", Precision, Expansion_Terms);
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: %g (%ld terms) is too great a precision.\n", Precision, Expansion_Terms);
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
    Number_Of_Processors = atoi(fgets(input, MAX_LINE_SIZE, stdin));
    if (Number_Of_Processors == 0) {
-      fprintf(stderr, "ERROR: The Number_Of_Processors has no default.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The Number_Of_Processors has no default.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
    if (Number_Of_Processors < 0) {
-      fprintf(stderr, "ERROR: Number of processors should be an int greater ");
-      fprintf(stderr, "than 0.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: Number of processors should be an int greater ");
+       if(TOPRINT) fprintf(stderr, "than 0.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
    Time_Steps = atoi(fgets(input, MAX_LINE_SIZE, stdin));
    if (Time_Steps == 0) {
-      fprintf(stderr, "ERROR: The number of time steps has no default.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The number of time steps has no default.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
    if (Time_Steps < 0) {
-      fprintf(stderr, "ERROR: The number of time steps should be an int ");
-      fprintf(stderr, "greater than 0.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The number of time steps should be an int ");
+       if(TOPRINT) fprintf(stderr, "greater than 0.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
    Timestep_Dur = atof(fgets(input, MAX_LINE_SIZE, stdin));
    if (Timestep_Dur == 0.0) {
-      fprintf(stderr, "ERROR: The duration of a time step has no default ");
-      fprintf(stderr, "value.\n If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The duration of a time step has no default ");
+       if(TOPRINT) fprintf(stderr, "value.\n If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
    if (Timestep_Dur < 0) {
-      fprintf(stderr, "ERROR: The duration of a time step should be a ");
-      fprintf(stderr, "double greater than 0.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The duration of a time step should be a ");
+       if(TOPRINT) fprintf(stderr, "double greater than 0.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
@@ -418,9 +418,9 @@ GetArguments ()
    if (Softening_Param == 0.0)
       Softening_Param = MIN_REAL;
    if (Softening_Param < 0) {
-      fprintf(stderr, "ERROR: The softening parameter should be a double ");
-      fprintf(stderr, "greater than 0.\n");
-      fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+       if(TOPRINT) fprintf(stderr, "ERROR: The softening parameter should be a double ");
+       if(TOPRINT) fprintf(stderr, "greater than 0.\n");
+       if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
       exit(-1);
    }
 
@@ -431,9 +431,9 @@ GetArguments ()
       if (strcmp(input, "orb\n") == 0)
 	 Partition_Flag = ORB;
       else {
-	 fprintf(stderr, "ERROR: The only partitioning schemes available ");
-	 fprintf(stderr, "are \"cost zones\" \n\t or \"orb\".\n");
-	 fprintf(stderr, "If you need help, type \"nbody -help\".\n");
+	  if(TOPRINT) fprintf(stderr, "ERROR: The only partitioning schemes available ");
+	  if(TOPRINT) fprintf(stderr, "are \"cost zones\" \n\t or \"orb\".\n");
+	  if(TOPRINT) fprintf(stderr, "If you need help, type \"nbody -help\".\n");
 	 exit(-1);
       }
    }
@@ -469,38 +469,38 @@ PrintTimes ()
    long init_done;
 
    if ((fp = fopen("times", "w")) == NULL) {
-      fprintf(stderr, "Error opening output file\n");
+       if(TOPRINT) fprintf(stderr, "Error opening output file\n");
       fflush(stderr);
       exit(-1);
    }
-   fprintf(fp, "TIMING:\n");
-   fprintf(fp, "%ld\t%ld\t%.2e\t%ld\n", Number_Of_Processors, Total_Particles, Precision, Time_Steps);
+    if(TOPRINT) fprintf(fp, "TIMING:\n");
+    if(TOPRINT) fprintf(fp, "%ld\t%ld\t%.2e\t%ld\n", Number_Of_Processors, Total_Particles, Precision, Time_Steps);
    for (i = 0; i < Time_Steps; i++) {
-      fprintf(fp, "Time Step %ld\n", i);
+       if(TOPRINT) fprintf(fp, "Time Step %ld\n", i);
       for (j = 0; j < Number_Of_Processors; j++) {
 	 timing = &(Local[j].Timing[i]);
-	 fprintf(fp, "Processor %ld\n", j);
-	 fprintf(fp, "\tTotal Time = %lu\n", timing->total_time);
+	  if(TOPRINT) fprintf(fp, "Processor %ld\n", j);
+	  if(TOPRINT) fprintf(fp, "\tTotal Time = %lu\n", timing->total_time);
 	 if (do_stats) {
-	    fprintf(fp, "\tTree Construction Time = %lu\n",
+	     if(TOPRINT) fprintf(fp, "\tTree Construction Time = %lu\n",
 		    timing->construct_time);
-	    fprintf(fp, "\tList Construction Time = %lu\n", timing->list_time);
-	    fprintf(fp, "\tPartition Time = %lu\n", timing->partition_time);
-	    fprintf(fp, "\tTree Pass Time = %lu\n", timing->pass_time);
-	    fprintf(fp, "\tInter Particle Time = %lu\n", timing->inter_time);
-	    fprintf(fp, "\tBarrier Time = %lu\n", timing->barrier_time);
-	    fprintf(fp, "\tIntra Particle Time = %lu\n", timing->intra_time);
-	    fprintf(fp, "\tOther Time = %lu\n", timing->other_time);
+	     if(TOPRINT) fprintf(fp, "\tList Construction Time = %lu\n", timing->list_time);
+	     if(TOPRINT) fprintf(fp, "\tPartition Time = %lu\n", timing->partition_time);
+	     if(TOPRINT) fprintf(fp, "\tTree Pass Time = %lu\n", timing->pass_time);
+	     if(TOPRINT) fprintf(fp, "\tInter Particle Time = %lu\n", timing->inter_time);
+	     if(TOPRINT) fprintf(fp, "\tBarrier Time = %lu\n", timing->barrier_time);
+	     if(TOPRINT) fprintf(fp, "\tIntra Particle Time = %lu\n", timing->intra_time);
+	     if(TOPRINT) fprintf(fp, "\tOther Time = %lu\n", timing->other_time);
 	 }
 	 fflush(fp);
       }
    }
-   fprintf(fp, "END\n");
+    if(TOPRINT) fprintf(fp, "END\n");
    fclose(fp);
 
-   printf("                                   PROCESS STATISTICS\n");
-   printf("             Track        Tree        List        Part        Pass       Inter        Bar        Intra       Other\n");
-   printf(" Proc        Time         Time        Time        Time        Time       Time         Time       Time        Time\n");
+   if (TOPRINT) printf("                                   PROCESS STATISTICS\n");
+   if (TOPRINT) printf("             Track        Tree        List        Part        Pass       Inter        Bar        Intra       Other\n");
+   if (TOPRINT) printf(" Proc        Time         Time        Time        Time        Time       Time         Time       Time        Time\n");
    total_time = tree_time = list_time = part_time = pass_time =
    inter_time = bar_time = intra_time = other_time = 0;
    for (i = 2; i < Time_Steps; i++) {
@@ -515,7 +515,7 @@ PrintTimes ()
      intra_time += timing->intra_time;
      other_time += timing->other_time;
    }
-   printf(" %4d %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
+   if (TOPRINT) printf(" %4d %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
           0,total_time,tree_time,list_time,part_time,pass_time,
           inter_time,bar_time,intra_time,other_time);
    t_total_time += total_time;
@@ -546,7 +546,7 @@ PrintTimes ()
        other_time += timing->other_time;
      }
      if (do_stats) {
-       printf(" %4ld %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
+       if (TOPRINT) printf(" %4ld %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
                j,total_time,tree_time,list_time,part_time,pass_time,
                inter_time,bar_time,intra_time,other_time);
      }
@@ -565,12 +565,12 @@ PrintTimes ()
    }
    if (do_stats) {
      P = Number_Of_Processors;
-     printf("  Avg %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
+     if (TOPRINT) printf("  Avg %12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f%12.0f\n",
              t_total_time/P,t_tree_time/P,t_list_time/P,t_part_time/P,
 	     t_pass_time/P,t_inter_time/P,t_bar_time/P,t_intra_time/P,
 	     t_other_time/P);
    }
-   printf("\n");
+   if (TOPRINT) printf("\n");
    if (Time_Steps > 2) {
      init_done = Local[0].init_done_times;
      if (do_stats) {
@@ -580,16 +580,16 @@ PrintTimes ()
          }
        }
      }
-     printf("                                   TIMING INFORMATION\n");
-     printf("Start time                        : %16lu\n", starttime);
-     printf("Initialization finish time        : %16lu\n", init_done);
-     printf("Overall finish time               : %16lu\n", endtime);
-     printf("Total time with initialization    : %16lu\n", endtime - starttime);
-     printf("Total time without initialization : %16lu\n", (long) (overall_total));
-     printf("\n");
+     if (TOPRINT) printf("                                   TIMING INFORMATION\n");
+     if (TOPRINT) printf("Start time                        : %16lu\n", starttime);
+     if (TOPRINT) printf("Initialization finish time        : %16lu\n", init_done);
+     if (TOPRINT) printf("Overall finish time               : %16lu\n", endtime);
+     if (TOPRINT) printf("Total time with initialization    : %16lu\n", endtime - starttime);
+     if (TOPRINT) printf("Total time without initialization : %16lu\n", (long) (overall_total));
+     if (TOPRINT) printf("\n");
 
-     printf("Total time for steps %ld to %ld : %12.0f\n", 3L, Time_Steps, overall_total);
-     printf("\n");
+     if (TOPRINT) printf("Total time for steps %ld to %ld : %12.0f\n", 3L, Time_Steps, overall_total);
+     if (TOPRINT) printf("\n");
    }
 }
 
@@ -597,31 +597,31 @@ PrintTimes ()
 void
 Help ()
 {
-   printf("Usage: FMM <options> < inputfile\n\n");
-   printf("options:\n");
-   printf("  -o : Print out final particle positions.\n");
-   printf("  -s : Print out individual processor timing statistics.\n");
-   printf("  -h : Print out command line options\n");
-   printf("\n");
-   printf("Input parameter descriptions:\n");
-   printf("  There are nine parameters, and parameters three through\n");
-   printf("  have no default values.\n");
-   printf("1) Cluster Type : Distribute particles in one cluster\n");
+   if (TOPRINT) printf("Usage: FMM <options> < inputfile\n\n");
+   if (TOPRINT) printf("options:\n");
+   if (TOPRINT) printf("  -o : Print out final particle positions.\n");
+   if (TOPRINT) printf("  -s : Print out individual processor timing statistics.\n");
+   if (TOPRINT) printf("  -h : Print out command line options\n");
+   if (TOPRINT) printf("\n");
+   if (TOPRINT) printf("Input parameter descriptions:\n");
+   if (TOPRINT) printf("  There are nine parameters, and parameters three through\n");
+   if (TOPRINT) printf("  have no default values.\n");
+   if (TOPRINT) printf("1) Cluster Type : Distribute particles in one cluster\n");
 
-   printf("   (\"one cluster\") or two interacting clusters (\"two cluster\")\n");
-   printf("   Default is two cluster.\n");
-   printf("2) Distribution Type : Distribute particles in either a\n");
-   printf("   uniform spherical distribution (\"uniform\"), or in a\n");
-   printf("   Plummer model (\"plummer\").  Default is plummer.\n");
-   printf("3) Number Of Particles : Integer greater than 0.\n");
-   printf("4) Precision : Precision of results.  Should be a double.\n");
-   printf("5) Number of Processors : Integer greater than 0.\n");
-   printf("6) Number of Time Steps : Integer greater than 0.\n");
-   printf("7) Time Step Duration : Double greater than 0.\n");
-   printf("8) Softening Parameter : Real number greater than 0.\n");
-   printf("   Defaults is DBL_MIN or FLT_MIN.\n");
-   printf("9) Partitioning Scheme : \"cost zones\" or \"orb\".\n");
-   printf("   Default is cost zones.\n");
+   if (TOPRINT) printf("   (\"one cluster\") or two interacting clusters (\"two cluster\")\n");
+   if (TOPRINT) printf("   Default is two cluster.\n");
+   if (TOPRINT) printf("2) Distribution Type : Distribute particles in either a\n");
+   if (TOPRINT) printf("   uniform spherical distribution (\"uniform\"), or in a\n");
+   if (TOPRINT) printf("   Plummer model (\"plummer\").  Default is plummer.\n");
+   if (TOPRINT) printf("3) Number Of Particles : Integer greater than 0.\n");
+   if (TOPRINT) printf("4) Precision : Precision of results.  Should be a double.\n");
+   if (TOPRINT) printf("5) Number of Processors : Integer greater than 0.\n");
+   if (TOPRINT) printf("6) Number of Time Steps : Integer greater than 0.\n");
+   if (TOPRINT) printf("7) Time Step Duration : Double greater than 0.\n");
+   if (TOPRINT) printf("8) Softening Parameter : Real number greater than 0.\n");
+   if (TOPRINT) printf("   Defaults is DBL_MIN or FLT_MIN.\n");
+   if (TOPRINT) printf("9) Partitioning Scheme : \"cost zones\" or \"orb\".\n");
+   if (TOPRINT) printf("   Default is cost zones.\n");
    exit(0);
 }
 

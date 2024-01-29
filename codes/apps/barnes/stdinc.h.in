@@ -29,7 +29,7 @@
 #include <sys/times.h>
 #include <unistd.h>
 
-#define error(msg, ...)	printf(msg, ##__VA_ARGS__);
+#define error(msg, ...)	if(TOPRINT) printf(msg, ##__VA_ARGS__);
 /*
  * STREAM: a replacement for FILE *.
  */

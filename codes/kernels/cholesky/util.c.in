@@ -20,7 +20,7 @@ EXTERN_ENV
 #include <stdio.h>
 #include "matrix.h"
 
-#define Error(m) { printf(m); exit(0); }
+#define Error(m) { if (TOPRINT) printf(m); exit(0); }
 #define AddMember(set, new) { long s, n; s = set; n = new; link[n] = link[s]; link[s] = n; }
 
 long maxm;
@@ -40,7 +40,7 @@ SMatrix NewMatrix(long n, long m, long nz)
   }
 
   if (!M.col || !M.row || (nz && !M.nz)) {
-    printf("NewMatrix %ld %ld: Out of memory\n", n, m);
+    if (TOPRINT) printf("NewMatrix %ld %ld: Out of memory\n", n, m);
     exit(0);
   }
 
@@ -65,7 +65,7 @@ double *NewVector(long n)
   v = (double *) MyMalloc(n*sizeof(double), DISTRIBUTED);
 
   if (!v && n) {
-    printf("Out of memory: NewVector(%ld)\n", n);
+    if (TOPRINT) printf("Out of memory: NewVector(%ld)\n", n);
     exit(0);
   }
 
@@ -120,7 +120,7 @@ SMatrix ReadSparse(char *name, char *probName)
 	fscanf(fp, "%3c", type);
 	type[3] = 0;
 	if (!(type[0] != 'C' && type[1] == 'S' && type[2] == 'A')) {
-	  fprintf(stderr, "Wrong type: %s\n", type);
+	   if(TOPRINT) fprintf(stderr, "Wrong type: %s\n", type);
 	  exit(0);
 	}
 
@@ -134,9 +134,9 @@ SMatrix ReadSparse(char *name, char *probName)
 
 	fscanf(fp, "%14c", buf); sscanf(buf, "%ld", &tmp);
 	if (tmp != 0)
-	  printf("This is not an assembled matrix!\n");
+	  if (TOPRINT) printf("This is not an assembled matrix!\n");
 	if (n_rows != n)
-	  printf("Matrix is not symmetric\n");
+	  if (TOPRINT) printf("Matrix is not symmetric\n");
 	DumpLine(fp);
 
 	fscanf(fp, "%16c", buf);
@@ -263,11 +263,11 @@ SMatrix LowerToFull(SMatrix L)
     if (L.row[first[i]] == i) {
       first[i]++;
     } else {
-      fprintf(stderr, "Missing diagonal: %ld: ", i);
+       if(TOPRINT) fprintf(stderr, "Missing diagonal: %ld: ", i);
       for (j=L.col[i]; j<L.col[i+1]; j++) {
-	fprintf(stderr, "%ld ", L.row[j]);
+	 if(TOPRINT) fprintf(stderr, "%ld ", L.row[j]);
       }
-      fprintf(stderr, "\n");
+       if(TOPRINT) fprintf(stderr, "\n");
     }
 
     if (first[i] < L.col[i+1]) {
@@ -282,7 +282,7 @@ SMatrix LowerToFull(SMatrix L)
   }
 
   if (ind != M.m) {
-    printf("Lost some\n");
+    if (TOPRINT) printf("Lost some\n");
   }
 
   free(link); free(first);

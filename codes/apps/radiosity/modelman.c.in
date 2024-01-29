@@ -183,7 +183,7 @@ void process_model(Model *model, long  type, long process_id)
             process_rectangle( (Model_Rectangle *)model, process_id ) ;
             break ;
         default:
-            fprintf( stderr, "Panic:process_model:Illegal type %ld\n", type ) ;
+             if(TOPRINT) fprintf( stderr, "Panic:process_model:Illegal type %ld\n", type ) ;
         }
 }
 

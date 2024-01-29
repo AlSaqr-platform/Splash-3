@@ -157,7 +157,7 @@ void FindSupernodes(SMatrix A, long *T, long *nz, long *node)
     max_super = size;
   node[A.n] = 0;
 
-  printf("%ld supers, %4.2f nodes/super, %ld max super\n",
+  if (TOPRINT) printf("%ld supers, %4.2f nodes/super, %ld max super\n",
 	 supers, A.n/(double) supers, max_super);  
 
   free(nchild);

@@ -149,7 +149,7 @@ void DriveParallelFO(long MyNum, struct LocalCopies *lc)
       ;
 
   if (TaskWaiting(MyNum))
-    printf("**** Termination error ***\n");
+    if (TOPRINT) printf("**** Termination error ***\n");
 }
 
 
@@ -282,7 +282,7 @@ void DecrementRemaining(long dest_block, long MyNum, struct LocalCopies *lc)
   if (BLOCK(dest_block)->remaining == 0)
     BlockReadyFO(dest_block, MyNum, lc);
   else if (BLOCK(dest_block)->remaining == -1)
-    printf("*** Error rem ***\n");  
+    if (TOPRINT) printf("*** Error rem ***\n");  
 }
 
 
@@ -303,7 +303,7 @@ void PerformUpdate(struct BlockList *above_bl, struct BlockList *below_bl, long 
 
   dest_block = FindBlock(desti, destj);
   if (dest_block == -1)
-    printf("Couldn't find %ld,%ld\n", desti, destj);
+    if (TOPRINT) printf("Couldn't find %ld,%ld\n", desti, destj);
   else if (BLOCK(dest_block)->owner != MyNum)
     return; /* not my block */
 
@@ -392,9 +392,9 @@ void HandleUpdate2FO(long which_domain, long bli, long blj, long MyNum, struct L
   dest_block = FindBlock(desti, destj);
 
   if (dest_block == -1)
-    printf("Couldn't find %ld,%ld\n", desti, destj);
+    if (TOPRINT) printf("Couldn't find %ld,%ld\n", desti, destj);
   else if (BLOCK(dest_block)->owner != MyNum)
-    printf("Sent to wrong PE\n");
+    if (TOPRINT) printf("Sent to wrong PE\n");
 
   FindBlockUpdate(which_domain, bli, blj, &update, &stride);
 
@@ -506,7 +506,7 @@ void CheckRemaining()
     }
 
   if (bogus)
-    printf("Bad remaining\n");
+    if (TOPRINT) printf("Bad remaining\n");
 
 }
 
@@ -523,7 +523,7 @@ void CheckReceived()
 	bogus = 1;
     }
   if (bogus)
-    printf("Bad received\n");
+    if (TOPRINT) printf("Bad received\n");
 
 }
 

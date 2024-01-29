@@ -51,16 +51,16 @@ void
 PrintComplexNum (complex *c)
 {
    if (c->i >= (real) 0.0)
-      printf("%e + %ei", c->r, c->i);
+      if (TOPRINT) printf("%e + %ei", c->r, c->i);
    else
-      printf("%e - %ei", c->r, -c->i);
+      if (TOPRINT) printf("%e - %ei", c->r, -c->i);
 }
 
 
 void
 PrintVector (vector *v)
 {
-   printf("(%10.5f, %10.5f)", v->x, v->y);
+   if (TOPRINT) printf("(%10.5f, %10.5f)", v->x, v->y);
 }
 
 
@@ -72,7 +72,7 @@ LockedPrint (char *format_str, ...)
    va_start(ap, format_str);
    LOCK(G_Memory->io_lock);
    fflush(stdout);
-   vfprintf(stdout, format_str, ap);
+   if(TOPRINT) fprintf(stdout, format_str, ap);
    fflush(stdout);
    UNLOCK(G_Memory->io_lock);
    va_end(ap);

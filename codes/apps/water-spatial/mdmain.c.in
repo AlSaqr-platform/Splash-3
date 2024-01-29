@@ -170,9 +170,9 @@ double MDMAIN(long NSTEP, long NPRINT, long NSAVE, long NORD1, long ProcID)
             /* if it is time to print output as well ... */
             if ((i % NPRINT) == 0 && ProcID == 0) {
                 LOCK(gl->IOLock);
-                fprintf(six,"     %5ld %14.5lf %12.5lf %12.5lf %12.5lf \n"
+                 if(TOPRINT) fprintf(six,"     %5ld %14.5lf %12.5lf %12.5lf %12.5lf \n"
                         ,i,TEN,POTA,POTR,POTRF);
-                fprintf(six," %16.3lf %16.5lf %16.5lf\n",XTT,AVGT,XVIR);
+                 if(TOPRINT) fprintf(six," %16.3lf %16.5lf %16.5lf\n",XTT,AVGT,XVIR);
                 fflush(six);
                 UNLOCK(gl->IOLock);
             }

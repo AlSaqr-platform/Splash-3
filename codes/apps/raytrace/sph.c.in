@@ -68,13 +68,13 @@ VOID	SphPrint(OBJECT *po)
 	ELEMENT *pe;			/* Ptr to sphere element.	     */
 
 	pe = po->pelem;
-	fprintf(stderr,"\tSphere object\n");
+	 if(TOPRINT) fprintf(stderr,"\tSphere object\n");
 
 	for (i = 0; i < po->numelements; i++)
 		{
 		ps = (SPHERE *)(pe->data);
-		fprintf(stderr,"\t\tcenter  %f %f %f\n", ps->center[0], ps->center[1], ps->center[2]);
-		fprintf(stderr,"\t\t        radius %f %f\n\n", ps->rad, ps->rad2);
+		 if(TOPRINT) fprintf(stderr,"\t\tcenter  %f %f %f\n", ps->center[0], ps->center[1], ps->center[2]);
+		 if(TOPRINT) fprintf(stderr,"\t\t        radius %f %f\n\n", ps->rad, ps->rad2);
 		pe++;
 		}
 	}
@@ -472,7 +472,7 @@ VOID	SphRead(OBJECT *po, FILE *pf)
 
 		if (instat != 4)
 			{
-			printf("Error in SphRead: sphere %ld.\n", i);
+			if (TOPRINT) printf("Error in SphRead: sphere %ld.\n", i);
 			exit(1);
 			}
 

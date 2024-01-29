@@ -38,7 +38,7 @@ InitGlobalMemory ()
 {
    G_Memory = (g_mem *) G_MALLOC(sizeof(g_mem));
    if (G_Memory == NULL) {
-      printf("Ran out of global memory in InitGlobalMemory\n");
+      if (TOPRINT) printf("Ran out of global memory in InitGlobalMemory\n");
       exit(-1);
    }
    G_Memory->count = 0;
