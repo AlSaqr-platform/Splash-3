@@ -70,6 +70,7 @@ MAIN_ENV
 #define global  /* nada */
 
 #include "stdinc.h"
+#include "stats.h"
 
 string defv[] = {                 /* DEFAULT PARAMETER VALUES              */
     /* file names for input/output                                         */
@@ -252,9 +253,6 @@ int main (int argc, string argv[])
      }
    }
 
-   // cycle counter holders
-   long unsigned cycles_cntr_start, cycles_cntr_end;
-
    Global = NULL;
    initparam(defv);
    startrun();
@@ -271,15 +269,15 @@ int main (int argc, string argv[])
 
    if(TOPRINT) printf("COMPUTESTART  = %12lu\n",Global->computestart);
 
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+   START_STATS()
 
    SPLASH3_ROI_BEGIN();
    CREATE(SlaveStart, NPROC);
    WAIT_FOR_END(NPROC);
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    SPLASH3_ROI_END();
 
-   
+   STOP_STATS()
+
    CLOCK(Global->computeend);
 
    if(TOPRINT) printf("COMPUTEEND    = %12lu\n",Global->computeend);
@@ -298,11 +296,7 @@ int main (int argc, string argv[])
 		   Global->treebuildtime-Global->forcecalctime))/
 	  Global->tracktime);
 
-   // read out cycle counter and calc diff
-   if(TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("BARNES CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   if(TOPRINT) printf("\n");
-
+   PRINT_STATS()
    MAIN_END;
 }
 
