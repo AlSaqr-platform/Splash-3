@@ -83,6 +83,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "rt.h"
+#include "stats.h"
 
 INT	DataType;			/* Ascii or binary geometry file.    */
 
@@ -297,8 +298,6 @@ int	main(int argc, CHAR *argv[])
 	UINT	end;
 	UINT	lapsed;
 	MATRIX	vtrans, Vinv;		/*  View transformation and inverse. */
-	long unsigned cycles_cntr_start, cycles_cntr_end;
-
 
 	/*
 	 *	First, process command line arguments.
@@ -454,16 +453,14 @@ int	main(int argc, CHAR *argv[])
 	 *	Now create slave processes.
 	 */
 
-	__asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+  START_STATS();
 	CLOCK(begin);
 	SPLASH3_ROI_BEGIN();
 	CREATE(StartRayTrace, gm->nprocs);
 	WAIT_FOR_END(gm->nprocs);
-	__asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+  STOP_STATS();
 	SPLASH3_ROI_END();
 	CLOCK(end);
-
-
 
 	/*
 	 *	We are finished.  Clean up, print statistics and run time.
@@ -481,9 +478,7 @@ int	main(int argc, CHAR *argv[])
 	if (TOPRINT) printf("        Overall end time   %20lu\n", end);
 	if (TOPRINT) printf("        Total time with initialization  %20lu\n", lapsed);
 	if (TOPRINT) printf("        Total time without initialization  %20lu\n", end - gm->par_start_time);
-	if (TOPRINT) printf("CYCLES_START = %12lu\n",cycles_cntr_start);
-	if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-	printf("RAYTRACE CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
+  PRINT_STATS();
 	if (TOPRINT) printf("\n");
 
     if (dostats) {

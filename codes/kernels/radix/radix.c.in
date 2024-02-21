@@ -39,6 +39,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+#include "stats.h"
 
 #define DEFAULT_P                    1
 #define DEFAULT_N               262144
@@ -129,9 +130,6 @@ int main(int argc, char *argv[])
    double minrank, maxrank, avgrank;
    double minsort, maxsort, avgsort;
    unsigned long start;
-
-   // cycle counter holders
-   long unsigned cycles_cntr_start, cycles_cntr_end;
 
    CLOCK(start)
 
@@ -312,12 +310,12 @@ int main(int argc, char *argv[])
    }  */
 
    /* Fill the random-number array. */
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+   START_STATS();
    SPLASH3_ROI_BEGIN();
 
    CREATE(slave_sort, number_of_processors);
    WAIT_FOR_END(number_of_processors);
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+   STOP_STATS();
 
    if (TOPRINT) printf("\n");
    if (TOPRINT) printf("                 PROCESS STATISTICS\n");
@@ -391,11 +389,8 @@ int main(int argc, char *argv[])
      test_sort(global->final);  
    }
   
-   // read out cycle counter and calc diff
-   if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("RADIX CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   if (TOPRINT) printf("\n");
 
+   PRINT_STATS();
    MAIN_END;
 }
 

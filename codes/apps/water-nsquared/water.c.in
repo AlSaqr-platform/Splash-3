@@ -58,6 +58,7 @@ MAIN_ENV
 #include "fileio.h"
 #include "frcnst.h"
 #include "global.h"
+#include "stats.h"
 
 long NMOL,NORDER,NATMO,NATMO3,NMOL1;
 long NATOMS;
@@ -111,9 +112,6 @@ int main(int argc, char **argv)
         (process 0) to a processor if one wanted to. Others can be bound in
         the WorkStart routine.
         */
-
-    // cycle counter holders
-    long unsigned cycles_cntr_start, cycles_cntr_end;
 
     // read out cycle counter before test
     six = stdout;   /* output file */
@@ -250,15 +248,15 @@ int main(int argc, char **argv)
     /* spawn helper processes, each getting its unique process id */
     CLOCK(gl->computestart);
 
-    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+    START_STATS();
     SPLASH3_ROI_BEGIN();
 
     CREATE(WorkStart, NumProcs);
 
     /* macro to make main process wait for all others to finish */
     WAIT_FOR_END(NumProcs);
-    __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
     SPLASH3_ROI_END();
+    STOP_STATS();
     CLOCK(gl->computeend);
 
 
@@ -270,13 +268,9 @@ int main(int argc, char **argv)
     if (TOPRINT) printf("Intermolecular time only (2nd timestep onward) = %lu\n",gl->intertime);
     if (TOPRINT) printf("Other time (2nd timestep onward) = %lu\n",gl->tracktime - gl->intratime - gl->intertime);
 
-    // read out cycle counter and calc diff
-    if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-    printf("WATER NSQ CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-    if (TOPRINT) printf("\n");
-
     if (TOPRINT) printf("\nExited Happily with XTT = %g (note: XTT value is garbage if NPRINT > NSTEP)\n", XTT);
 
+    PRINT_STATS();
     MAIN_END;
 } /* main.c */
 

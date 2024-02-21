@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "stats.h"
 #if defined(SGI_GL)
 #include <gl.h>
 #if defined(GL_NASA)
@@ -168,10 +169,6 @@ int main(int argc, char *argv[])
                        DFLT_VIEW_DIST, DFLT_VIEW_ZOOM,0 ) ;
         }
 
-    // cycle counter holders
-    long unsigned cycles_cntr_start, cycles_cntr_end;
-
-
     /* Initialize ANL macro */
     MAIN_INITENV(,60000000) ;
 
@@ -239,7 +236,7 @@ int main(int argc, char *argv[])
 
             /* Time stamp */
             CLOCK( time_rad_start );
-            __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+            START_STATS();
             SPLASH3_ROI_BEGIN();
 
             global->index = 0;
@@ -252,10 +249,11 @@ int main(int argc, char *argv[])
             CREATE(radiosity, n_processors);
             WAIT_FOR_END(n_processors);
             SPLASH3_ROI_END();
-            __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+            STOP_STATS();
 
             /* Time stamp */
             CLOCK( time_rad_end );
+            PRINT_STATS();
 
             /* Print out running time */
             if (TOPRINT) printf("TIMING STATISTICS MEASURED BY MAIN PROCESS:\n");
@@ -333,11 +331,6 @@ int main(int argc, char *argv[])
             g_start( expose_callback,
                     N_SLIDERS, sliders, N_CHOICES, choices ) ;
         }
-
-    // read out cycle counter and calc diff
-    if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-    printf("RADIOSITY CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-    if (TOPRINT) printf("\n");
 
     MAIN_END;
     exit(0) ;

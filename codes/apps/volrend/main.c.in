@@ -32,6 +32,7 @@
 #include <sys/resource.h>
 #include <limits.h>
 #include "tiffio.h"
+#include "stats.h"
 
 #define SH_MEM_AMT 60000000
 
@@ -77,6 +78,7 @@ int main(int argc, char *argv[])
 
   MAIN_INITENV(, SH_MEM_AMT);
 
+  START_STATS();
   num_nodes = atol(argv[1]);
   ROTATE_STEPS = atoi(argv[3]);
 
@@ -99,6 +101,8 @@ int main(int argc, char *argv[])
     WAIT_FOR_END(num_nodes);
   }
   SPLASH3_ROI_END();
+  STOP_STATS();
+  PRINT_STATS();
   MAIN_END;
 }
 

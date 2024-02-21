@@ -62,6 +62,7 @@ MAIN_ENV
 #include <stdlib.h>
 #include <unistd.h>
 #include "decs.h"
+#include "stats.h"
 
 struct multi_struct *multi;
 struct global_struct *global;
@@ -159,9 +160,6 @@ int main(int argc, char *argv[])
    unsigned long computeend;
    unsigned long start;
 
-
-   // cycle counter holders
-   long unsigned cycles_cntr_start, cycles_cntr_end;
 
    CLOCK(start)
 
@@ -476,12 +474,12 @@ int main(int argc, char *argv[])
      if (TOPRINT) printf("                       MULTIGRID OUTPUTS\n");
    }
 
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+   START_STATS();
    SPLASH3_ROI_BEGIN();
    CREATE(slave, nprocs);
    WAIT_FOR_END(nprocs);
-   __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
    SPLASH3_ROI_END();
+   STOP_STATS();
    CLOCK(computeend)
 
    if (TOPRINT) printf("\n");
@@ -539,11 +537,7 @@ int main(int argc, char *argv[])
    if (TOPRINT) printf("    (excludes first timestep)\n");
    if (TOPRINT) printf("\n");
 
-   // read out cycle counter and calc diff
-   if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-   printf("OCEAN C CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-   if (TOPRINT) printf("\n");
-
+   PRINT_STATS();
    MAIN_END
 }
 

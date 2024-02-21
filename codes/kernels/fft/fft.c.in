@@ -46,6 +46,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+#include "stats.h"
+
 #define PAGE_SIZE               4096
 #define NUM_CACHE_LINES        65536 
 #define LOG2_LINE_SIZE             4
@@ -131,9 +133,6 @@ int main(int argc, char *argv[])
   long factor;
   long pages;
   unsigned long start;
-
-  // cycle counter holders
-  long unsigned cycles_cntr_start, cycles_cntr_end;
 
   CLOCK(start);
 
@@ -322,16 +321,14 @@ int main(int argc, char *argv[])
   InitU2(N,umain2,rootN);
 
   /* fire off P processes */
-  // read out cycle counter before test
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
-
+  START_STATS();
   SPLASH3_ROI_BEGIN();
 
   CREATE(SlaveStart, P);
   WAIT_FOR_END(P);
 
   SPLASH3_ROI_END();
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+  STOP_STATS();
 
   if (doprint) {
     if (test_result) {
@@ -423,11 +420,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  // read out cycle counter and calc diff
-  if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-  printf("FFT CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-  if (TOPRINT) printf("\n");
-
+  PRINT_STATS();
   MAIN_END;
 }
 

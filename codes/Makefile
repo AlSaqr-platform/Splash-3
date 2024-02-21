@@ -49,36 +49,47 @@ splash3 :
 
 splash3/runtest : splash3
 	echo "cd /perf/splash3/codes/apps/barnes" > $@
+	echo "echo BARNES" >> $@
 	echo "./BARNES < inputs/n16384-p2" >> $@
 
 	echo "cd /perf/splash3/codes/apps/fmm" >> $@
+	echo "echo FMM" >> $@
 	echo "./FMM < inputs/input.2.16384" >> $@
 
 	echo "cd /perf/splash3/codes/apps/ocean/contiguous_partitions" >> $@
+	echo "echo OCEAN CONTIGUOUS" >> $@
 	echo "./OCEAN -p2 -n258" >> $@
 
 	echo "cd /perf/splash3/codes/apps/radiosity" >> $@
+	echo "echo RADIOSITY" >> $@
 	echo "./RADIOSITY -p 2 -ae 5000 -bf 0.1 -en 0.05 -room -batch" >> $@
 
 	echo "cd /perf/splash3/codes/apps/water-nsquared" >> $@
+	echo "echo WATER NSQUARED" >> $@
 	echo "./WATER-NSQUARED < inputs/n512-p2" >> $@
 
 	echo "cd /perf/splash3/codes/apps/water-spatial" >> $@
+	echo "echo WATER SPATIAL" >> $@
 	echo "./WATER-SPATIAL < inputs/n512-p2" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/cholesky" >> $@
+	echo "echo CHOLESKY" >> $@
 	echo "./CHOLESKY -p2 < inputs/tk15.O" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/fft" >> $@
+	echo "echo FFT" >> $@
 	echo "./FFT -p2 -m16" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/lu/contiguous_blocks" >> $@
+	echo "echo LU CONTIGUOUS" >> $@
 	echo "./LU -p2 -n512" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/lu/non_contiguous_blocks" >> $@
+	echo "echo LU NON CONTIGUOUS" >> $@
 	echo "./LU -p2 -n512" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/radix" >> $@
+	echo "echo RADIX" >> $@
 	echo "./RADIX -p2 -n1048576" >> $@
 
 	chmod +x $@

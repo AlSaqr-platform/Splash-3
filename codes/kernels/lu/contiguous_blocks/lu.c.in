@@ -43,6 +43,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "stats.h"
+
 MAIN_ENV
 
 #define MAXRAND                         32767.0
@@ -118,9 +120,6 @@ int main(int argc, char *argv[])
   long edge;
   long size;
   unsigned long start;
-
-  // cycle counter holders
-  long unsigned cycles_cntr_start, cycles_cntr_end;
 
   CLOCK(start)
 
@@ -305,14 +304,14 @@ int main(int argc, char *argv[])
   }
 
   // read out cycle counter before test
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+  START_STATS();
   SPLASH3_ROI_BEGIN();
 
   CREATE(SlaveStart, P);
   WAIT_FOR_END(P);
 
   SPLASH3_ROI_END();
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+  STOP_STATS();
 
   if (doprint) {
     if (TOPRINT) printf("\nMatrix after decomposition:\n");
@@ -403,16 +402,12 @@ int main(int argc, char *argv[])
   if (TOPRINT) printf("Total time without initialization : %16lu\n", Global->rf-Global->rs);
   if (TOPRINT) printf("\n");
 
-  // read out cycle counter and calc diff
-  if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-  printf("LU C CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-  if (TOPRINT) printf("\n");
-
   if (test_result) {
     if (TOPRINT) printf("                             TESTING RESULTS\n");
     CheckResult(n, a, rhs);
   }
 
+  PRINT_STATS();
   MAIN_END;
 }
 

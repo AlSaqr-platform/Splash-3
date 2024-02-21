@@ -36,6 +36,7 @@ MAIN_ENV
 #include <math.h>
 #include <unistd.h>
 #include "matrix.h"
+#include "stats.h"
 
 #define SH_MEM_AMT   100000000
 #define DEFAULT_PPS         32
@@ -95,9 +96,6 @@ int main(int argc, char *argv[])
   extern long *partition;
   unsigned long start;
   double mint, maxt, avgt;
-
-   // cycle counter holders
-   long unsigned cycles_cntr_start, cycles_cntr_end;
 
   CLOCK(start)
 
@@ -255,15 +253,14 @@ int main(int argc, char *argv[])
   ComputeRemainingFO();
   ComputeReceivedFO();
 
-  // read out cycle counter before test
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_start));
+  START_STATS();
   SPLASH3_ROI_BEGIN();
 
   CREATE(Go, P);
   WAIT_FOR_END(P);
 
   SPLASH3_ROI_END();
-  __asm__ volatile ("rdcycle %0" : "=r"(cycles_cntr_end));
+  STOP_STATS();
 
   if (TOPRINT) printf("%.0f operations for factorization\n", work_tree[M.n]);
 
@@ -316,12 +313,8 @@ int main(int argc, char *argv[])
       if (TOPRINT) printf("PASSED\n");
     }
   }
-
-  // read out cycle counter and calc diff
-  if (TOPRINT) printf("CYCLES_END   = %12lu\n",cycles_cntr_end);
-  printf("CHOLESKY CYCLES, %12lu\n",cycles_cntr_end - cycles_cntr_start);
-  if (TOPRINT) printf("\n");
-
+  
+  PRINT_STATS();
   MAIN_END
 }
 
