@@ -4,7 +4,7 @@
 splash3 :
 	mkdir -p                                       $@/codes/apps/barnes/inputs
 	cp apps/barnes/BARNES                          $@/codes/apps/barnes/
-	cp apps/barnes/inputs/n16384-p2                $@/codes/apps/barnes/inputs/
+	cp apps/barnes/inputs/n8k-p2                   $@/codes/apps/barnes/inputs/
 
 	mkdir -p                                       $@/codes/apps/fmm/inputs
 	cp apps/fmm/FMM                                $@/codes/apps/fmm/
@@ -32,7 +32,7 @@ splash3 :
 
 	mkdir -p                                       $@/codes/kernels/cholesky/inputs
 	cp kernels/cholesky/CHOLESKY                   $@/codes/kernels/cholesky/
-	cp kernels/cholesky/inputs/tk15.O              $@/codes/kernels/cholesky/inputs/
+	cp kernels/cholesky/inputs/tk14.O              $@/codes/kernels/cholesky/inputs/
 
 	mkdir -p                                       $@/codes/kernels/fft
 	cp kernels/fft/FFT                             $@/codes/kernels/fft/
@@ -50,7 +50,7 @@ splash3 :
 splash3/runtest : splash3
 	echo "cd /perf/splash3/codes/apps/barnes" > $@
 	echo "echo BARNES" >> $@
-	echo "./BARNES < inputs/n16384-p2" >> $@
+	echo "./BARNES < inputs/n8k-p2" >> $@
 
 	echo "cd /perf/splash3/codes/apps/fmm" >> $@
 	echo "echo FMM" >> $@
@@ -74,7 +74,7 @@ splash3/runtest : splash3
 
 	echo "cd /perf/splash3/codes/kernels/cholesky" >> $@
 	echo "echo CHOLESKY" >> $@
-	echo "./CHOLESKY -p2 < inputs/tk15.O" >> $@
+	echo "./CHOLESKY -p2 < inputs/tk14.O" >> $@
 
 	echo "cd /perf/splash3/codes/kernels/fft" >> $@
 	echo "echo FFT" >> $@
