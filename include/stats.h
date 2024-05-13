@@ -13,15 +13,14 @@
   volatile long unsigned sevent_start                = read_csr(0xC06);   \
   volatile long unsigned ifempty_start               = read_csr(0xC07);   \
   volatile long unsigned stall_start                 = read_csr(0xC08);   \
-  volatile long unsigned in_snoop_read_once_start       = read_csr(0xC09);   \
-  volatile long unsigned in_snoop_read_shared_start     = read_csr(0xC0A);   \
-  volatile long unsigned in_snoop_read_clean_start      = read_csr(0xC0B);   \
-  volatile long unsigned in_snoop_read_no_shared_start  = read_csr(0xC0C);   \
-  volatile long unsigned in_snoop_read_unique_start     = read_csr(0xC0D);   \
-  volatile long unsigned in_snoop_clean_shared_start    = read_csr(0xC0E);   \
-  volatile long unsigned in_snoop_clean_invalid_start   = read_csr(0xC0F);   \
-  volatile long unsigned in_snoop_clean_unique_start    = read_csr(0xC10);   \
-  volatile long unsigned in_snoop_make_invalid_start    = read_csr(0xC11);   \
+  volatile long unsigned perf_ext_evt_00_start       = read_csr(0xC09);   \
+  volatile long unsigned perf_ext_evt_01_start       = read_csr(0xC0A);   \
+  volatile long unsigned perf_ext_evt_02_start       = read_csr(0xC0B);   \
+  volatile long unsigned perf_ext_evt_03_start       = read_csr(0xC0C);   \
+  volatile long unsigned perf_ext_evt_04_start       = read_csr(0xC0D);   \
+  volatile long unsigned perf_ext_evt_05_start       = read_csr(0xC0E);   \
+  volatile long unsigned perf_ext_evt_06_start       = read_csr(0xC0F);   \
+  volatile long unsigned perf_ext_evt_07_start       = read_csr(0xC10);   \
   volatile long unsigned out_snoop_read_once_start      = read_csr(0xC12);   \
   volatile long unsigned out_snoop_read_shared_start    = read_csr(0xC13);   \
   volatile long unsigned out_snoop_read_unique_start    = read_csr(0xC14);   \
@@ -40,15 +39,14 @@
   volatile long unsigned sevent                =  read_csr(0xC06)   - sevent_start     ; \
   volatile long unsigned ifempty               =  read_csr(0xC07)   - ifempty_start    ; \
   volatile long unsigned stall                 =  read_csr(0xC08)   - stall_start      ; \
-  volatile long unsigned in_snoop_read_once       = read_csr(0xC09) - in_snoop_read_once_start     ;   \
-  volatile long unsigned in_snoop_read_shared     = read_csr(0xC0A) - in_snoop_read_shared_start   ;   \
-  volatile long unsigned in_snoop_read_clean      = read_csr(0xC0B) - in_snoop_read_clean_start    ;   \
-  volatile long unsigned in_snoop_read_no_shared  = read_csr(0xC0C) - in_snoop_read_no_shared_start;   \
-  volatile long unsigned in_snoop_read_unique     = read_csr(0xC0D) - in_snoop_read_unique_start   ;   \
-  volatile long unsigned in_snoop_clean_shared    = read_csr(0xC0E) - in_snoop_clean_shared_start  ;   \
-  volatile long unsigned in_snoop_clean_invalid   = read_csr(0xC0F) - in_snoop_clean_invalid_start ;   \
-  volatile long unsigned in_snoop_clean_unique    = read_csr(0xC10) - in_snoop_clean_unique_start  ;   \
-  volatile long unsigned in_snoop_make_invalid    = read_csr(0xC11) - in_snoop_make_invalid_start  ;   \
+  volatile long unsigned perf_ext_evt_00       = read_csr(0xC09) - perf_ext_evt_00_start;   \
+  volatile long unsigned perf_ext_evt_01       = read_csr(0xC0A) - perf_ext_evt_01_start;   \
+  volatile long unsigned perf_ext_evt_02       = read_csr(0xC0B) - perf_ext_evt_02_start;   \
+  volatile long unsigned perf_ext_evt_03       = read_csr(0xC0C) - perf_ext_evt_03_start;   \
+  volatile long unsigned perf_ext_evt_04       = read_csr(0xC0D) - perf_ext_evt_04_start;   \
+  volatile long unsigned perf_ext_evt_05       = read_csr(0xC0E) - perf_ext_evt_05_start;   \
+  volatile long unsigned perf_ext_evt_06       = read_csr(0xC0F) - perf_ext_evt_06_start;   \
+  volatile long unsigned perf_ext_evt_07       = read_csr(0xC10) - perf_ext_evt_07_start;   \
   volatile long unsigned out_snoop_read_once      = read_csr(0xC12) - out_snoop_read_once_start    ;   \
   volatile long unsigned out_snoop_read_shared    = read_csr(0xC13) - out_snoop_read_shared_start  ;   \
   volatile long unsigned out_snoop_read_unique    = read_csr(0xC14) - out_snoop_read_unique_start  ;   \
@@ -59,10 +57,10 @@
   volatile long unsigned out_snoop_snoop_wrback   = read_csr(0xC19) - out_snoop_snoop_wrback_start 
 
 #define PRINT_STATS() \
-printf("%lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu ,%lu, %lu , %lu, %lu, %lu, %lu, %lu, %lu ,%lu, %lu \n ", \
+printf("%lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu ,%lu, %lu , %lu, %lu, %lu, %lu, %lu, %lu ,%lu \n ", \
          cycles_cntr         , instrs_cntr          , icachemiss, dcachemiss, levent               , sevent              , ifempty             , stall  , \
-         in_snoop_read_once     , in_snoop_read_shared    , in_snoop_read_clean      , in_snoop_read_no_shared , in_snoop_read_unique   , in_snoop_clean_shared  , in_snoop_clean_invalid , \
-         in_snoop_clean_unique  , in_snoop_make_invalid   , out_snoop_read_once     , out_snoop_read_shared    , out_snoop_read_unique     , out_snoop_read_no_snoop  , out_snoop_clean_unique   , \
+         perf_ext_evt_00      , perf_ext_evt_01     , perf_ext_evt_02       , perf_ext_evt_03  , perf_ext_evt_04    , perf_ext_evt_05   , perf_ext_evt_06  , \
+         perf_ext_evt_07   , out_snoop_read_once     , out_snoop_read_shared    , out_snoop_read_unique     , out_snoop_read_no_snoop  , out_snoop_clean_unique   , \
          out_snoop_wr_unique  , out_snoop_wr_nosnoop ,   out_snoop_snoop_wrback )
 
 #else
