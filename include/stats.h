@@ -57,11 +57,10 @@
   volatile long unsigned out_snoop_snoop_wrback   = read_csr(0xC19) - out_snoop_snoop_wrback_start 
 
 #define PRINT_STATS() \
-printf("%lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu, %lu ,%lu, %lu , %lu, %lu, %lu, %lu, %lu, %lu ,%lu \n ", \
-         cycles_cntr         , instrs_cntr          , icachemiss, dcachemiss, levent               , sevent              , ifempty             , stall  , \
-         perf_ext_evt_00      , perf_ext_evt_01     , perf_ext_evt_02       , perf_ext_evt_03  , perf_ext_evt_04    , perf_ext_evt_05   , perf_ext_evt_06  , \
-         perf_ext_evt_07   , out_snoop_read_once     , out_snoop_read_shared    , out_snoop_read_unique     , out_snoop_read_no_snoop  , out_snoop_clean_unique   , \
-         out_snoop_wr_unique  , out_snoop_wr_nosnoop ,   out_snoop_snoop_wrback )
+printf("%lu, %lu, %lu, %lu, %lu, %lu,  ", cycles_cntr               , instrs_cntr              , icachemiss             , dcachemiss          , levent               , sevent                 ); \
+printf("%lu, %lu, %lu, %lu, %lu, %lu,  ", ifempty                   , stall                    ,  perf_ext_evt_00       , perf_ext_evt_01     , perf_ext_evt_02      , perf_ext_evt_03        ); \
+printf("%lu, %lu, %lu, %lu, %lu, %lu,  ", perf_ext_evt_04           , perf_ext_evt_05          , perf_ext_evt_06        , perf_ext_evt_07     , out_snoop_read_once  , out_snoop_read_shared  ); \
+printf("%lu, %lu, %lu, %lu, %lu, %lu \n", out_snoop_read_unique     , out_snoop_read_no_snoop  , out_snoop_clean_unique , out_snoop_wr_unique , out_snoop_wr_nosnoop , out_snoop_snoop_wrback )
 
 #else
 
