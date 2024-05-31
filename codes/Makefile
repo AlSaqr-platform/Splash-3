@@ -16,10 +16,6 @@ splash3 :
 	mkdir -p                                       $@/codes/apps/radiosity
 	cp apps/radiosity/RADIOSITY                    $@/codes/apps/radiosity/
 
-	mkdir -p                                       $@/codes/apps/raytrace/inputs
-	cp apps/raytrace/RAYTRACE                      $@/codes/apps/raytrace/
-	cp apps/raytrace/inputs/car.*                  $@/codes/apps/raytrace/inputs/
-
 	mkdir -p                                       $@/codes/apps/water-nsquared/inputs
 	cp apps/water-nsquared/WATER-NSQUARED          $@/codes/apps/water-nsquared/
 	cp apps/water-nsquared/random.in               $@/codes/apps/water-nsquared/
